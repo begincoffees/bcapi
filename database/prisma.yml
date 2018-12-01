@@ -1,7 +1,7 @@
-endpoint: https://begincoffeesgraph.herokuapp.com/bcprisma/test
+endpoint: ${env:PRISMA_ENDPOINT}
 datamodel: datamodel.graphql
 # Auth Docs: https://www.prisma.io/docs/reference/prisma-api/concepts-utee3eiquo#authentication
-secret: 576eef8cb1f325292da28c44ff8c48237782409c
+secret: ${env:PRISMA_SECRET}
 generate:
   - generator: typescript-client
     output: ../src/generated/prisma-client/
