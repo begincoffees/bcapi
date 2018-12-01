@@ -16,17 +16,17 @@ export interface ViewerParent {
 }
 
 export const Viewer: ViewerResolvers.Type<TypeMap> = {
-  me: async (parent, args, context: Context): Promise<UserParent> => {
+  me: async (parent, args, context: any): Promise<UserParent> => {
     const id = getUserId(context)
     if(id){
-      const me = await context.db.user({id})
+      const me = await context.db.query.user({where: {id}})
       return me as any
     }
   },
-  cart: async (parent, args, context: Context): Promise<CartParent> => {
+  cart: async (parent, args, context: any): Promise<CartParent> => {
     const id = getUserId(context)
     // ok ok 
-    const me = await context.db.user({id}).cart()
+    const me = await context.db.query.user({id}).cart()
     return me as any
   },
   purchases: parent => parent.purchases || [],

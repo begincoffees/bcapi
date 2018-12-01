@@ -308,6 +308,7 @@ input CartWhereInput {
 
 input CartWhereUniqueInput {
   id: ID
+  user: User
 }
 
 type Invoice implements Node {

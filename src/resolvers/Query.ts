@@ -18,36 +18,14 @@ export const Query: QueryResolvers.Type<TypeMap> = {
     try {
       const id = getUserId(context)
       console.log(id)
-      if(id){
-        const { 
-          cart: { itemCount, totalPrice, items }
-        } = await context.db.query.cart({where: {id}})
-        
-        return {
-          itemCount: itemCount || 0,
-          totalPrice: totalPrice || "0",
-          items: items || []
-        } as CartParent
-      }
-      const guestCart = await context.db.mutation.createUser({
-        permissions: {
-          set: [
-            'read:feed',
-            'write:cart',
-            'read:purchases'
-          ]
-        },
-        cart: {
-          create: {
-            itemCount: 0,
-            totalPrice: "0"
-          }
-        }
-      })
+      const { 
+        cart: { itemCount, totalPrice, items }
+      } = await context.db.query.cart({where: {user: {id}}})
+      
       return {
-        itemCount: guestCart.itemCount || 0,
-        totalPrice: guestCart.totalPrice || "0",
-        items: guestCart.items || []
+        itemCount: itemCount || 0,
+        totalPrice: totalPrice || "0",
+        items: items || []
       } as CartParent
     }catch {
       throw new Error('Trouble getting cart')
