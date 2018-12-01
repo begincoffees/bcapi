@@ -23,10 +23,10 @@ const server = new GraphQLServer({
 } as any)
 
 const options = {
-  port: process.env.PORT || 6006,
+  port: process.env.PORT,
   endpoint: '/bcgraph'
 }
 
 server.start(options).then(() => {
-  console.log(`Server is up`)
+  console.log(`Server is up ${process.env.PORT}`)
 });
