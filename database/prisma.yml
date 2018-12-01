@@ -11,5 +11,3 @@ hooks:
   post-deploy:
     - graphql get-schema -p database
     - graphql codegen
-    - prisma generate
-      

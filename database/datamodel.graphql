@@ -7,7 +7,7 @@ type User {
   lastName: String
   bizName: String
   password: String
-  cart: Cart 
+  cart: Cart @unique
   purchases: [Invoice!]! @relation(name: "CUSTOMER")
   products: [Product!]!
   sales: [Invoice!]! @relation(name: "VENDOR")
