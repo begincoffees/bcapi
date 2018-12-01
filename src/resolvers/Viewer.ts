@@ -25,6 +25,7 @@ export const Viewer: ViewerResolvers.Type<TypeMap> = {
   },
   cart: async (parent, args, context: Context): Promise<CartParent> => {
     const id = getUserId(context)
+    // ok ok 
     const me = await context.db.user({id}).cart()
     return me as any
   },
