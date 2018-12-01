@@ -1,5 +1,5 @@
 # source: https://begincoffeesprisma.herokuapp.com/bcprisma/test
-# timestamp: Sat Nov 24 2018 23:33:10 GMT-0600 (CST)
+# timestamp: Sat Dec 01 2018 16:21:13 GMT-0600 (CST)
 
 type AggregateCart {
   count: Int!
@@ -308,7 +308,6 @@ input CartWhereInput {
 
 input CartWhereUniqueInput {
   id: ID
-  user: User
 }
 
 type Invoice implements Node {

@@ -1,23 +1,20 @@
 import { CartResolvers } from "../generated/resolvers";
 import { TypeMap } from "./types/TypeMap";
 import { ProductParent } from "./Product";
-import { getUserId } from "../utils";
-import { Context } from "./types/context";
+import { UserParent } from "./User";
 
 export interface CartParent {
-  user: string;
+  id: string;
   itemCount?: number;
   totalPrice?: string;
   items: ProductParent[];
+  user: UserParent;
 }
 
 export const Cart: CartResolvers.Type<TypeMap> = {
-  id: (parent, args, context: Context, info) => {
-    const id = getUserId(context)
-    console.log(id)
-    return id
-  },
+  id: parent => parent.id,
   itemCount: parent => parent.itemCount,
   totalPrice: parent => parent.totalPrice,
-  items: (parent, args) => parent.items
+  items: (parent, args) => parent.items,
+  user: (parent, args) => parent.user
 };

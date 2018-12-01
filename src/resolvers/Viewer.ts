@@ -23,11 +23,16 @@ export const Viewer: ViewerResolvers.Type<TypeMap> = {
       return me as any
     }
   },
-  cart: async (parent, args, context: any): Promise<CartParent> => {
-    const id = getUserId(context)
-    // ok ok 
-    const me = await context.db.query.user({id}).cart()
-    return me as any
+  cart: async (parent, args, context: Context): Promise<CartParent> => {
+    try {
+      const id = getUserId(context)
+      const me = await context.db.query.carts({where: {user:{id}}})
+      
+      return me as any
+    }
+    catch {
+      console.log('ok')
+    }
   },
   purchases: parent => parent.purchases || [],
   sales: parent => parent.sales || [],

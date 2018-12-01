@@ -23,6 +23,7 @@ type Cart {
   itemCount: Int
   totalPrice: String
   items(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
+  user: User!
 }
 
 type CartConnection {
@@ -35,6 +36,7 @@ input CartCreateInput {
   itemCount: Int
   totalPrice: String
   items: ProductCreateManyWithoutCartsInput
+  user: UserCreateOneWithoutCartInput!
 }
 
 input CartCreateManyWithoutItemsInput {
@@ -42,14 +44,21 @@ input CartCreateManyWithoutItemsInput {
   connect: [CartWhereUniqueInput!]
 }
 
-input CartCreateOneInput {
-  create: CartCreateInput
+input CartCreateOneWithoutUserInput {
+  create: CartCreateWithoutUserInput
   connect: CartWhereUniqueInput
 }
 
 input CartCreateWithoutItemsInput {
   itemCount: Int
   totalPrice: String
+  user: UserCreateOneWithoutCartInput!
+}
+
+input CartCreateWithoutUserInput {
+  itemCount: Int
+  totalPrice: String
+  items: ProductCreateManyWithoutCartsInput
 }
 
 type CartEdge {
@@ -94,16 +103,16 @@ input CartSubscriptionWhereInput {
   NOT: [CartSubscriptionWhereInput!]
 }
 
-input CartUpdateDataInput {
-  itemCount: Int
-  totalPrice: String
-  items: ProductUpdateManyWithoutCartsInput
-}
-
 input CartUpdateInput {
   itemCount: Int
   totalPrice: String
   items: ProductUpdateManyWithoutCartsInput
+  user: UserUpdateOneRequiredWithoutCartInput
+}
+
+input CartUpdateManyMutationInput {
+  itemCount: Int
+  totalPrice: String
 }
 
 input CartUpdateManyWithoutItemsInput {
@@ -115,10 +124,10 @@ input CartUpdateManyWithoutItemsInput {
   upsert: [CartUpsertWithWhereUniqueWithoutItemsInput!]
 }
 
-input CartUpdateOneInput {
-  create: CartCreateInput
-  update: CartUpdateDataInput
-  upsert: CartUpsertNestedInput
+input CartUpdateOneWithoutUserInput {
+  create: CartCreateWithoutUserInput
+  update: CartUpdateWithoutUserDataInput
+  upsert: CartUpsertWithoutUserInput
   delete: Boolean
   disconnect: Boolean
   connect: CartWhereUniqueInput
@@ -127,6 +136,13 @@ input CartUpdateOneInput {
 input CartUpdateWithoutItemsDataInput {
   itemCount: Int
   totalPrice: String
+  user: UserUpdateOneRequiredWithoutCartInput
+}
+
+input CartUpdateWithoutUserDataInput {
+  itemCount: Int
+  totalPrice: String
+  items: ProductUpdateManyWithoutCartsInput
 }
 
 input CartUpdateWithWhereUniqueWithoutItemsInput {
@@ -134,9 +150,9 @@ input CartUpdateWithWhereUniqueWithoutItemsInput {
   data: CartUpdateWithoutItemsDataInput!
 }
 
-input CartUpsertNestedInput {
-  update: CartUpdateDataInput!
-  create: CartCreateInput!
+input CartUpsertWithoutUserInput {
+  update: CartUpdateWithoutUserDataInput!
+  create: CartCreateWithoutUserInput!
 }
 
 input CartUpsertWithWhereUniqueWithoutItemsInput {
@@ -185,6 +201,7 @@ input CartWhereInput {
   items_every: ProductWhereInput
   items_some: ProductWhereInput
   items_none: ProductWhereInput
+  user: UserWhereInput
   AND: [CartWhereInput!]
   OR: [CartWhereInput!]
   NOT: [CartWhereInput!]
@@ -289,6 +306,11 @@ input InvoiceUpdateInput {
   email: String
   customer: UserUpdateOneWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
+}
+
+input InvoiceUpdateManyMutationInput {
+  amount: String
+  email: String
 }
 
 input InvoiceUpdateManyWithoutCustomerInput {
@@ -409,25 +431,25 @@ scalar Long
 type Mutation {
   createCart(data: CartCreateInput!): Cart!
   updateCart(data: CartUpdateInput!, where: CartWhereUniqueInput!): Cart
-  updateManyCarts(data: CartUpdateInput!, where: CartWhereInput): BatchPayload!
+  updateManyCarts(data: CartUpdateManyMutationInput!, where: CartWhereInput): BatchPayload!
   upsertCart(where: CartWhereUniqueInput!, create: CartCreateInput!, update: CartUpdateInput!): Cart!
   deleteCart(where: CartWhereUniqueInput!): Cart
   deleteManyCarts(where: CartWhereInput): BatchPayload!
   createInvoice(data: InvoiceCreateInput!): Invoice!
   updateInvoice(data: InvoiceUpdateInput!, where: InvoiceWhereUniqueInput!): Invoice
-  updateManyInvoices(data: InvoiceUpdateInput!, where: InvoiceWhereInput): BatchPayload!
+  updateManyInvoices(data: InvoiceUpdateManyMutationInput!, where: InvoiceWhereInput): BatchPayload!
   upsertInvoice(where: InvoiceWhereUniqueInput!, create: InvoiceCreateInput!, update: InvoiceUpdateInput!): Invoice!
   deleteInvoice(where: InvoiceWhereUniqueInput!): Invoice
   deleteManyInvoices(where: InvoiceWhereInput): BatchPayload!
   createProduct(data: ProductCreateInput!): Product!
   updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
-  updateManyProducts(data: ProductUpdateInput!, where: ProductWhereInput): BatchPayload!
+  updateManyProducts(data: ProductUpdateManyMutationInput!, where: ProductWhereInput): BatchPayload!
   upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
   deleteProduct(where: ProductWhereUniqueInput!): Product
   deleteManyProducts(where: ProductWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
@@ -574,11 +596,18 @@ input ProductUpdateInput {
 
 input ProductUpdateManyInput {
   create: [ProductCreateInput!]
+  update: [ProductUpdateWithWhereUniqueNestedInput!]
+  upsert: [ProductUpsertWithWhereUniqueNestedInput!]
   delete: [ProductWhereUniqueInput!]
   connect: [ProductWhereUniqueInput!]
   disconnect: [ProductWhereUniqueInput!]
-  update: [ProductUpdateWithWhereUniqueNestedInput!]
-  upsert: [ProductUpsertWithWhereUniqueNestedInput!]
+}
+
+input ProductUpdateManyMutationInput {
+  name: String
+  price: String
+  description: String
+  varietal: String
 }
 
 input ProductUpdateManyWithoutCartsInput {
@@ -784,7 +813,7 @@ input UserCreateInput {
   lastName: String
   bizName: String
   password: String
-  cart: CartCreateOneInput
+  cart: CartCreateOneWithoutUserInput
   purchases: InvoiceCreateManyWithoutCustomerInput
   products: ProductCreateManyWithoutVendorInput
   sales: InvoiceCreateManyWithoutVendorsInput
@@ -793,6 +822,11 @@ input UserCreateInput {
 input UserCreateManyWithoutSalesInput {
   create: [UserCreateWithoutSalesInput!]
   connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateOneWithoutCartInput {
+  create: UserCreateWithoutCartInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutProductsInput {
@@ -809,6 +843,19 @@ input UserCreatepermissionsInput {
   set: [String!]
 }
 
+input UserCreateWithoutCartInput {
+  role: String
+  permissions: UserCreatepermissionsInput
+  email: String
+  firstName: String
+  lastName: String
+  bizName: String
+  password: String
+  purchases: InvoiceCreateManyWithoutCustomerInput
+  products: ProductCreateManyWithoutVendorInput
+  sales: InvoiceCreateManyWithoutVendorsInput
+}
+
 input UserCreateWithoutProductsInput {
   role: String
   permissions: UserCreatepermissionsInput
@@ -817,7 +864,7 @@ input UserCreateWithoutProductsInput {
   lastName: String
   bizName: String
   password: String
-  cart: CartCreateOneInput
+  cart: CartCreateOneWithoutUserInput
   purchases: InvoiceCreateManyWithoutCustomerInput
   sales: InvoiceCreateManyWithoutVendorsInput
 }
@@ -830,7 +877,7 @@ input UserCreateWithoutPurchasesInput {
   lastName: String
   bizName: String
   password: String
-  cart: CartCreateOneInput
+  cart: CartCreateOneWithoutUserInput
   products: ProductCreateManyWithoutVendorInput
   sales: InvoiceCreateManyWithoutVendorsInput
 }
@@ -843,7 +890,7 @@ input UserCreateWithoutSalesInput {
   lastName: String
   bizName: String
   password: String
-  cart: CartCreateOneInput
+  cart: CartCreateOneWithoutUserInput
   purchases: InvoiceCreateManyWithoutCustomerInput
   products: ProductCreateManyWithoutVendorInput
 }
@@ -911,10 +958,20 @@ input UserUpdateInput {
   lastName: String
   bizName: String
   password: String
-  cart: CartUpdateOneInput
+  cart: CartUpdateOneWithoutUserInput
   purchases: InvoiceUpdateManyWithoutCustomerInput
   products: ProductUpdateManyWithoutVendorInput
   sales: InvoiceUpdateManyWithoutVendorsInput
+}
+
+input UserUpdateManyMutationInput {
+  role: String
+  permissions: UserUpdatepermissionsInput
+  email: String
+  firstName: String
+  lastName: String
+  bizName: String
+  password: String
 }
 
 input UserUpdateManyWithoutSalesInput {
@@ -924,6 +981,13 @@ input UserUpdateManyWithoutSalesInput {
   disconnect: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutSalesInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutSalesInput!]
+}
+
+input UserUpdateOneRequiredWithoutCartInput {
+  create: UserCreateWithoutCartInput
+  update: UserUpdateWithoutCartDataInput
+  upsert: UserUpsertWithoutCartInput
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneWithoutProductsInput {
@@ -948,6 +1012,19 @@ input UserUpdatepermissionsInput {
   set: [String!]
 }
 
+input UserUpdateWithoutCartDataInput {
+  role: String
+  permissions: UserUpdatepermissionsInput
+  email: String
+  firstName: String
+  lastName: String
+  bizName: String
+  password: String
+  purchases: InvoiceUpdateManyWithoutCustomerInput
+  products: ProductUpdateManyWithoutVendorInput
+  sales: InvoiceUpdateManyWithoutVendorsInput
+}
+
 input UserUpdateWithoutProductsDataInput {
   role: String
   permissions: UserUpdatepermissionsInput
@@ -956,7 +1033,7 @@ input UserUpdateWithoutProductsDataInput {
   lastName: String
   bizName: String
   password: String
-  cart: CartUpdateOneInput
+  cart: CartUpdateOneWithoutUserInput
   purchases: InvoiceUpdateManyWithoutCustomerInput
   sales: InvoiceUpdateManyWithoutVendorsInput
 }
@@ -969,7 +1046,7 @@ input UserUpdateWithoutPurchasesDataInput {
   lastName: String
   bizName: String
   password: String
-  cart: CartUpdateOneInput
+  cart: CartUpdateOneWithoutUserInput
   products: ProductUpdateManyWithoutVendorInput
   sales: InvoiceUpdateManyWithoutVendorsInput
 }
@@ -982,7 +1059,7 @@ input UserUpdateWithoutSalesDataInput {
   lastName: String
   bizName: String
   password: String
-  cart: CartUpdateOneInput
+  cart: CartUpdateOneWithoutUserInput
   purchases: InvoiceUpdateManyWithoutCustomerInput
   products: ProductUpdateManyWithoutVendorInput
 }
@@ -990,6 +1067,11 @@ input UserUpdateWithoutSalesDataInput {
 input UserUpdateWithWhereUniqueWithoutSalesInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutSalesDataInput!
+}
+
+input UserUpsertWithoutCartInput {
+  update: UserUpdateWithoutCartDataInput!
+  create: UserCreateWithoutCartInput!
 }
 
 input UserUpsertWithoutProductsInput {

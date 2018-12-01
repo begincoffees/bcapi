@@ -942,6 +942,13 @@ export namespace CartResolvers {
       ctx: T["Context"],
       info: GraphQLResolveInfo
     ) => T["ProductParent"][] | Promise<T["ProductParent"][]>;
+
+    user: (
+      parent: T["CartParent"],
+      args: ArgsItems<T>,
+      ctx: T["Context"],
+      info: GraphQLResolveInfo
+    ) => T["UserParent"];
   }
 }
 
