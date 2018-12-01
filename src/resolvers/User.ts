@@ -3,6 +3,8 @@ import { TypeMap } from "./types/TypeMap";
 import { CartParent } from "./Cart";
 import { InvoiceParent } from "./Invoice";
 import { ProductParent } from "./Product";
+import { getUserId } from "../utils";
+import { Context } from "./types/Context";
 
 export interface UserParent {
   id: string;
@@ -28,8 +30,44 @@ export const User: UserResolvers.Type<TypeMap> = {
   lastName: parent => parent.lastName,
   bizName: parent => parent.bizName,
   password: parent => parent.password,
-  cart: parent => parent.cart,
-  purchases: (parent, args) => parent.purchases,
-  products: (parent, args) => parent.products,
-  sales: (parent, args) => parent.sales
+  cart: async (parent, args, context: any, info): Promise<CartParent> => {
+    try {
+      console.log(parent)
+      const id = getUserId(context)
+      const cart = await context.db.query.carts({where: {user: {id}}})
+      return cart[0]
+    }catch {
+      throw new Error('Trouble getting users cart')
+    }
+  },
+  purchases: async (parent, args, context: Context, info): Promise<InvoiceParent[]> => {
+    try {
+      const id = getUserId(context)
+      const purchases = await context.db.invoices({where:{customer: id}})
+      return purchases as InvoiceParent[]
+    }catch {
+      console.debug('trouble getting user purchases')
+      return []
+    }
+  },
+  products: async (parent, args, context: Context, info): Promise<ProductParent[]> => {
+    try {
+      const id = getUserId(context)
+      const purchases = await context.db.products({where:{vendor: id}})
+      return purchases as ProductParent[]
+    }catch {
+      console.debug('trouble getting vendor products')
+      return []
+    }
+  },
+  sales: async (parent, args, context: Context, info): Promise<InvoiceParent[]> => {
+    try {
+      const id = getUserId(context)
+      const purchases = await context.db.invoices({where:{vendors_some: id}})
+      return purchases as InvoiceParent[]
+    }catch {
+      console.debug('trouble getting vendor sales')
+      return []
+    }
+  },
 };

@@ -6,6 +6,8 @@ import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs'
 import * as moment from 'moment';
 import { UserParent } from "./User";
+import { getUserId } from "../utils";
+import { Context } from "./types/Context";
 
 export interface MutationParent {}
 
@@ -160,14 +162,14 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
   },
   createNewProduct: async (_parent, _args, context: any, _info): Promise<MutationResultParent> => {
     try {
-      await context.db.mutation.createProduct({
+      const id = getUserId(context)
+      await context.db.mutation.createNewProduct({
         name: _args.name,
         description:  _args.description,
         varietal: _args.varietal,
         price: _args.price,
-        vendor: {
-          connect: {id: _args.vendor}
-        }
+        vendor: {connect: {id}}
+        
       })
       return {success: true}
     } catch {
