@@ -1,0 +1,6 @@
+setup:
+build:
+  config:
+    NODE_ENV: development
+run:
+  web: npm run dev

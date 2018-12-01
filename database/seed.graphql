@@ -1,0 +1,104 @@
+mutation {
+  createProduct(data: {
+    name: "Ethiopian",
+    description: "a description",
+    varietal: "Heirloom",
+    price: "20",
+    vendor: {
+      connect: {id: "cjowcofby002c0903p5v557dg"}
+    }
+  }){
+    id
+    name
+    description
+    price
+    varietal
+    vendor {
+      id
+    }
+  }
+
+  createProduct(data: {
+    name: "Kenyan",
+    description: "a description",
+    varietal: "Heirloom",
+    price: "20",
+    vendor: {
+      connect: {id: "cjowcofby002c0903p5v557dg"}
+    }
+  }){
+  "data": {
+    "createProduct": {
+      "name": "Kenyan",
+      "description": "a description",
+      "price": "20",
+      "varietal": "Heirloom",
+      "id": "cjn8ax7o2k8lo0b77d0pqw6do",
+      "vendor": {
+        "id": "cjowcofby002c0903p5v557dg"
+      }
+    }
+  }
+}
+
+  createProduct(data: {
+    name: "Costa Rican",
+    description: "a description",
+    varietal: "Bourbon",
+    price: "20",
+    vendor: {
+      connect: {id: "cjowcofby002c0903p5v557dg"}
+    }
+  }){
+  "data": {
+    "createProduct": {
+      "name": "Costa Rican",
+      "description": "a description",
+      "price": "20",
+      "varietal": "Bourbon",
+      "id": "cjn8awad0k8j10b77dqzg58p1",
+      "vendor": {
+        "id": "cjowcofby002c0903p5v557dg"
+      }
+    }
+  }
+}
+
+  createProduct(data: {
+    name: "Peru",
+    description: "a description",
+    varietal: "Caturra",
+    price: "20",
+    vendor: {
+      connect: {id: "cjowcofby002c0903p5v557dg"}
+    }
+  }){
+    id
+    name
+    description
+    price
+    varietal
+    vendor {
+      id
+    }
+  }
+
+  createProduct(data: {
+    name: "Colombian",
+    description: "a description",
+    varietal: "Bourbon, Caturra, Catuai",
+    price: "20",
+    vendor: {
+      connect: {id: "cjowcofby002c0903p5v557dg"}
+    }
+  }){
+    name: "Colombian",
+    description: "a description",
+    price: "20",
+    varietal: "Bourbon, Caturra, Catuai",
+    id: "cjn8at40kk8bw0b77vbf8gasy",
+    vendor: {
+      "id": "cjowcofby002c0903p5v557dg"
+    }
+  }
+}

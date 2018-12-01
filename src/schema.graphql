@@ -1,0 +1,49 @@
+# import * from './generated/prisma.graphql'
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type Viewer {
+  me: User!
+  cart(id: String): Cart!
+  purchases(id: String): [Invoice!]!
+  sales(id: Int): [Invoice!]!
+  products(id: Int): [Product!]!
+}
+
+input cartAddItem {
+  id: ID
+}
+
+input purchaseAddItem {
+  id: ID
+  price: String
+  quantity: String
+}
+
+type MutationResult {
+  success: Boolean
+}
+
+type Query {  
+  viewer: Viewer
+  cart(id: ID): Cart!
+  feed: [Product!]!
+}
+
+type Mutation {
+  customerSignup(email: String!, password: String!, firstName: String!, lastName: String!,): AuthPayload!
+  vendorSignup(name: String!, email: String!, password: String!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+  logout(email: String): MutationResult!
+  addItemToCart(product: cartAddItem): MutationResult!
+  updateCartItem(id: String, quantity: Int): MutationResult!
+  removeItemFromCart(id: String): MutationResult!
+  clearCart(id: String): MutationResult!
+  checkout(items: [purchaseAddItem]): MutationResult!
+  createNewProduct(name: String!, price: String!, description: String!, imageUrl: String, varietal: String!, vendor: String!): MutationResult!
+}
+
+
