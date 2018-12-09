@@ -10,7 +10,7 @@ export function getUserId(ctx: Context) {
     const { userId }: any = jwt.decode(token)
     // const { userId } = jwt.verify(token, process.env.APP_SECRET) as { userId: string }
     // arbirtrary revision
-    return userId
+    return userId || ''
   }
 
   throw new AuthError()

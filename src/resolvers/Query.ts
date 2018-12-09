@@ -20,7 +20,12 @@ export const Query: QueryResolvers.Type<TypeMap> = {
       const cart = await context.db.query.carts({where: {user: {id}}})
       return cart[0]
     }catch {
-      throw new Error('Trouble getting cart')
+      console.debug('Trouble getting cart')
+      return {
+        itemCount: 0,
+        totalPrice: '0',
+        items: []
+      } as any
     }
   },
   feed: async (parent, args, context, info): Promise<ProductParent[]> => {
@@ -28,7 +33,8 @@ export const Query: QueryResolvers.Type<TypeMap> = {
       const products = await (context as any).db.query.products({first: 50})
       return products as ProductParent[]
     }catch(err) {
-      throw new Error('trouble getting feed')
+      console.debug('trouble getting feed')
+      return []
     }
   },
 };

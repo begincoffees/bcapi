@@ -53,9 +53,8 @@ export const User: UserResolvers.Type<TypeMap> = {
   products: async (parent, args, context: any, info): Promise<ProductParent[]> => {
     try {
       const id = getUserId(context)
-      const purchases = await context.db.query.products({where:{vendor: {id}}})
-      console.log(purchases)
-      return purchases as ProductParent[]
+      const products= await context.db.query.products({where:{vendor: {id}}})
+      return products as ProductParent[]
     }catch {
       console.debug('trouble getting vendor products')
       return []
