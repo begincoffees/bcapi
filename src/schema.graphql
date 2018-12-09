@@ -17,10 +17,18 @@ input cartAddItem {
   id: ID
 }
 
-input purchaseAddItem {
+input invoiceItem {
   id: ID
+  name: String
   price: String
-  quantity: String
+  description: String
+  varietal: String
+}
+
+input invoiceCreate {
+  items: invoiceItem
+  amount: String
+  email: String
 }
 
 type MutationResult {
@@ -42,7 +50,7 @@ type Mutation {
   updateCartItem(id: String, quantity: Int): MutationResult!
   removeItemFromCart(id: String): MutationResult!
   clearCart(id: String): MutationResult!
-  checkout(items: [purchaseAddItem]): MutationResult!
+  checkout(items: [invoiceItem], amount: String, email: String): MutationResult!
   createNewProduct(name: String!, price: String!, description: String!, imageUrl: String, varietal: String!, vendor: String!): MutationResult!
 }
 

@@ -32,7 +32,6 @@ export const User: UserResolvers.Type<TypeMap> = {
   password: parent => parent.password,
   cart: async (parent, args, context: any, info): Promise<CartParent> => {
     try {
-      console.log(parent)
       const id = getUserId(context)
       const cart = await context.db.query.carts({where: {user: {id}}})
       return cart[0]

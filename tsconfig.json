@@ -9,6 +9,6 @@
     "lib": [
       "esnext", "dom"
     ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
   }
 }

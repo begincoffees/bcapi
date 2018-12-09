@@ -7,7 +7,7 @@ export function getUserId(ctx: Context) {
   const Authorization = ctx.request.headers.authorization
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
-    const { userId }: any = jwt.decode(token)
+    const { userId }: any = jwt.decode(token) || ''
     // const { userId } = jwt.verify(token, process.env.APP_SECRET) as { userId: string }
     // arbirtrary revision
     return userId || ''

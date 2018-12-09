@@ -153,11 +153,28 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
       throw new Error("Resolver not implemented");      
     }
   },
-  checkout: async (_parent, _args, context: any, _info): Promise<MutationResultParent> => {
+  checkout: async (_parent, _args: any, context: any, _info): Promise<MutationResultParent> => {
     try {
+      const id = getUserId(context)
+
+      await context.db.mutation.createInvoice({
+        amount: _args.amount,
+        email: _args.email,
+        customer: {
+          connect: {id}
+        },
+        venders: {
+          connect: [..._args.vendors]
+        },
+        items: [..._args.items]
+      })
+       
       return {success: true}
-    } catch {
-      throw new Error("Resolver not implemented");      
+    } catch(err) {
+      console.debug({
+        message: err.message,
+        resolver: 'Mutation.checkout'
+      });      
     }
   },
   createNewProduct: async (_parent, _args, context: any, _info): Promise<MutationResultParent> => {

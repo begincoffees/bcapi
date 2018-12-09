@@ -28,9 +28,9 @@ export const Query: QueryResolvers.Type<TypeMap> = {
       } as any
     }
   },
-  feed: async (parent, args, context, info): Promise<ProductParent[]> => {
+  feed: async (parent, args, context: any, info): Promise<ProductParent[]> => {
     try {
-      const products = await (context as any).db.query.products({first: 50})
+      const products = await context.db.query.products({first: 50})
       return products as ProductParent[]
     }catch(err) {
       console.debug('trouble getting feed')
