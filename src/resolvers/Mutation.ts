@@ -163,7 +163,7 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
   createNewProduct: async (_parent, _args, context: any, _info): Promise<MutationResultParent> => {
     try {
       const id = getUserId(context)
-      await context.db.mutation.createNewProduct({
+      await context.db.mutation.createProduct({
         name: _args.name,
         description:  _args.description,
         varietal: _args.varietal,
