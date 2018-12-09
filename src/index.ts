@@ -12,7 +12,8 @@ const withDB = (req) => ({
   db: new Prisma({
     typeDefs: './src/generated/prisma.graphql',
     endpoint: process.env.PRISMA_ENDPOINT,
-    secret: process.env.PRISMA_SECRET
+    secret: process.env.PRISMA_SECRET || 'bigboi',
+    debug: true
   } as any)
 })
 
