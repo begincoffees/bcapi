@@ -16,11 +16,6 @@ export function getUserId(ctx: Context) {
   throw new AuthError()
 }
 
-export function setUserId(req, res, next) {
-  console.log(req.headers.Authorization)
-  next()
-}
-
 export class AuthError extends Error {
   constructor() {
     super('Not authorized')

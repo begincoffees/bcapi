@@ -16,7 +16,7 @@ export interface ViewerParent {
 }
 
 export const Viewer: ViewerResolvers.Type<TypeMap> = {
-  me: async (parent, args, context: any): Promise<UserParent> => {
+  me: async (parent, args, context: Context): Promise<UserParent> => {
     const id = getUserId(context)
     if(id){
       const me = await context.db.query.user({where:{id}})
@@ -26,11 +26,11 @@ export const Viewer: ViewerResolvers.Type<TypeMap> = {
   cart: async (parent, args, context: Context): Promise<CartParent> => {
     try {
       const id = getUserId(context)
-      const me = await context.db.carts({where: {user:{id}}})
+      const me = await context.db.query.carts({where: {user:{id}}})
       return me[0] as any
     }
     catch {
-      console.log('ok')
+      console.log('Viewer.cart error')
     }
   },
   purchases: parent => parent.purchases || [],

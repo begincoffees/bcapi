@@ -25,6 +25,7 @@
     "prisma-client-lib": "^1.21.0",
     "serve": "^10.1.1",
     "serve-static": "^1.13.2",
+    "stripe": "^6.18.1",
     "ts-node": "^7.0.1"
   },
   "devDependencies": {
@@ -36,6 +37,7 @@
     "@babel/preset-typescript": "^7.1.0",
     "@types/bcryptjs": "2.4.2",
     "@types/jsonwebtoken": "^7.2.8",
+    "@types/stripe": "^6.0.4",
     "apollo-codegen": "^0.20.2",
     "dotenv-cli": "^1.4.0",
     "graphql-cli": "^2.17.0",

@@ -7,38 +7,31 @@ services:
       dockerfile: config/Dockerfile
     command: npm start
     restart: always
-    networks: 
-      - web
-      - default
     ports:
       - "6006:6006"
+    networks: 
+      - bcapp
+      - default
     volumes:
       - .:/usr/app/
       - /usr/app/node_modules
     labels:
-      - "traefik.docker.network=web"
+      - "traefik.docker.network=proxy"
       - "traefik.enable=true"
       - "traefik.basic.frontend.rule=Host:begincoffees.app"
       - "traefik.basic.port=80"
       - "traefik.basic.protocol=http"
-  proxy:
-    image: traefik 
-    command: --api --docker # Enables the web UI and tells Traefik to listen to docker
-    ports:
-      - "80:80"    # The HTTP port
-      - "8080:8080" # The Web UI (enabled by --api)
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
   prisma:
-    container_name: bcdb
     image: prismagraphql/prisma:1.17.1
     restart: always
     ports:
     - "4466:4466"
+    networks: 
+      - bcapp  
     environment:
       PRISMA_CONFIG: |
         port: 4466
-        managementApiSecret: bigboi
+        managementApiSecret: 'bigboi'
         databases:
           default:
             connector: postgres
@@ -46,11 +39,30 @@ services:
             port: 5432
             user: prisma
             password: prisma
-            migrations: true  
+            migrations: true
+  postgres:
+    image: postgres
+    restart: always
+    networks: 
+      - bcapp     
+    environment:
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: prisma
+    volumes:
+      - postgres:/var/lib/postgresql/data      
+  bcapp:
+    image: traefik 
+    command: --api --docker # Enables the web UI and tells Traefik to listen to docker
+    ports:
+      - "80:80"    # The HTTP port
+      - "8080:8080" # The Web UI (enabled by --api)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 volumes:
+  postgres:
   prisma:
   api:
-  proxy:
+  bcapp:
 networks:
-  web:
+  bcapp:
     external: true

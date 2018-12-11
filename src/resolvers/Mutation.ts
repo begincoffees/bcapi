@@ -8,8 +8,36 @@ import * as moment from 'moment';
 import { UserParent } from "./User";
 import { getUserId } from "../utils";
 import { Context } from "./types/Context";
+import * as Stripe from 'stripe';
+
+const stripe = new Stripe('sk_test_txLGX8cbuvZv44l5TTCuX7S3');
 
 export interface MutationParent {}
+
+export async function transaction (email: string){
+  try{
+    const transaction = await stripe.customers.create({
+      email,
+    }).then((customer) => {
+      return stripe.customers.createSource(customer.id, {
+        source: 'tok_visa'
+      });
+    }).then((source) => {
+      return stripe.charges.create({
+        amount: 1600,
+        currency: 'usd',
+        customer: source.customer as any
+      }); 
+    })
+    return transaction
+  } catch(err) {
+    console.log({transactionErr: err.message})
+  }
+}
+
+const saveInvoice = async (prisma: any, args: any) => await prisma.mutation
+  .createInvoice({...args})
+  .catch((err) => err)
 
 export const Mutation: MutationResolvers.Type<TypeMap> = {
   customerSignup: async (_parent, {..._args}, context: any, _info): Promise<AuthPayloadParent> => {
@@ -156,27 +184,29 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
   checkout: async (_parent, _args: any, context: any, _info): Promise<MutationResultParent> => {
     try {
       const id = getUserId(context)
-
-      await context.db.mutation.createInvoice({
+      // const stripeAuth = await transaction(_args.email)
+      const whatever = await context.db.mutation.createInvoice({data: {
         amount: _args.amount,
         email: _args.email,
-        customer: {
-          connect: {id}
-        },
-        venders: {
-          connect: [..._args.vendors]
-        },
-        items: [..._args.items]
-      })
-       
+        vendors:{connect: [..._args.vendors]},
+        customer: {connect: {id}},
+        items: {connect: [..._args.items]}
+      }}).then(res => res)
+
       return {success: true}
-    } catch(err) {
-      console.debug({
-        message: err.message,
-        resolver: 'Mutation.checkout'
-      });      
+    } catch {
+      throw new Error('error checkout')
     }
   },
+  // createNewInvoice: async (_parent, _args: any, context: any, _info): Promise<MutationResultParent> => {
+  //   try {
+  //     const id = getUserId(context)
+  //     const items = [..._args.items].map(i => ({id: i.id}))
+  //   } catch {
+  //     throw new Error('error checkout')
+  //   }
+  // },
+
   createNewProduct: async (_parent, _args, context: any, _info): Promise<MutationResultParent> => {
     try {
       const id = getUserId(context)
