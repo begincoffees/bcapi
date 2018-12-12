@@ -25,7 +25,8 @@ type Invoice {
   id: ID! @unique
   items: [Product!]!
   amount: String
-  email: String! 
+  email: String!
+  record: Json
   customer: User @relation(name: "CUSTOMER")
   vendors: [User!]! @relation(name: "VENDOR")
 }

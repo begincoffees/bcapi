@@ -1,7 +1,88 @@
-# source: https://begincoffeesprisma.herokuapp.com/bcprisma/test
-# timestamp: Wed Dec 12 2018 18:29:12 GMT-0600 (CST)
+import { GraphQLResolveInfo, GraphQLSchema } from 'graphql'
+import { IResolvers } from 'graphql-tools/dist/Interfaces'
+import { Options } from 'graphql-binding'
+import { makePrismaBindingClass, BasePrismaOptions } from 'prisma-binding'
 
-type AggregateCart {
+export interface Query {
+    users: <T = User[]>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    carts: <T = Cart[]>(args: { where?: CartWhereInput, orderBy?: CartOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    invoices: <T = Invoice[]>(args: { where?: InvoiceWhereInput, orderBy?: InvoiceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    products: <T = Product[]>(args: { where?: ProductWhereInput, orderBy?: ProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    user: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    cart: <T = Cart | null>(args: { where: CartWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    invoice: <T = Invoice | null>(args: { where: InvoiceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    product: <T = Product | null>(args: { where: ProductWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    usersConnection: <T = UserConnection>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    cartsConnection: <T = CartConnection>(args: { where?: CartWhereInput, orderBy?: CartOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    invoicesConnection: <T = InvoiceConnection>(args: { where?: InvoiceWhereInput, orderBy?: InvoiceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    productsConnection: <T = ProductConnection>(args: { where?: ProductWhereInput, orderBy?: ProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
+  }
+
+export interface Mutation {
+    createUser: <T = User>(args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createCart: <T = Cart>(args: { data: CartCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createInvoice: <T = Invoice>(args: { data: InvoiceCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createProduct: <T = Product>(args: { data: ProductCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateUser: <T = User | null>(args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateCart: <T = Cart | null>(args: { data: CartUpdateInput, where: CartWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateInvoice: <T = Invoice | null>(args: { data: InvoiceUpdateInput, where: InvoiceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateProduct: <T = Product | null>(args: { data: ProductUpdateInput, where: ProductWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteUser: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteCart: <T = Cart | null>(args: { where: CartWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteInvoice: <T = Invoice | null>(args: { where: InvoiceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteProduct: <T = Product | null>(args: { where: ProductWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertUser: <T = User>(args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertCart: <T = Cart>(args: { where: CartWhereUniqueInput, create: CartCreateInput, update: CartUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertInvoice: <T = Invoice>(args: { where: InvoiceWhereUniqueInput, create: InvoiceCreateInput, update: InvoiceUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertProduct: <T = Product>(args: { where: ProductWhereUniqueInput, create: ProductCreateInput, update: ProductUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyUsers: <T = BatchPayload>(args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyCarts: <T = BatchPayload>(args: { data: CartUpdateInput, where?: CartWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyInvoices: <T = BatchPayload>(args: { data: InvoiceUpdateInput, where?: InvoiceWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyProducts: <T = BatchPayload>(args: { data: ProductUpdateInput, where?: ProductWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyCarts: <T = BatchPayload>(args: { where?: CartWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyInvoices: <T = BatchPayload>(args: { where?: InvoiceWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyProducts: <T = BatchPayload>(args: { where?: ProductWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
+  }
+
+export interface Subscription {
+    user: <T = UserSubscriptionPayload | null>(args: { where?: UserSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    cart: <T = CartSubscriptionPayload | null>(args: { where?: CartSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    invoice: <T = InvoiceSubscriptionPayload | null>(args: { where?: InvoiceSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    product: <T = ProductSubscriptionPayload | null>(args: { where?: ProductSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
+  }
+
+export interface Exists {
+  User: (where?: UserWhereInput) => Promise<boolean>
+  Cart: (where?: CartWhereInput) => Promise<boolean>
+  Invoice: (where?: InvoiceWhereInput) => Promise<boolean>
+  Product: (where?: ProductWhereInput) => Promise<boolean>
+}
+
+export interface Prisma {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+  exists: Exists
+  request: <T = any>(query: string, variables?: {[key: string]: any}) => Promise<T>
+  delegate(operation: 'query' | 'mutation', fieldName: string, args: {
+    [key: string]: any;
+}, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<any>;
+delegateSubscription(fieldName: string, args?: {
+    [key: string]: any;
+}, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<AsyncIterator<any>>;
+getAbstractResolvers(filterSchema?: GraphQLSchema | string): IResolvers;
+}
+
+export interface BindingConstructor<T> {
+  new(options: BasePrismaOptions): T
+}
+/**
+ * Type Defs
+*/
+
+const typeDefs = `type AggregateCart {
   count: Int!
 }
 
@@ -646,7 +727,7 @@ input InvoiceWhereUniqueInput {
 scalar Json
 
 """
-The `Long` scalar type represents non-fractional signed whole numeric values.
+The \`Long\` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
 """
 scalar Long
@@ -1813,3 +1894,1218 @@ input UserWhereUniqueInput {
   id: ID
   email: String
 }
+`
+
+export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({typeDefs})
+
+/**
+ * Types
+*/
+
+export type UserOrderByInput =   'id_ASC' |
+  'id_DESC' |
+  'role_ASC' |
+  'role_DESC' |
+  'email_ASC' |
+  'email_DESC' |
+  'firstName_ASC' |
+  'firstName_DESC' |
+  'lastName_ASC' |
+  'lastName_DESC' |
+  'bizName_ASC' |
+  'bizName_DESC' |
+  'password_ASC' |
+  'password_DESC' |
+  'updatedAt_ASC' |
+  'updatedAt_DESC' |
+  'createdAt_ASC' |
+  'createdAt_DESC'
+
+export type ProductOrderByInput =   'id_ASC' |
+  'id_DESC' |
+  'name_ASC' |
+  'name_DESC' |
+  'price_ASC' |
+  'price_DESC' |
+  'description_ASC' |
+  'description_DESC' |
+  'varietal_ASC' |
+  'varietal_DESC' |
+  'updatedAt_ASC' |
+  'updatedAt_DESC' |
+  'createdAt_ASC' |
+  'createdAt_DESC'
+
+export type CartOrderByInput =   'id_ASC' |
+  'id_DESC' |
+  'itemCount_ASC' |
+  'itemCount_DESC' |
+  'totalPrice_ASC' |
+  'totalPrice_DESC' |
+  'updatedAt_ASC' |
+  'updatedAt_DESC' |
+  'createdAt_ASC' |
+  'createdAt_DESC'
+
+export type InvoiceOrderByInput =   'id_ASC' |
+  'id_DESC' |
+  'amount_ASC' |
+  'amount_DESC' |
+  'email_ASC' |
+  'email_DESC' |
+  'record_ASC' |
+  'record_DESC' |
+  'updatedAt_ASC' |
+  'updatedAt_DESC' |
+  'createdAt_ASC' |
+  'createdAt_DESC'
+
+export type MutationType =   'CREATED' |
+  'UPDATED' |
+  'DELETED'
+
+export interface InvoiceCreateInput {
+  amount?: String
+  email: String
+  record?: Json
+  items?: ProductCreateManyInput
+  customer?: UserCreateOneWithoutPurchasesInput
+  vendors?: UserCreateManyWithoutSalesInput
+}
+
+export interface UserWhereInput {
+  AND?: UserWhereInput[] | UserWhereInput
+  OR?: UserWhereInput[] | UserWhereInput
+  NOT?: UserWhereInput[] | UserWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  role?: String
+  role_not?: String
+  role_in?: String[] | String
+  role_not_in?: String[] | String
+  role_lt?: String
+  role_lte?: String
+  role_gt?: String
+  role_gte?: String
+  role_contains?: String
+  role_not_contains?: String
+  role_starts_with?: String
+  role_not_starts_with?: String
+  role_ends_with?: String
+  role_not_ends_with?: String
+  email?: String
+  email_not?: String
+  email_in?: String[] | String
+  email_not_in?: String[] | String
+  email_lt?: String
+  email_lte?: String
+  email_gt?: String
+  email_gte?: String
+  email_contains?: String
+  email_not_contains?: String
+  email_starts_with?: String
+  email_not_starts_with?: String
+  email_ends_with?: String
+  email_not_ends_with?: String
+  firstName?: String
+  firstName_not?: String
+  firstName_in?: String[] | String
+  firstName_not_in?: String[] | String
+  firstName_lt?: String
+  firstName_lte?: String
+  firstName_gt?: String
+  firstName_gte?: String
+  firstName_contains?: String
+  firstName_not_contains?: String
+  firstName_starts_with?: String
+  firstName_not_starts_with?: String
+  firstName_ends_with?: String
+  firstName_not_ends_with?: String
+  lastName?: String
+  lastName_not?: String
+  lastName_in?: String[] | String
+  lastName_not_in?: String[] | String
+  lastName_lt?: String
+  lastName_lte?: String
+  lastName_gt?: String
+  lastName_gte?: String
+  lastName_contains?: String
+  lastName_not_contains?: String
+  lastName_starts_with?: String
+  lastName_not_starts_with?: String
+  lastName_ends_with?: String
+  lastName_not_ends_with?: String
+  bizName?: String
+  bizName_not?: String
+  bizName_in?: String[] | String
+  bizName_not_in?: String[] | String
+  bizName_lt?: String
+  bizName_lte?: String
+  bizName_gt?: String
+  bizName_gte?: String
+  bizName_contains?: String
+  bizName_not_contains?: String
+  bizName_starts_with?: String
+  bizName_not_starts_with?: String
+  bizName_ends_with?: String
+  bizName_not_ends_with?: String
+  password?: String
+  password_not?: String
+  password_in?: String[] | String
+  password_not_in?: String[] | String
+  password_lt?: String
+  password_lte?: String
+  password_gt?: String
+  password_gte?: String
+  password_contains?: String
+  password_not_contains?: String
+  password_starts_with?: String
+  password_not_starts_with?: String
+  password_ends_with?: String
+  password_not_ends_with?: String
+  cart?: CartWhereInput
+  purchases_every?: InvoiceWhereInput
+  purchases_some?: InvoiceWhereInput
+  purchases_none?: InvoiceWhereInput
+  products_every?: ProductWhereInput
+  products_some?: ProductWhereInput
+  products_none?: ProductWhereInput
+  sales_every?: InvoiceWhereInput
+  sales_some?: InvoiceWhereInput
+  sales_none?: InvoiceWhereInput
+}
+
+export interface CartUpdateWithoutUserDataInput {
+  itemCount?: Int
+  totalPrice?: String
+  items?: ProductUpdateManyWithoutCartsInput
+}
+
+export interface InvoiceWhereInput {
+  AND?: InvoiceWhereInput[] | InvoiceWhereInput
+  OR?: InvoiceWhereInput[] | InvoiceWhereInput
+  NOT?: InvoiceWhereInput[] | InvoiceWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  amount?: String
+  amount_not?: String
+  amount_in?: String[] | String
+  amount_not_in?: String[] | String
+  amount_lt?: String
+  amount_lte?: String
+  amount_gt?: String
+  amount_gte?: String
+  amount_contains?: String
+  amount_not_contains?: String
+  amount_starts_with?: String
+  amount_not_starts_with?: String
+  amount_ends_with?: String
+  amount_not_ends_with?: String
+  email?: String
+  email_not?: String
+  email_in?: String[] | String
+  email_not_in?: String[] | String
+  email_lt?: String
+  email_lte?: String
+  email_gt?: String
+  email_gte?: String
+  email_contains?: String
+  email_not_contains?: String
+  email_starts_with?: String
+  email_not_starts_with?: String
+  email_ends_with?: String
+  email_not_ends_with?: String
+  items_every?: ProductWhereInput
+  items_some?: ProductWhereInput
+  items_none?: ProductWhereInput
+  customer?: UserWhereInput
+  vendors_every?: UserWhereInput
+  vendors_some?: UserWhereInput
+  vendors_none?: UserWhereInput
+}
+
+export interface UserCreateOneWithoutCartInput {
+  create?: UserCreateWithoutCartInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface UserUpdateOneWithoutPurchasesInput {
+  create?: UserCreateWithoutPurchasesInput
+  connect?: UserWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: UserUpdateWithoutPurchasesDataInput
+  upsert?: UserUpsertWithoutPurchasesInput
+}
+
+export interface UserCreateWithoutCartInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  permissions?: UserCreatepermissionsInput
+  purchases?: InvoiceCreateManyWithoutCustomerInput
+  products?: ProductCreateManyWithoutVendorInput
+  sales?: InvoiceCreateManyWithoutVendorsInput
+}
+
+export interface ProductUpdateManyWithoutCartsInput {
+  create?: ProductCreateWithoutCartsInput[] | ProductCreateWithoutCartsInput
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  update?: ProductUpdateWithWhereUniqueWithoutCartsInput[] | ProductUpdateWithWhereUniqueWithoutCartsInput
+  upsert?: ProductUpsertWithWhereUniqueWithoutCartsInput[] | ProductUpsertWithWhereUniqueWithoutCartsInput
+}
+
+export interface ProductCreateManyWithoutVendorInput {
+  create?: ProductCreateWithoutVendorInput[] | ProductCreateWithoutVendorInput
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+}
+
+export interface ProductSubscriptionWhereInput {
+  AND?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  OR?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  NOT?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ProductWhereInput
+}
+
+export interface ProductCreateWithoutVendorInput {
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+  carts?: CartCreateManyWithoutItemsInput
+}
+
+export interface CartWhereInput {
+  AND?: CartWhereInput[] | CartWhereInput
+  OR?: CartWhereInput[] | CartWhereInput
+  NOT?: CartWhereInput[] | CartWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  itemCount?: Int
+  itemCount_not?: Int
+  itemCount_in?: Int[] | Int
+  itemCount_not_in?: Int[] | Int
+  itemCount_lt?: Int
+  itemCount_lte?: Int
+  itemCount_gt?: Int
+  itemCount_gte?: Int
+  totalPrice?: String
+  totalPrice_not?: String
+  totalPrice_in?: String[] | String
+  totalPrice_not_in?: String[] | String
+  totalPrice_lt?: String
+  totalPrice_lte?: String
+  totalPrice_gt?: String
+  totalPrice_gte?: String
+  totalPrice_contains?: String
+  totalPrice_not_contains?: String
+  totalPrice_starts_with?: String
+  totalPrice_not_starts_with?: String
+  totalPrice_ends_with?: String
+  totalPrice_not_ends_with?: String
+  items_every?: ProductWhereInput
+  items_some?: ProductWhereInput
+  items_none?: ProductWhereInput
+  user?: UserWhereInput
+}
+
+export interface InvoiceCreateManyWithoutVendorsInput {
+  create?: InvoiceCreateWithoutVendorsInput[] | InvoiceCreateWithoutVendorsInput
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+}
+
+export interface UserSubscriptionWhereInput {
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: UserWhereInput
+}
+
+export interface InvoiceCreateWithoutVendorsInput {
+  amount?: String
+  email: String
+  record?: Json
+  items?: ProductCreateManyInput
+  customer?: UserCreateOneWithoutPurchasesInput
+}
+
+export interface CartWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface UserCreateOneWithoutPurchasesInput {
+  create?: UserCreateWithoutPurchasesInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface ProductWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface UserCreateWithoutPurchasesInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  permissions?: UserCreatepermissionsInput
+  cart?: CartCreateOneWithoutUserInput
+  products?: ProductCreateManyWithoutVendorInput
+  sales?: InvoiceCreateManyWithoutVendorsInput
+}
+
+export interface InvoiceUpdateInput {
+  amount?: String
+  email?: String
+  record?: Json
+  items?: ProductUpdateManyInput
+  customer?: UserUpdateOneWithoutPurchasesInput
+  vendors?: UserUpdateManyWithoutSalesInput
+}
+
+export interface UserCreateManyWithoutSalesInput {
+  create?: UserCreateWithoutSalesInput[] | UserCreateWithoutSalesInput
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+}
+
+export interface CartUpsertWithoutUserInput {
+  update: CartUpdateWithoutUserDataInput
+  create: CartCreateWithoutUserInput
+}
+
+export interface UserCreateWithoutSalesInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  permissions?: UserCreatepermissionsInput
+  cart?: CartCreateOneWithoutUserInput
+  purchases?: InvoiceCreateManyWithoutCustomerInput
+  products?: ProductCreateManyWithoutVendorInput
+}
+
+export interface UserUpsertWithoutProductsInput {
+  update: UserUpdateWithoutProductsDataInput
+  create: UserCreateWithoutProductsInput
+}
+
+export interface CartCreateInput {
+  itemCount?: Int
+  totalPrice?: String
+  items?: ProductCreateManyWithoutCartsInput
+  user: UserCreateOneWithoutCartInput
+}
+
+export interface UserUpsertWithWhereUniqueWithoutSalesInput {
+  where: UserWhereUniqueInput
+  update: UserUpdateWithoutSalesDataInput
+  create: UserCreateWithoutSalesInput
+}
+
+export interface InvoiceUpsertWithWhereUniqueWithoutVendorsInput {
+  where: InvoiceWhereUniqueInput
+  update: InvoiceUpdateWithoutVendorsDataInput
+  create: InvoiceCreateWithoutVendorsInput
+}
+
+export interface UserUpdateWithWhereUniqueWithoutSalesInput {
+  where: UserWhereUniqueInput
+  data: UserUpdateWithoutSalesDataInput
+}
+
+export interface UserUpdateInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  permissions?: UserUpdatepermissionsInput
+  cart?: CartUpdateOneWithoutUserInput
+  purchases?: InvoiceUpdateManyWithoutCustomerInput
+  products?: ProductUpdateManyWithoutVendorInput
+  sales?: InvoiceUpdateManyWithoutVendorsInput
+}
+
+export interface ProductUpsertWithWhereUniqueNestedInput {
+  where: ProductWhereUniqueInput
+  update: ProductUpdateDataInput
+  create: ProductCreateInput
+}
+
+export interface UserUpdatepermissionsInput {
+  set?: String[] | String
+}
+
+export interface UserUpsertWithoutCartInput {
+  update: UserUpdateWithoutCartDataInput
+  create: UserCreateWithoutCartInput
+}
+
+export interface CartUpdateOneWithoutUserInput {
+  create?: CartCreateWithoutUserInput
+  connect?: CartWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: CartUpdateWithoutUserDataInput
+  upsert?: CartUpsertWithoutUserInput
+}
+
+export interface UserCreatepermissionsInput {
+  set?: String[] | String
+}
+
+export interface UserUpsertWithoutPurchasesInput {
+  update: UserUpdateWithoutPurchasesDataInput
+  create: UserCreateWithoutPurchasesInput
+}
+
+export interface CartCreateWithoutUserInput {
+  itemCount?: Int
+  totalPrice?: String
+  items?: ProductCreateManyWithoutCartsInput
+}
+
+export interface UserUpdateWithoutPurchasesDataInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  permissions?: UserUpdatepermissionsInput
+  cart?: CartUpdateOneWithoutUserInput
+  products?: ProductUpdateManyWithoutVendorInput
+  sales?: InvoiceUpdateManyWithoutVendorsInput
+}
+
+export interface ProductCreateWithoutCartsInput {
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+  vendor?: UserCreateOneWithoutProductsInput
+}
+
+export interface ProductUpdateWithWhereUniqueWithoutCartsInput {
+  where: ProductWhereUniqueInput
+  data: ProductUpdateWithoutCartsDataInput
+}
+
+export interface UserCreateWithoutProductsInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  permissions?: UserCreatepermissionsInput
+  cart?: CartCreateOneWithoutUserInput
+  purchases?: InvoiceCreateManyWithoutCustomerInput
+  sales?: InvoiceCreateManyWithoutVendorsInput
+}
+
+export interface ProductUpdateWithoutCartsDataInput {
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+  vendor?: UserUpdateOneWithoutProductsInput
+}
+
+export interface InvoiceCreateWithoutCustomerInput {
+  amount?: String
+  email: String
+  record?: Json
+  items?: ProductCreateManyInput
+  vendors?: UserCreateManyWithoutSalesInput
+}
+
+export interface UserUpdateOneWithoutProductsInput {
+  create?: UserCreateWithoutProductsInput
+  connect?: UserWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: UserUpdateWithoutProductsDataInput
+  upsert?: UserUpsertWithoutProductsInput
+}
+
+export interface ProductCreateInput {
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+  vendor?: UserCreateOneWithoutProductsInput
+  carts?: CartCreateManyWithoutItemsInput
+}
+
+export interface UserUpdateWithoutProductsDataInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  permissions?: UserUpdatepermissionsInput
+  cart?: CartUpdateOneWithoutUserInput
+  purchases?: InvoiceUpdateManyWithoutCustomerInput
+  sales?: InvoiceUpdateManyWithoutVendorsInput
+}
+
+export interface CartCreateWithoutItemsInput {
+  itemCount?: Int
+  totalPrice?: String
+  user: UserCreateOneWithoutCartInput
+}
+
+export interface InvoiceUpdateManyWithoutCustomerInput {
+  create?: InvoiceCreateWithoutCustomerInput[] | InvoiceCreateWithoutCustomerInput
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  disconnect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  delete?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  update?: InvoiceUpdateWithWhereUniqueWithoutCustomerInput[] | InvoiceUpdateWithWhereUniqueWithoutCustomerInput
+  upsert?: InvoiceUpsertWithWhereUniqueWithoutCustomerInput[] | InvoiceUpsertWithWhereUniqueWithoutCustomerInput
+}
+
+export interface InvoiceSubscriptionWhereInput {
+  AND?: InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput
+  OR?: InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput
+  NOT?: InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: InvoiceWhereInput
+}
+
+export interface InvoiceUpdateWithWhereUniqueWithoutCustomerInput {
+  where: InvoiceWhereUniqueInput
+  data: InvoiceUpdateWithoutCustomerDataInput
+}
+
+export interface UserWhereUniqueInput {
+  id?: ID_Input
+  email?: String
+}
+
+export interface InvoiceUpdateWithoutCustomerDataInput {
+  amount?: String
+  email?: String
+  record?: Json
+  items?: ProductUpdateManyInput
+  vendors?: UserUpdateManyWithoutSalesInput
+}
+
+export interface ProductUpdateInput {
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+  vendor?: UserUpdateOneWithoutProductsInput
+  carts?: CartUpdateManyWithoutItemsInput
+}
+
+export interface ProductUpdateManyInput {
+  create?: ProductCreateInput[] | ProductCreateInput
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  update?: ProductUpdateWithWhereUniqueNestedInput[] | ProductUpdateWithWhereUniqueNestedInput
+  upsert?: ProductUpsertWithWhereUniqueNestedInput[] | ProductUpsertWithWhereUniqueNestedInput
+}
+
+export interface ProductUpsertWithWhereUniqueWithoutCartsInput {
+  where: ProductWhereUniqueInput
+  update: ProductUpdateWithoutCartsDataInput
+  create: ProductCreateWithoutCartsInput
+}
+
+export interface ProductUpdateWithWhereUniqueNestedInput {
+  where: ProductWhereUniqueInput
+  data: ProductUpdateDataInput
+}
+
+export interface UserUpdateWithoutSalesDataInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  permissions?: UserUpdatepermissionsInput
+  cart?: CartUpdateOneWithoutUserInput
+  purchases?: InvoiceUpdateManyWithoutCustomerInput
+  products?: ProductUpdateManyWithoutVendorInput
+}
+
+export interface ProductUpdateDataInput {
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+  vendor?: UserUpdateOneWithoutProductsInput
+  carts?: CartUpdateManyWithoutItemsInput
+}
+
+export interface CartUpsertWithWhereUniqueWithoutItemsInput {
+  where: CartWhereUniqueInput
+  update: CartUpdateWithoutItemsDataInput
+  create: CartCreateWithoutItemsInput
+}
+
+export interface CartUpdateManyWithoutItemsInput {
+  create?: CartCreateWithoutItemsInput[] | CartCreateWithoutItemsInput
+  connect?: CartWhereUniqueInput[] | CartWhereUniqueInput
+  disconnect?: CartWhereUniqueInput[] | CartWhereUniqueInput
+  delete?: CartWhereUniqueInput[] | CartWhereUniqueInput
+  update?: CartUpdateWithWhereUniqueWithoutItemsInput[] | CartUpdateWithWhereUniqueWithoutItemsInput
+  upsert?: CartUpsertWithWhereUniqueWithoutItemsInput[] | CartUpsertWithWhereUniqueWithoutItemsInput
+}
+
+export interface CartCreateOneWithoutUserInput {
+  create?: CartCreateWithoutUserInput
+  connect?: CartWhereUniqueInput
+}
+
+export interface CartUpdateWithWhereUniqueWithoutItemsInput {
+  where: CartWhereUniqueInput
+  data: CartUpdateWithoutItemsDataInput
+}
+
+export interface UserCreateOneWithoutProductsInput {
+  create?: UserCreateWithoutProductsInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface CartUpdateWithoutItemsDataInput {
+  itemCount?: Int
+  totalPrice?: String
+  user?: UserUpdateOneWithoutCartInput
+}
+
+export interface ProductCreateManyInput {
+  create?: ProductCreateInput[] | ProductCreateInput
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+}
+
+export interface UserUpdateOneWithoutCartInput {
+  create?: UserCreateWithoutCartInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutCartDataInput
+  upsert?: UserUpsertWithoutCartInput
+}
+
+export interface ProductWhereInput {
+  AND?: ProductWhereInput[] | ProductWhereInput
+  OR?: ProductWhereInput[] | ProductWhereInput
+  NOT?: ProductWhereInput[] | ProductWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
+  price?: String
+  price_not?: String
+  price_in?: String[] | String
+  price_not_in?: String[] | String
+  price_lt?: String
+  price_lte?: String
+  price_gt?: String
+  price_gte?: String
+  price_contains?: String
+  price_not_contains?: String
+  price_starts_with?: String
+  price_not_starts_with?: String
+  price_ends_with?: String
+  price_not_ends_with?: String
+  description?: String
+  description_not?: String
+  description_in?: String[] | String
+  description_not_in?: String[] | String
+  description_lt?: String
+  description_lte?: String
+  description_gt?: String
+  description_gte?: String
+  description_contains?: String
+  description_not_contains?: String
+  description_starts_with?: String
+  description_not_starts_with?: String
+  description_ends_with?: String
+  description_not_ends_with?: String
+  varietal?: String
+  varietal_not?: String
+  varietal_in?: String[] | String
+  varietal_not_in?: String[] | String
+  varietal_lt?: String
+  varietal_lte?: String
+  varietal_gt?: String
+  varietal_gte?: String
+  varietal_contains?: String
+  varietal_not_contains?: String
+  varietal_starts_with?: String
+  varietal_not_starts_with?: String
+  varietal_ends_with?: String
+  varietal_not_ends_with?: String
+  vendor?: UserWhereInput
+  carts_every?: CartWhereInput
+  carts_some?: CartWhereInput
+  carts_none?: CartWhereInput
+  _MagicalBackRelation_InvoiceToProduct_every?: InvoiceWhereInput
+  _MagicalBackRelation_InvoiceToProduct_some?: InvoiceWhereInput
+  _MagicalBackRelation_InvoiceToProduct_none?: InvoiceWhereInput
+}
+
+export interface UserUpdateWithoutCartDataInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  permissions?: UserUpdatepermissionsInput
+  purchases?: InvoiceUpdateManyWithoutCustomerInput
+  products?: ProductUpdateManyWithoutVendorInput
+  sales?: InvoiceUpdateManyWithoutVendorsInput
+}
+
+export interface InvoiceWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface ProductUpdateManyWithoutVendorInput {
+  create?: ProductCreateWithoutVendorInput[] | ProductCreateWithoutVendorInput
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  update?: ProductUpdateWithWhereUniqueWithoutVendorInput[] | ProductUpdateWithWhereUniqueWithoutVendorInput
+  upsert?: ProductUpsertWithWhereUniqueWithoutVendorInput[] | ProductUpsertWithWhereUniqueWithoutVendorInput
+}
+
+export interface InvoiceUpsertWithWhereUniqueWithoutCustomerInput {
+  where: InvoiceWhereUniqueInput
+  update: InvoiceUpdateWithoutCustomerDataInput
+  create: InvoiceCreateWithoutCustomerInput
+}
+
+export interface ProductUpdateWithWhereUniqueWithoutVendorInput {
+  where: ProductWhereUniqueInput
+  data: ProductUpdateWithoutVendorDataInput
+}
+
+export interface UserCreateInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  permissions?: UserCreatepermissionsInput
+  cart?: CartCreateOneWithoutUserInput
+  purchases?: InvoiceCreateManyWithoutCustomerInput
+  products?: ProductCreateManyWithoutVendorInput
+  sales?: InvoiceCreateManyWithoutVendorsInput
+}
+
+export interface ProductUpdateWithoutVendorDataInput {
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+  carts?: CartUpdateManyWithoutItemsInput
+}
+
+export interface InvoiceCreateManyWithoutCustomerInput {
+  create?: InvoiceCreateWithoutCustomerInput[] | InvoiceCreateWithoutCustomerInput
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+}
+
+export interface CartSubscriptionWhereInput {
+  AND?: CartSubscriptionWhereInput[] | CartSubscriptionWhereInput
+  OR?: CartSubscriptionWhereInput[] | CartSubscriptionWhereInput
+  NOT?: CartSubscriptionWhereInput[] | CartSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: CartWhereInput
+}
+
+export interface InvoiceUpdateWithoutVendorsDataInput {
+  amount?: String
+  email?: String
+  record?: Json
+  items?: ProductUpdateManyInput
+  customer?: UserUpdateOneWithoutPurchasesInput
+}
+
+export interface InvoiceUpdateWithWhereUniqueWithoutVendorsInput {
+  where: InvoiceWhereUniqueInput
+  data: InvoiceUpdateWithoutVendorsDataInput
+}
+
+export interface InvoiceUpdateManyWithoutVendorsInput {
+  create?: InvoiceCreateWithoutVendorsInput[] | InvoiceCreateWithoutVendorsInput
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  disconnect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  delete?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  update?: InvoiceUpdateWithWhereUniqueWithoutVendorsInput[] | InvoiceUpdateWithWhereUniqueWithoutVendorsInput
+  upsert?: InvoiceUpsertWithWhereUniqueWithoutVendorsInput[] | InvoiceUpsertWithWhereUniqueWithoutVendorsInput
+}
+
+export interface ProductUpsertWithWhereUniqueWithoutVendorInput {
+  where: ProductWhereUniqueInput
+  update: ProductUpdateWithoutVendorDataInput
+  create: ProductCreateWithoutVendorInput
+}
+
+export interface CartUpdateInput {
+  itemCount?: Int
+  totalPrice?: String
+  items?: ProductUpdateManyWithoutCartsInput
+  user?: UserUpdateOneWithoutCartInput
+}
+
+export interface CartCreateManyWithoutItemsInput {
+  create?: CartCreateWithoutItemsInput[] | CartCreateWithoutItemsInput
+  connect?: CartWhereUniqueInput[] | CartWhereUniqueInput
+}
+
+export interface ProductCreateManyWithoutCartsInput {
+  create?: ProductCreateWithoutCartsInput[] | ProductCreateWithoutCartsInput
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+}
+
+export interface UserUpdateManyWithoutSalesInput {
+  create?: UserCreateWithoutSalesInput[] | UserCreateWithoutSalesInput
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  update?: UserUpdateWithWhereUniqueWithoutSalesInput[] | UserUpdateWithWhereUniqueWithoutSalesInput
+  upsert?: UserUpsertWithWhereUniqueWithoutSalesInput[] | UserUpsertWithWhereUniqueWithoutSalesInput
+}
+
+/*
+ * An object with an ID
+
+ */
+export interface Node {
+  id: ID_Output
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface UserConnection {
+  pageInfo: PageInfo
+  edges: UserEdge[]
+  aggregate: AggregateUser
+}
+
+export interface ProductPreviousValues {
+  id: ID_Output
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+}
+
+export interface BatchPayload {
+  count: Long
+}
+
+export interface Cart extends Node {
+  id: ID_Output
+  itemCount?: Int
+  totalPrice?: String
+  items?: Product[]
+  user: User
+}
+
+export interface User extends Node {
+  id: ID_Output
+  role?: String
+  permissions: String[]
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  cart?: Cart
+  purchases?: Invoice[]
+  products?: Product[]
+  sales?: Invoice[]
+}
+
+export interface InvoiceSubscriptionPayload {
+  mutation: MutationType
+  node?: Invoice
+  updatedFields?: String[]
+  previousValues?: InvoicePreviousValues
+}
+
+export interface AggregateProduct {
+  count: Int
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface ProductEdge {
+  node: Product
+  cursor: String
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface ProductConnection {
+  pageInfo: PageInfo
+  edges: ProductEdge[]
+  aggregate: AggregateProduct
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface InvoiceEdge {
+  node: Invoice
+  cursor: String
+}
+
+export interface Product extends Node {
+  id: ID_Output
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+  vendor?: User
+  carts?: Cart[]
+}
+
+export interface AggregateCart {
+  count: Int
+}
+
+export interface InvoicePreviousValues {
+  id: ID_Output
+  amount?: String
+  email: String
+  record?: Json
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface CartConnection {
+  pageInfo: PageInfo
+  edges: CartEdge[]
+  aggregate: AggregateCart
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType
+  node?: User
+  updatedFields?: String[]
+  previousValues?: UserPreviousValues
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface UserEdge {
+  node: User
+  cursor: String
+}
+
+/*
+ * Information about pagination in a connection.
+
+ */
+export interface PageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor?: String
+  endCursor?: String
+}
+
+export interface CartPreviousValues {
+  id: ID_Output
+  itemCount?: Int
+  totalPrice?: String
+}
+
+export interface CartSubscriptionPayload {
+  mutation: MutationType
+  node?: Cart
+  updatedFields?: String[]
+  previousValues?: CartPreviousValues
+}
+
+export interface Invoice extends Node {
+  id: ID_Output
+  items?: Product[]
+  amount?: String
+  email: String
+  record?: Json
+  customer?: User
+  vendors?: User[]
+}
+
+export interface UserPreviousValues {
+  id: ID_Output
+  role?: String
+  permissions: String[]
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+}
+
+export interface AggregateInvoice {
+  count: Int
+}
+
+export interface ProductSubscriptionPayload {
+  mutation: MutationType
+  node?: Product
+  updatedFields?: String[]
+  previousValues?: ProductPreviousValues
+}
+
+export interface AggregateUser {
+  count: Int
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface CartEdge {
+  node: Cart
+  cursor: String
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface InvoiceConnection {
+  pageInfo: PageInfo
+  edges: InvoiceEdge[]
+  aggregate: AggregateInvoice
+}
+
+/*
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
+*/
+export type Long = string
+
+/*
+The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+*/
+export type ID_Input = string | number
+export type ID_Output = string
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean
+
+/*
+Raw JSON value
+*/
+export type Json = any
+
+/*
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+*/
+export type String = string
+
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number

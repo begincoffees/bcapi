@@ -29,6 +29,7 @@ export const Query: QueryResolvers.Type<TypeMap> = {
     }
   },
   feed: async (parent, args, context: any, info): Promise<ProductParent[]> => {
+    console.log(process.env.STRIPE_SECRET)
     try {
       const products = await context.db.query.products({first: 50})
       return products as ProductParent[]

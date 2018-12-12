@@ -507,36 +507,6 @@ export namespace MutationResolvers {
       ctx: T["Context"],
       info: GraphQLResolveInfo
     ) => T["AuthPayloadParent"] | Promise<T["AuthPayloadParent"]>;
-    logout: (
-      parent: T["MutationParent"],
-      args: ArgsLogout,
-      ctx: T["Context"],
-      info: GraphQLResolveInfo
-    ) => T["MutationResultParent"] | Promise<T["MutationResultParent"]>;
-    addItemToCart: (
-      parent: T["MutationParent"],
-      args: ArgsAddItemToCart,
-      ctx: T["Context"],
-      info: GraphQLResolveInfo
-    ) => T["MutationResultParent"] | Promise<T["MutationResultParent"]>;
-    updateCartItem: (
-      parent: T["MutationParent"],
-      args: ArgsUpdateCartItem,
-      ctx: T["Context"],
-      info: GraphQLResolveInfo
-    ) => T["MutationResultParent"] | Promise<T["MutationResultParent"]>;
-    removeItemFromCart: (
-      parent: T["MutationParent"],
-      args: ArgsRemoveItemFromCart,
-      ctx: T["Context"],
-      info: GraphQLResolveInfo
-    ) => T["MutationResultParent"] | Promise<T["MutationResultParent"]>;
-    clearCart: (
-      parent: T["MutationParent"],
-      args: ArgsClearCart,
-      ctx: T["Context"],
-      info: GraphQLResolveInfo
-    ) => T["MutationResultParent"] | Promise<T["MutationResultParent"]>;
     checkout: (
       parent: T["MutationParent"],
       args: ArgsCheckout,

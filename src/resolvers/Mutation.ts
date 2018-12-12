@@ -8,36 +8,9 @@ import * as moment from 'moment';
 import { UserParent } from "./User";
 import { getUserId } from "../utils";
 import { Context } from "./types/Context";
-import * as Stripe from 'stripe';
-
-const stripe = new Stripe('sk_test_txLGX8cbuvZv44l5TTCuX7S3');
+import { createStripeInvoice } from "../utils/stripe";
 
 export interface MutationParent {}
-
-export async function transaction (email: string){
-  try{
-    const transaction = await stripe.customers.create({
-      email,
-    }).then((customer) => {
-      return stripe.customers.createSource(customer.id, {
-        source: 'tok_visa'
-      });
-    }).then((source) => {
-      return stripe.charges.create({
-        amount: 1600,
-        currency: 'usd',
-        customer: source.customer as any
-      }); 
-    })
-    return transaction
-  } catch(err) {
-    console.log({transactionErr: err.message})
-  }
-}
-
-const saveInvoice = async (prisma: any, args: any) => await prisma.mutation
-  .createInvoice({...args})
-  .catch((err) => err)
 
 export const Mutation: MutationResolvers.Type<TypeMap> = {
   customerSignup: async (_parent, {..._args}, context: any, _info): Promise<AuthPayloadParent> => {
@@ -146,67 +119,28 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
       throw new Error("I'm having completing your log in; Would you mind trying again?")
     }
   },
-  logout: async (_parent, _args, context: any, _info): Promise<MutationResultParent> => {
-    try {
-      return {success: true}
-    } catch {
-      throw new Error("Resolver not implemented");      
-    }
-  },
-  addItemToCart: async (_parent, _args, context: any, _info): Promise<MutationResultParent> => {
-    try {
-      return {success: true}
-    } catch {
-      throw new Error("Resolver not implemented");      
-    }
-  },
-  updateCartItem: async (_parent, _args, context: any, _info): Promise<MutationResultParent> => {
-    try {
-      return {success: true}
-    } catch {
-      throw new Error("Resolver not implemented");      
-    }
-  },
-  removeItemFromCart: async (_parent, _args, context: any, _info): Promise<MutationResultParent> => {
-    try {
-      return {success: true}
-    } catch {
-      throw new Error("Resolver not implemented");      
-    }
-  },
-  clearCart: async (_parent, _args, context: any, _info): Promise<MutationResultParent> => {
-    try {
-      return {success: true}
-    } catch {
-      throw new Error("Resolver not implemented");      
-    }
-  },
-  checkout: async (_parent, _args: any, context: any, _info): Promise<MutationResultParent> => {
+  checkout: async (_parent, _args: any, context: Context, _info): Promise<MutationResultParent> => {
     try {
       const id = getUserId(context)
-      // const stripeAuth = await transaction(_args.email)
-      const whatever = await context.db.mutation.createInvoice({data: {
+      await createStripeInvoice(_args.email)
+
+      // TODO:
+      // if(!_args.email) throw err
+      // if no user, create a new user, save the record
+      // invoice table needs a record key where I can save the data from stripe
+      await context.db.mutation.createInvoice({data: {
         amount: _args.amount,
         email: _args.email,
         vendors:{connect: [..._args.vendors]},
         customer: {connect: {id}},
         items: {connect: [..._args.items]}
-      }}).then(res => res)
+      }})
 
       return {success: true}
     } catch {
       throw new Error('error checkout')
     }
   },
-  // createNewInvoice: async (_parent, _args: any, context: any, _info): Promise<MutationResultParent> => {
-  //   try {
-  //     const id = getUserId(context)
-  //     const items = [..._args.items].map(i => ({id: i.id}))
-  //   } catch {
-  //     throw new Error('error checkout')
-  //   }
-  // },
-
   createNewProduct: async (_parent, _args, context: any, _info): Promise<MutationResultParent> => {
     try {
       const id = getUserId(context)
