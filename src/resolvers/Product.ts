@@ -2,6 +2,7 @@ import { ProductResolvers } from "../generated/resolvers";
 import { TypeMap } from "./types/TypeMap";
 import { UserParent } from "./User";
 import { CartParent } from "./Cart";
+import { Context } from "./types/Context";
 
 export interface ProductParent {
   id: string;
@@ -19,10 +20,10 @@ export const Product: ProductResolvers.Type<TypeMap> = {
   price: parent => parent.price,
   description: parent => parent.description,
   varietal: parent => parent.varietal,
-  vendor: async (parent, args, context: any, info): Promise<UserParent> => {
+  vendor: async (parent, args, context: Context, info): Promise<UserParent> => {
     try {
-      const product = await context.db.query.users({where: {products_some: {id: parent.id}}})
-      return product[0] || {} as UserParent
+      const product = await context.db.users({where: {products_some: {id: parent.id}}})[0] || {}
+      return product
     }catch(err) {
       console.debug('trouble getting products vendor')
     }

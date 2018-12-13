@@ -1,5 +1,3 @@
-import { IResolvers } from "../generated/resolvers";
-import { TypeMap } from "./types/TypeMap";
 
 import { Query } from "./Query";
 import { Mutation } from "./Mutation";
@@ -10,8 +8,9 @@ import { User } from "./User";
 import { Cart } from "./Cart";
 import { Invoice } from "./Invoice";
 import { Product } from "./Product";
+import { IResolvers, ITypeMap } from "../generated/resolvers";
 
-export const resolvers: IResolvers<TypeMap> = {
+export const resolvers: IResolvers<ITypeMap> = {
   Query,
   Mutation,
   AuthPayload,
@@ -20,5 +19,5 @@ export const resolvers: IResolvers<TypeMap> = {
   User,
   Cart,
   Invoice,
-  Product
+  Product,
 };

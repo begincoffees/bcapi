@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo } from "graphql";
+import { PaymentRecord } from "./prisma-client";
 
 export interface ITypeMap {
   Context: any;
@@ -999,6 +1000,40 @@ export namespace InvoiceResolvers {
       info: GraphQLResolveInfo
     ) => T["ProductParent"][] | Promise<T["ProductParent"][]>;
     amount: (
+      parent: T["InvoiceParent"],
+      args: {},
+      ctx: T["Context"],
+      info: GraphQLResolveInfo
+    ) => string | null | Promise<string | null>;
+    record: (
+      parent: T["InvoiceParent"],
+      args: {},
+      ctx: T["Context"],
+      info: GraphQLResolveInfo
+    ) => string | null | Promise<string | null>;
+
+    stripeRecord: (
+      parent: T["InvoiceParent"],
+      args: {},
+      ctx: T["Context"],
+      info: GraphQLResolveInfo
+    ) => PaymentRecord | Promise<PaymentRecord[]>;
+
+    created: (
+      parent: T["InvoiceParent"],
+      args: {},
+      ctx: T["Context"],
+      info: GraphQLResolveInfo
+    ) => number | null | Promise<number | null>;
+
+    stripePaymentId: (
+      parent: T["InvoiceParent"],
+      args: {},
+      ctx: T["Context"],
+      info: GraphQLResolveInfo
+    ) => string | null | Promise<string | null>;
+
+    stripeCustomerId: (
       parent: T["InvoiceParent"],
       args: {},
       ctx: T["Context"],

@@ -6,6 +6,10 @@ type AggregateInvoice {
   count: Int!
 }
 
+type AggregatePaymentRecord {
+  count: Int!
+}
+
 type AggregateProduct {
   count: Int!
 }
@@ -216,6 +220,8 @@ type Invoice {
   items(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
   amount: String
   email: String!
+  record: Json
+  stripeRecord: PaymentRecord!
   customer: User
   vendors(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
@@ -230,6 +236,8 @@ input InvoiceCreateInput {
   items: ProductCreateManyInput
   amount: String
   email: String!
+  record: Json
+  stripeRecord: PaymentRecordCreateOneInput!
   customer: UserCreateOneWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
 }
@@ -248,6 +256,8 @@ input InvoiceCreateWithoutCustomerInput {
   items: ProductCreateManyInput
   amount: String
   email: String!
+  record: Json
+  stripeRecord: PaymentRecordCreateOneInput!
   vendors: UserCreateManyWithoutSalesInput
 }
 
@@ -255,6 +265,8 @@ input InvoiceCreateWithoutVendorsInput {
   items: ProductCreateManyInput
   amount: String
   email: String!
+  record: Json
+  stripeRecord: PaymentRecordCreateOneInput!
   customer: UserCreateOneWithoutPurchasesInput
 }
 
@@ -270,6 +282,8 @@ enum InvoiceOrderByInput {
   amount_DESC
   email_ASC
   email_DESC
+  record_ASC
+  record_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -280,6 +294,7 @@ type InvoicePreviousValues {
   id: ID!
   amount: String
   email: String!
+  record: Json
 }
 
 type InvoiceSubscriptionPayload {
@@ -304,6 +319,8 @@ input InvoiceUpdateInput {
   items: ProductUpdateManyInput
   amount: String
   email: String
+  record: Json
+  stripeRecord: PaymentRecordUpdateOneRequiredInput
   customer: UserUpdateOneWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
 }
@@ -311,6 +328,7 @@ input InvoiceUpdateInput {
 input InvoiceUpdateManyMutationInput {
   amount: String
   email: String
+  record: Json
 }
 
 input InvoiceUpdateManyWithoutCustomerInput {
@@ -335,6 +353,8 @@ input InvoiceUpdateWithoutCustomerDataInput {
   items: ProductUpdateManyInput
   amount: String
   email: String
+  record: Json
+  stripeRecord: PaymentRecordUpdateOneRequiredInput
   vendors: UserUpdateManyWithoutSalesInput
 }
 
@@ -342,6 +362,8 @@ input InvoiceUpdateWithoutVendorsDataInput {
   items: ProductUpdateManyInput
   amount: String
   email: String
+  record: Json
+  stripeRecord: PaymentRecordUpdateOneRequiredInput
   customer: UserUpdateOneWithoutPurchasesInput
 }
 
@@ -413,6 +435,7 @@ input InvoiceWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
+  stripeRecord: PaymentRecordWhereInput
   customer: UserWhereInput
   vendors_every: UserWhereInput
   vendors_some: UserWhereInput
@@ -425,6 +448,8 @@ input InvoiceWhereInput {
 input InvoiceWhereUniqueInput {
   id: ID
 }
+
+scalar Json
 
 scalar Long
 
@@ -441,6 +466,9 @@ type Mutation {
   upsertInvoice(where: InvoiceWhereUniqueInput!, create: InvoiceCreateInput!, update: InvoiceUpdateInput!): Invoice!
   deleteInvoice(where: InvoiceWhereUniqueInput!): Invoice
   deleteManyInvoices(where: InvoiceWhereInput): BatchPayload!
+  createPaymentRecord(data: PaymentRecordCreateInput!): PaymentRecord!
+  updateManyPaymentRecords(data: PaymentRecordUpdateManyMutationInput!, where: PaymentRecordWhereInput): BatchPayload!
+  deleteManyPaymentRecords(where: PaymentRecordWhereInput): BatchPayload!
   createProduct(data: ProductCreateInput!): Product!
   updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
   updateManyProducts(data: ProductUpdateManyMutationInput!, where: ProductWhereInput): BatchPayload!
@@ -470,6 +498,215 @@ type PageInfo {
   hasPreviousPage: Boolean!
   startCursor: String
   endCursor: String
+}
+
+type PaymentRecord {
+  amount: Int!
+  balanceTransaction: String!
+  created: Int!
+  currency: String!
+  stripeCustomerId: String!
+  stripePaymentId: String!
+  status: String!
+}
+
+type PaymentRecordConnection {
+  pageInfo: PageInfo!
+  edges: [PaymentRecordEdge]!
+  aggregate: AggregatePaymentRecord!
+}
+
+input PaymentRecordCreateInput {
+  amount: Int!
+  balanceTransaction: String!
+  created: Int!
+  currency: String!
+  stripeCustomerId: String!
+  stripePaymentId: String!
+  status: String!
+}
+
+input PaymentRecordCreateOneInput {
+  create: PaymentRecordCreateInput
+}
+
+type PaymentRecordEdge {
+  node: PaymentRecord!
+  cursor: String!
+}
+
+enum PaymentRecordOrderByInput {
+  amount_ASC
+  amount_DESC
+  balanceTransaction_ASC
+  balanceTransaction_DESC
+  created_ASC
+  created_DESC
+  currency_ASC
+  currency_DESC
+  stripeCustomerId_ASC
+  stripeCustomerId_DESC
+  stripePaymentId_ASC
+  stripePaymentId_DESC
+  status_ASC
+  status_DESC
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PaymentRecordPreviousValues {
+  amount: Int!
+  balanceTransaction: String!
+  created: Int!
+  currency: String!
+  stripeCustomerId: String!
+  stripePaymentId: String!
+  status: String!
+}
+
+type PaymentRecordSubscriptionPayload {
+  mutation: MutationType!
+  node: PaymentRecord
+  updatedFields: [String!]
+  previousValues: PaymentRecordPreviousValues
+}
+
+input PaymentRecordSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PaymentRecordWhereInput
+  AND: [PaymentRecordSubscriptionWhereInput!]
+  OR: [PaymentRecordSubscriptionWhereInput!]
+  NOT: [PaymentRecordSubscriptionWhereInput!]
+}
+
+input PaymentRecordUpdateDataInput {
+  amount: Int
+  balanceTransaction: String
+  created: Int
+  currency: String
+  stripeCustomerId: String
+  stripePaymentId: String
+  status: String
+}
+
+input PaymentRecordUpdateManyMutationInput {
+  amount: Int
+  balanceTransaction: String
+  created: Int
+  currency: String
+  stripeCustomerId: String
+  stripePaymentId: String
+  status: String
+}
+
+input PaymentRecordUpdateOneRequiredInput {
+  create: PaymentRecordCreateInput
+  update: PaymentRecordUpdateDataInput
+  upsert: PaymentRecordUpsertNestedInput
+}
+
+input PaymentRecordUpsertNestedInput {
+  update: PaymentRecordUpdateDataInput!
+  create: PaymentRecordCreateInput!
+}
+
+input PaymentRecordWhereInput {
+  amount: Int
+  amount_not: Int
+  amount_in: [Int!]
+  amount_not_in: [Int!]
+  amount_lt: Int
+  amount_lte: Int
+  amount_gt: Int
+  amount_gte: Int
+  balanceTransaction: String
+  balanceTransaction_not: String
+  balanceTransaction_in: [String!]
+  balanceTransaction_not_in: [String!]
+  balanceTransaction_lt: String
+  balanceTransaction_lte: String
+  balanceTransaction_gt: String
+  balanceTransaction_gte: String
+  balanceTransaction_contains: String
+  balanceTransaction_not_contains: String
+  balanceTransaction_starts_with: String
+  balanceTransaction_not_starts_with: String
+  balanceTransaction_ends_with: String
+  balanceTransaction_not_ends_with: String
+  created: Int
+  created_not: Int
+  created_in: [Int!]
+  created_not_in: [Int!]
+  created_lt: Int
+  created_lte: Int
+  created_gt: Int
+  created_gte: Int
+  currency: String
+  currency_not: String
+  currency_in: [String!]
+  currency_not_in: [String!]
+  currency_lt: String
+  currency_lte: String
+  currency_gt: String
+  currency_gte: String
+  currency_contains: String
+  currency_not_contains: String
+  currency_starts_with: String
+  currency_not_starts_with: String
+  currency_ends_with: String
+  currency_not_ends_with: String
+  stripeCustomerId: String
+  stripeCustomerId_not: String
+  stripeCustomerId_in: [String!]
+  stripeCustomerId_not_in: [String!]
+  stripeCustomerId_lt: String
+  stripeCustomerId_lte: String
+  stripeCustomerId_gt: String
+  stripeCustomerId_gte: String
+  stripeCustomerId_contains: String
+  stripeCustomerId_not_contains: String
+  stripeCustomerId_starts_with: String
+  stripeCustomerId_not_starts_with: String
+  stripeCustomerId_ends_with: String
+  stripeCustomerId_not_ends_with: String
+  stripePaymentId: String
+  stripePaymentId_not: String
+  stripePaymentId_in: [String!]
+  stripePaymentId_not_in: [String!]
+  stripePaymentId_lt: String
+  stripePaymentId_lte: String
+  stripePaymentId_gt: String
+  stripePaymentId_gte: String
+  stripePaymentId_contains: String
+  stripePaymentId_not_contains: String
+  stripePaymentId_starts_with: String
+  stripePaymentId_not_starts_with: String
+  stripePaymentId_ends_with: String
+  stripePaymentId_not_ends_with: String
+  status: String
+  status_not: String
+  status_in: [String!]
+  status_not_in: [String!]
+  status_lt: String
+  status_lte: String
+  status_gt: String
+  status_gte: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
+  AND: [PaymentRecordWhereInput!]
+  OR: [PaymentRecordWhereInput!]
+  NOT: [PaymentRecordWhereInput!]
 }
 
 type Product {
@@ -768,6 +1005,8 @@ type Query {
   invoice(where: InvoiceWhereUniqueInput!): Invoice
   invoices(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice]!
   invoicesConnection(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InvoiceConnection!
+  paymentRecords(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PaymentRecord]!
+  paymentRecordsConnection(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PaymentRecordConnection!
   product(where: ProductWhereUniqueInput!): Product
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
   productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
@@ -780,6 +1019,7 @@ type Query {
 type Subscription {
   cart(where: CartSubscriptionWhereInput): CartSubscriptionPayload
   invoice(where: InvoiceSubscriptionWhereInput): InvoiceSubscriptionPayload
+  paymentRecord(where: PaymentRecordSubscriptionWhereInput): PaymentRecordSubscriptionPayload
   product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
