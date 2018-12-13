@@ -9,6 +9,7 @@ import { UserParent } from "../User";
 import { CartParent } from "../Cart";
 import { InvoiceParent } from "../Invoice";
 import { ProductParent } from "../Product";
+import { PaymentRecordParent } from "../PaymentRecord";
 
 import { Context } from "./context";
 
@@ -23,4 +24,5 @@ export interface TypeMap extends ITypeMap {
   CartParent: CartParent;
   InvoiceParent: InvoiceParent;
   ProductParent: ProductParent;
+  PaymentRecordParent: PaymentRecordParent;
 }

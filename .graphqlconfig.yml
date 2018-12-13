@@ -3,13 +3,17 @@ projects:
     schemaPath: src/schema.graphql
     extensions:
       endpoints:
-        default: http://localhost:6006
+        default: http://bcgraph.herokuapp.com/bcgraph
   database:
     schemaPath: src/generated/prisma.graphql
-    extensions:
-      prisma: database/prisma.yml
-      codegen:
-        - generator: prisma-binding
-          language: typescript
-          output:
-            binding: src/generated/prisma.ts
+      includes: [
+        "prisma.graphql",
+        "datamodel.graphql",
+      ]
+      extensions:
+        prisma: database/prisma.yml
+        codegen:
+          - generator: prisma-binding
+            language: typescript
+            output:
+              binding: src/generated/prisma.ts

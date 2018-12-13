@@ -10,6 +10,7 @@ import { User } from "./User";
 import { Cart } from "./Cart";
 import { Invoice } from "./Invoice";
 import { Product } from "./Product";
+import { PaymentRecord } from "./PaymentRecord";
 
 export const resolvers: IResolvers<TypeMap> = {
   Query,
@@ -20,5 +21,6 @@ export const resolvers: IResolvers<TypeMap> = {
   User,
   Cart,
   Invoice,
-  Product
+  Product,
+  PaymentRecord
 };
