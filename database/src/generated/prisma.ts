@@ -409,6 +409,9 @@ type Invoice implements Node {
   email: String!
   record: Json
   stripeRecord(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PaymentRecord!]
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
   customer(where: UserWhereInput): User
   vendors(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
@@ -427,6 +430,9 @@ input InvoiceCreateInput {
   amount: String
   email: String!
   record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
   items: ProductCreateManyInput
   stripeRecord: PaymentRecordCreateManyInput
   customer: UserCreateOneWithoutPurchasesInput
@@ -447,6 +453,9 @@ input InvoiceCreateWithoutCustomerInput {
   amount: String
   email: String!
   record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
   items: ProductCreateManyInput
   stripeRecord: PaymentRecordCreateManyInput
   vendors: UserCreateManyWithoutSalesInput
@@ -456,6 +465,9 @@ input InvoiceCreateWithoutVendorsInput {
   amount: String
   email: String!
   record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
   items: ProductCreateManyInput
   stripeRecord: PaymentRecordCreateManyInput
   customer: UserCreateOneWithoutPurchasesInput
@@ -479,6 +491,12 @@ enum InvoiceOrderByInput {
   email_DESC
   record_ASC
   record_DESC
+  created_ASC
+  created_DESC
+  stripePaymentId_ASC
+  stripePaymentId_DESC
+  stripeCustomerId_ASC
+  stripeCustomerId_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -490,6 +508,9 @@ type InvoicePreviousValues {
   amount: String
   email: String!
   record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
 }
 
 type InvoiceSubscriptionPayload {
@@ -535,6 +556,9 @@ input InvoiceUpdateInput {
   amount: String
   email: String
   record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
   items: ProductUpdateManyInput
   stripeRecord: PaymentRecordUpdateManyInput
   customer: UserUpdateOneWithoutPurchasesInput
@@ -563,6 +587,9 @@ input InvoiceUpdateWithoutCustomerDataInput {
   amount: String
   email: String
   record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
   items: ProductUpdateManyInput
   stripeRecord: PaymentRecordUpdateManyInput
   vendors: UserUpdateManyWithoutSalesInput
@@ -572,6 +599,9 @@ input InvoiceUpdateWithoutVendorsDataInput {
   amount: String
   email: String
   record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
   items: ProductUpdateManyInput
   stripeRecord: PaymentRecordUpdateManyInput
   customer: UserUpdateOneWithoutPurchasesInput
@@ -728,6 +758,108 @@ input InvoiceWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
+  created: Int
+
+  """All values that are not equal to given value."""
+  created_not: Int
+
+  """All values that are contained in given list."""
+  created_in: [Int!]
+
+  """All values that are not contained in given list."""
+  created_not_in: [Int!]
+
+  """All values less than the given value."""
+  created_lt: Int
+
+  """All values less than or equal the given value."""
+  created_lte: Int
+
+  """All values greater than the given value."""
+  created_gt: Int
+
+  """All values greater than or equal the given value."""
+  created_gte: Int
+  stripePaymentId: String
+
+  """All values that are not equal to given value."""
+  stripePaymentId_not: String
+
+  """All values that are contained in given list."""
+  stripePaymentId_in: [String!]
+
+  """All values that are not contained in given list."""
+  stripePaymentId_not_in: [String!]
+
+  """All values less than the given value."""
+  stripePaymentId_lt: String
+
+  """All values less than or equal the given value."""
+  stripePaymentId_lte: String
+
+  """All values greater than the given value."""
+  stripePaymentId_gt: String
+
+  """All values greater than or equal the given value."""
+  stripePaymentId_gte: String
+
+  """All values containing the given string."""
+  stripePaymentId_contains: String
+
+  """All values not containing the given string."""
+  stripePaymentId_not_contains: String
+
+  """All values starting with the given string."""
+  stripePaymentId_starts_with: String
+
+  """All values not starting with the given string."""
+  stripePaymentId_not_starts_with: String
+
+  """All values ending with the given string."""
+  stripePaymentId_ends_with: String
+
+  """All values not ending with the given string."""
+  stripePaymentId_not_ends_with: String
+  stripeCustomerId: String
+
+  """All values that are not equal to given value."""
+  stripeCustomerId_not: String
+
+  """All values that are contained in given list."""
+  stripeCustomerId_in: [String!]
+
+  """All values that are not contained in given list."""
+  stripeCustomerId_not_in: [String!]
+
+  """All values less than the given value."""
+  stripeCustomerId_lt: String
+
+  """All values less than or equal the given value."""
+  stripeCustomerId_lte: String
+
+  """All values greater than the given value."""
+  stripeCustomerId_gt: String
+
+  """All values greater than or equal the given value."""
+  stripeCustomerId_gte: String
+
+  """All values containing the given string."""
+  stripeCustomerId_contains: String
+
+  """All values not containing the given string."""
+  stripeCustomerId_not_contains: String
+
+  """All values starting with the given string."""
+  stripeCustomerId_starts_with: String
+
+  """All values not starting with the given string."""
+  stripeCustomerId_not_starts_with: String
+
+  """All values ending with the given string."""
+  stripeCustomerId_ends_with: String
+
+  """All values not ending with the given string."""
+  stripeCustomerId_not_ends_with: String
   items_every: ProductWhereInput
   items_some: ProductWhereInput
   items_none: ProductWhereInput
@@ -2369,6 +2501,12 @@ export type InvoiceOrderByInput =   'id_ASC' |
   'email_DESC' |
   'record_ASC' |
   'record_DESC' |
+  'created_ASC' |
+  'created_DESC' |
+  'stripePaymentId_ASC' |
+  'stripePaymentId_DESC' |
+  'stripeCustomerId_ASC' |
+  'stripeCustomerId_DESC' |
   'updatedAt_ASC' |
   'updatedAt_DESC' |
   'createdAt_ASC' |
@@ -2633,6 +2771,9 @@ export interface InvoiceUpdateWithoutVendorsDataInput {
   amount?: String
   email?: String
   record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
   items?: ProductUpdateManyInput
   stripeRecord?: PaymentRecordUpdateManyInput
   customer?: UserUpdateOneWithoutPurchasesInput
@@ -2738,6 +2879,9 @@ export interface InvoiceCreateWithoutVendorsInput {
   amount?: String
   email: String
   record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
   items?: ProductCreateManyInput
   stripeRecord?: PaymentRecordCreateManyInput
   customer?: UserCreateOneWithoutPurchasesInput
@@ -2870,6 +3014,9 @@ export interface InvoiceCreateInput {
   amount?: String
   email: String
   record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
   items?: ProductCreateManyInput
   stripeRecord?: PaymentRecordCreateManyInput
   customer?: UserCreateOneWithoutPurchasesInput
@@ -3020,6 +3167,42 @@ export interface InvoiceWhereInput {
   email_not_starts_with?: String
   email_ends_with?: String
   email_not_ends_with?: String
+  created?: Int
+  created_not?: Int
+  created_in?: Int[] | Int
+  created_not_in?: Int[] | Int
+  created_lt?: Int
+  created_lte?: Int
+  created_gt?: Int
+  created_gte?: Int
+  stripePaymentId?: String
+  stripePaymentId_not?: String
+  stripePaymentId_in?: String[] | String
+  stripePaymentId_not_in?: String[] | String
+  stripePaymentId_lt?: String
+  stripePaymentId_lte?: String
+  stripePaymentId_gt?: String
+  stripePaymentId_gte?: String
+  stripePaymentId_contains?: String
+  stripePaymentId_not_contains?: String
+  stripePaymentId_starts_with?: String
+  stripePaymentId_not_starts_with?: String
+  stripePaymentId_ends_with?: String
+  stripePaymentId_not_ends_with?: String
+  stripeCustomerId?: String
+  stripeCustomerId_not?: String
+  stripeCustomerId_in?: String[] | String
+  stripeCustomerId_not_in?: String[] | String
+  stripeCustomerId_lt?: String
+  stripeCustomerId_lte?: String
+  stripeCustomerId_gt?: String
+  stripeCustomerId_gte?: String
+  stripeCustomerId_contains?: String
+  stripeCustomerId_not_contains?: String
+  stripeCustomerId_starts_with?: String
+  stripeCustomerId_not_starts_with?: String
+  stripeCustomerId_ends_with?: String
+  stripeCustomerId_not_ends_with?: String
   items_every?: ProductWhereInput
   items_some?: ProductWhereInput
   items_none?: ProductWhereInput
@@ -3103,6 +3286,9 @@ export interface InvoiceUpdateWithoutCustomerDataInput {
   amount?: String
   email?: String
   record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
   items?: ProductUpdateManyInput
   stripeRecord?: PaymentRecordUpdateManyInput
   vendors?: UserUpdateManyWithoutSalesInput
@@ -3254,6 +3440,9 @@ export interface InvoiceUpdateInput {
   amount?: String
   email?: String
   record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
   items?: ProductUpdateManyInput
   stripeRecord?: PaymentRecordUpdateManyInput
   customer?: UserUpdateOneWithoutPurchasesInput
@@ -3300,6 +3489,9 @@ export interface InvoiceCreateWithoutCustomerInput {
   amount?: String
   email: String
   record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
   items?: ProductCreateManyInput
   stripeRecord?: PaymentRecordCreateManyInput
   vendors?: UserCreateManyWithoutSalesInput
@@ -3639,6 +3831,9 @@ export interface InvoicePreviousValues {
   amount?: String
   email: String
   record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
 }
 
 export interface InvoiceSubscriptionPayload {
@@ -3655,6 +3850,9 @@ export interface Invoice extends Node {
   email: String
   record?: Json
   stripeRecord?: PaymentRecord[]
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
   customer?: User
   vendors?: User[]
 }

@@ -28,6 +28,9 @@ type Invoice {
   email: String!
   record: Json
   stripeRecord: [PaymentRecord!]!
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
   customer: User @relation(name: "CUSTOMER")
   vendors: [User!]! @relation(name: "VENDOR")
 }
