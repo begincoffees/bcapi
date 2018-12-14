@@ -10,7 +10,7 @@ export interface InvoiceParent {
   amount?: string;
   email: string;
   record?: string;
-  stripeRecord: PaymentRecordParent[];
+  stripeRecord: PaymentRecordParent;
   created?: number;
   stripePaymentId?: string;
   stripeCustomerId?: string;

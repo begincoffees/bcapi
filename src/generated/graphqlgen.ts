@@ -2,14 +2,11 @@
 
 import { GraphQLResolveInfo } from "graphql";
 import {
-  Viewer,
   User,
   Cart,
   Product,
   Invoice,
   PaymentRecord,
-  AuthPayload,
-  MutationResult
 } from "./prisma-client";
 type Context = any;
 

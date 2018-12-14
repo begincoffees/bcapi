@@ -122,19 +122,20 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
   checkout: async (_parent, _args: any, context: Context, _info): Promise<MutationResultParent> => {
     try {
       const id = getUserId(context)
-      await createStripeInvoice(_args.email)
+      const record = await createStripeInvoice(_args.email)
 
       // TODO:
       // if(!_args.email) throw err
       // if no user, create a new user, save the record
       // invoice table needs a record key where I can save the data from stripe
-      await context.db.mutation.createInvoice({data: {
+      await context.db.createInvoice({
         amount: _args.amount,
         email: _args.email,
+        stripeRecord: {create: {...record}},
         vendors:{connect: [..._args.vendors]},
         customer: {connect: {id}},
         items: {connect: [..._args.items]}
-      }})
+      })
 
       return {success: true}
     } catch {

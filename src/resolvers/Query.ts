@@ -3,6 +3,7 @@ import { TypeMap } from "./types/TypeMap";
 import { getUserId } from "../utils";
 import { ProductParent } from "./Product";
 import { CartParent } from "./Cart";
+import { Context } from "./types/Context";
 
 export interface QueryParent {}
 
@@ -14,11 +15,11 @@ export const Query: QueryResolvers.Type<TypeMap> = {
     sales: null,
     products: null
   } as any),
-  cart: async (parent, args, context: any, info): Promise<CartParent> => {
+  cart: async (parent, args, context: Context, info): Promise<CartParent> => {
     try {
       const id = getUserId(context)
-      const cart = await context.db.query.carts({where: {user: {id}}})
-      return cart[0]
+      const cart = await context.db.carts({where: {user: {id}}})[0] || {}
+      return cart
     }catch {
       console.debug('Trouble getting cart')
       return {
@@ -28,10 +29,10 @@ export const Query: QueryResolvers.Type<TypeMap> = {
       } as any
     }
   },
-  feed: async (parent, args, context: any, info): Promise<ProductParent[]> => {
+  feed: async (parent, args, context: Context, info): Promise<ProductParent[]> => {
     console.log(process.env.STRIPE_SECRET)
     try {
-      const products = await context.db.query.products({first: 50})
+      const products = await context.db.products({first: 50})
       return products as ProductParent[]
     }catch(err) {
       console.debug('trouble getting feed')
