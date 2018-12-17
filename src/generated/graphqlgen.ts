@@ -10,6 +10,17 @@ import {
 } from "./prisma-client";
 type Context = any;
 
+export interface Viewer {
+
+}
+export interface AuthPayload {
+  token: string | null
+}
+export interface MutationResult {
+  success: boolean | null
+}
+
+
 type ProductOrderByInput =
   | "id_ASC"
   | "id_DESC"

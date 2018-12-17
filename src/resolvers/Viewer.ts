@@ -19,14 +19,14 @@ export const Viewer: ViewerResolvers.Type<TypeMap> = {
   me: async (parent, args, context: Context): Promise<UserParent> => {
     const id = getUserId(context)
     if(id){
-      const me = await context.db.user({id})
+      const me = await context.db.query.user({where: {id}})
       return me as any
     }
   },
   cart: async (parent, args, context: Context): Promise<CartParent> => {
     try {
       const id = getUserId(context)
-      const me = await context.db.carts({where: {user:{id}}})
+      const me = await context.db.query.carts({where: {user:{id}}})
       return me[0] as any
     }
     catch {

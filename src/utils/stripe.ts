@@ -1,8 +1,7 @@
 import * as Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET);
-
 async function stripeTransaction(email: string){
+  const stripe = new Stripe(process.env.STRIPE_SECRET);
   try{
     const transaction = await stripe.customers.create({
       email,
@@ -27,4 +26,4 @@ const createStripeInvoice = async (email: string) => await stripeTransaction(ema
   .then(res => res)
   .catch((err) => err)
 
-export { createStripeInvoice }
+export { stripeTransaction, createStripeInvoice }
