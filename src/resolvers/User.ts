@@ -43,7 +43,7 @@ export const User: UserResolvers.Type<TypeMap> = {
     try {
       const id = getUserId(context)
       const purchases = await context.db.query.invoices({where:{customer: {id}}})
-      return purchases as InvoiceParent[]
+      return purchases as any
     }catch {
       console.debug('trouble getting user purchases')
       return []
@@ -53,7 +53,7 @@ export const User: UserResolvers.Type<TypeMap> = {
     try {
       const id = getUserId(context)
       const products= await context.db.query.products({where:{vendor: {id}}})
-      return products as ProductParent[]
+      return products as any
     }catch {
       console.debug('trouble getting vendor products')
       return []
@@ -63,7 +63,7 @@ export const User: UserResolvers.Type<TypeMap> = {
     try {
       const id = getUserId(context)
       const purchases = await context.db.query.invoices({where:{vendors_some: {id}}})
-      return purchases as InvoiceParent[]
+      return purchases as any
     }catch {
       console.debug('trouble getting vendor sales')
       return []
