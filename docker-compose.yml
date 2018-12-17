@@ -1,10 +1,17 @@
 version: '3'
 services:
-  api:
+  web:
+    container_name: nginx
+    image: nginx:latest
+    restart: always
+    networks: 
+      - bcapp
+    volumes:
+      - .:/usr/app/
+      - /usr/app/server
+  server:
     container_name: bcapi
-    build: 
-      context: .
-      dockerfile: config/Dockerfile
+    build: .
     command: npm start
     restart: always
     ports:
@@ -14,7 +21,7 @@ services:
       - default
     volumes:
       - .:/usr/app/
-      - /usr/app/node_modules
+      - /usr/app/server
     labels:
       - "traefik.docker.network=proxy"
       - "traefik.enable=true"
@@ -59,10 +66,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 volumes:
+  web:
   postgres:
   prisma:
-  api:
-  bcapp:
+  server:
 networks:
   bcapp:
     external: true

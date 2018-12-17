@@ -39,30 +39,30 @@ export const User: UserResolvers.Type<TypeMap> = {
       throw new Error('Trouble getting users cart')
     }
   },
-  purchases: async (parent, args, context: any, info): Promise<InvoiceParent[]> => {
+  purchases: async (parent, args, context: Context, info): Promise<InvoiceParent[]> => {
     try {
       const id = getUserId(context)
-      const purchases = await context.db.invoices({where:{customer: {id}}})
+      const purchases = await context.db.query.invoices({where:{customer: {id}}})
       return purchases as InvoiceParent[]
     }catch {
       console.debug('trouble getting user purchases')
       return []
     }
   },
-  products: async (parent, args, context: any, info): Promise<ProductParent[]> => {
+  products: async (parent, args, context: Context, info): Promise<ProductParent[]> => {
     try {
       const id = getUserId(context)
-      const products= await context.db.products({where:{vendor: {id}}})
+      const products= await context.db.query.products({where:{vendor: {id}}})
       return products as ProductParent[]
     }catch {
       console.debug('trouble getting vendor products')
       return []
     }
   },
-  sales: async (parent, args, context: any, info): Promise<InvoiceParent[]> => {
+  sales: async (parent, args, context: Context, info): Promise<InvoiceParent[]> => {
     try {
       const id = getUserId(context)
-      const purchases = await context.db.invoices({where:{vendors_some: {id}}})
+      const purchases = await context.db.query.invoices({where:{vendors_some: {id}}})
       return purchases as InvoiceParent[]
     }catch {
       console.debug('trouble getting vendor sales')

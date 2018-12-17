@@ -4,7 +4,6 @@ import { AuthPayloadParent } from "./AuthPayload";
 import { MutationResultParent } from "./MutationResult";
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs'
-import * as moment from 'moment';
 import { UserParent } from "./User";
 import { getUserId } from "../utils";
 import { Context } from "./types/Context";
@@ -82,27 +81,6 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
   login: async (_parent, {email, password}, context: any, _info): Promise<AuthPayloadParent> => {
     const user = await context.db.query.user({where: {email}}).then(res => res)
 
-    if(!user){  
-      throw new Error('No user found. Check your email')
-    }
-
-    const passwordHash = user.password
-    const validPassword = await bcrypt.compare(password, passwordHash)
-    
-    // if(!validPassword){
-    //   console.log(password, passwordHash)
-    //   throw new Error('Wrong password')
-    // }
-
-    /**
-     * found match
-     */
-    // const currentSession = await context
-    //   .db
-    //   .authPayloads({where:{user: user.id}})
-    //   .then(res => res.reduce((acc, curr) => ({...acc, ...curr}), null));
-    //const isExpired = jwt.verify(context.authentication, process.env.APP_SECRET, res => res)
-
     if(user){
       const session = { 
         userId: user.id, 
@@ -124,21 +102,20 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
       const id = getUserId(context)
       const record = await createStripeInvoice(_args.email)
 
-      // TODO:
-      // if(!_args.email) throw err
-      // if no user, create a new user, save the record
-      // invoice table needs a record key where I can save the data from stripe
-      await context.db.createInvoice({
+      await context.db.mutation.createInvoice({data: {
         amount: _args.amount,
         email: _args.email,
-        stripeRecord: {create: {...record}},
+        created: record.created,
+        stripePaymentId: record.id,
+        stripeCustomerId: record.customer,
         vendors:{connect: [..._args.vendors]},
         customer: {connect: {id}},
         items: {connect: [..._args.items]}
-      })
+      }})
 
       return {success: true}
-    } catch {
+    } catch(err) {
+      console.debug(err.message)
       throw new Error('error checkout')
     }
   },

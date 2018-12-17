@@ -3,7 +3,7 @@ projects:
     schemaPath: src/schema.graphql
     extensions:
       endpoints:
-        default: http://localhost:6006
+        default: http://localhost:4466
   database:
     schemaPath: src/generated/prisma.graphql
       includes: [
@@ -11,7 +11,7 @@ projects:
         "datamodel.graphql",
       ]
       extensions:
-        prisma: database/prisma.yml
+        prisma: prisma.yml
         codegen:
           - generator: prisma-binding
             language: typescript

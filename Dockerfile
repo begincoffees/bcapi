@@ -3,4 +3,6 @@ WORKDIR /usr/app/
 COPY package*.json /usr/app/
 RUN npm install --silent
 COPY . .
+
+VOLUME ["/server"]
 EXPOSE 6006
