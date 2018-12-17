@@ -62,7 +62,7 @@ export const User: UserResolvers.Type<TypeMap> = {
   sales: async (parent, args, context: Context, info): Promise<InvoiceParent[]> => {
     try {
       const id = getUserId(context)
-      const purchases = await context.db.query.invoices({where:{vendors_some: {id}}})
+      const purchases = await context.db.query.invoices({where:{vendors_some: {id}}}).then(res => res)
       return purchases as any
     }catch {
       console.debug('trouble getting vendor sales')

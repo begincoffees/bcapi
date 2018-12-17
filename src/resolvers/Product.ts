@@ -22,8 +22,13 @@ export const Product: ProductResolvers.Type<TypeMap> = {
   varietal: parent => parent.varietal,
   vendor: async (parent, args, context: Context, info): Promise<UserParent> => {
     try {
-      const product = await context.db.query.users({where: {products_some: {id: parent.id}}})[0] || {}
-      return product
+      const user = await context.db.query
+        .users({where: {
+          products_some: {id: parent.id}
+        }})
+        .then(res => res)
+
+      return user as any
     }catch(err) {
       console.debug('trouble getting products vendor')
     }
