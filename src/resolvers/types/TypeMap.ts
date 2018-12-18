@@ -1,5 +1,4 @@
 import { ITypeMap } from "../../generated/resolvers";
-
 import { QueryParent } from "../Query";
 import { MutationParent } from "../Mutation";
 import { AuthPayloadParent } from "../AuthPayload";

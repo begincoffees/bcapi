@@ -22,7 +22,7 @@ export const Product: ProductResolvers.Type<TypeMap> = {
   varietal: parent => parent.varietal,
   vendor: async (parent, args, context: Context, info): Promise<UserParent> => {
     try {
-      const user = await context.db.query
+      const user = await context.db
         .users({where: {
           products_some: {id: parent.id}
         }}).then(res => res[0])

@@ -2,7 +2,8 @@ import { TypeMap } from "./types/TypeMap";
 import { ProductParent } from "./Product";
 import { PaymentRecordParent } from "./PaymentRecord";
 import { UserParent } from "./User";
-import { InvoiceResolvers } from "../generated/resolvers";
+import { InvoiceResolvers } from "../generated/graphqlgen";
+import { Product } from "../generated/prisma-client";
 
 export interface InvoiceParent {
   id: string;
@@ -18,12 +19,12 @@ export interface InvoiceParent {
   vendors: UserParent[];
 }
 
-export const Invoice: InvoiceResolvers.Type<TypeMap> = {
+export const Invoice = {
   id: parent => parent.id,
   items: async (parent, args, context) => {
      try{
-      // const items = await context.db.query.products({where: {}})
-      return parent.items
+      const items = await context.db.products({where: {invoices_some: {id: parent.id}}}).then(res => res)
+      return items || []
      } catch(err){
        console.log(err.message)
       return []
@@ -32,7 +33,7 @@ export const Invoice: InvoiceResolvers.Type<TypeMap> = {
   amount: parent => parent.amount,
   email: parent => parent.email,
   record: parent => parent.record,
-  stripeRecord: (parent, args) => parent.stripeRecord,
+  stripeRecord: async (parent, args) => null,
   created: parent => parent.created,
   stripePaymentId: parent => parent.stripePaymentId,
   stripeCustomerId: parent => parent.stripeCustomerId,

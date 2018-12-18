@@ -33,7 +33,7 @@ export const User: UserResolvers.Type<TypeMap> = {
   cart: async (parent, args, context: any, info): Promise<CartParent> => {
     try {
       const id = getUserId(context)
-      const cart = await context.db.carts({where: {user: {id}}})
+      const cart = await context.db.user({id}).cart()
       return cart[0]
     }catch {
       throw new Error('Trouble getting users cart')
@@ -42,7 +42,7 @@ export const User: UserResolvers.Type<TypeMap> = {
   purchases: async (parent, args, context: Context, info): Promise<InvoiceParent[]> => {
     try {
       const id = getUserId(context)
-      const purchases = await context.db.query.invoices({where:{customer: {id}}})
+      const purchases = await await context.db.user({id}).purchases()
       return purchases as any
     }catch {
       console.debug('trouble getting user purchases')
@@ -52,7 +52,7 @@ export const User: UserResolvers.Type<TypeMap> = {
   products: async (parent, args, context: Context, info): Promise<ProductParent[]> => {
     try {
       const id = getUserId(context)
-      const products= await context.db.query.products({where:{vendor: {id}}})
+      const products= await context.db.user({id}).products()
       return products as any
     }catch {
       console.debug('trouble getting vendor products')
@@ -62,8 +62,7 @@ export const User: UserResolvers.Type<TypeMap> = {
   sales: async (parent, args, context: Context, info): Promise<InvoiceParent[]> => {
     try {
       const id = getUserId(context)
-      const purchases = await context.db.query.invoices({where:{vendors_some: {id}}}).then(res => res)
-      console.log(purchases)
+      const purchases = await context.db.user({id}).sales()
       return purchases as any
     }catch {
       console.debug('trouble getting vendor sales')

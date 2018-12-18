@@ -15,7 +15,7 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
   customerSignup: async (_parent, {..._args}, context: any, _info): Promise<AuthPayloadParent> => {
     try {
       const password = await bcrypt.hash(_args.password, 10)
-      const customer = await context.db.mutation.createUser({
+      const customer = await context.db.createUser({
         firstName: _args.firstName,
         lastName: _args.lastName,
         email: _args.email,
@@ -47,7 +47,7 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
   vendorSignup: async (_parent, _args, context: any, _info): Promise<AuthPayloadParent> => {
     try {
       const password = await bcrypt.hash(_args.password, 10).then(res => res)
-      const vendor = await context.db.mutation.createUser({
+      const vendor = await context.db.createUser({
         bizName: _args.name,
         email: _args.email,
         password: password,
@@ -79,8 +79,8 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
       throw new Error("Error signing up");      
     }
   },
-  login: async (_parent, {email, password}, context: any, _info): Promise<AuthPayloadParent> => {
-    const user = await context.db.query.user({where: {email}}).then(res => res)
+  login: async (_parent, {email, password}, context: Context, _info): Promise<AuthPayloadParent> => {
+    const user = await context.db.user({email}).then(res => res)
 
     if(user){
       const session = { 
@@ -103,7 +103,7 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
       const id = getUserId(context)
       const record = await createStripeInvoice(_args.email)
 
-      await context.db.mutation.createInvoice({data: {
+      await context.db.createInvoice({
         amount: _args.amount,
         email: _args.email,
         created: record.created,
@@ -112,7 +112,7 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
         vendors:{connect: [..._args.vendors]},
         customer: {connect: {id}},
         items: {connect: [..._args.items]}
-      }})
+      } as any)
 
       return {success: true}
     } catch(err) {
@@ -123,7 +123,7 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
   createNewProduct: async (_parent, _args, context: any, _info): Promise<MutationResultParent> => {
     try {
       const id = getUserId(context)
-      await context.db.mutation.createProduct({
+      await context.db.createProduct({
         name: _args.name,
         description:  _args.description,
         varietal: _args.varietal,

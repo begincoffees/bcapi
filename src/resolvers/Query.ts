@@ -18,7 +18,7 @@ export const Query: QueryResolvers.Type<TypeMap> = {
   cart: async (parent, args, context: Context, info): Promise<CartParent> => {
     try {
       const id = getUserId(context)
-      const cart = await context.db.query.carts({where: {user: {id}}})[0] || {}
+      const cart = await context.db.carts({where: {user: {id}}})[0] || {}
       return cart
     }catch {
       console.debug('Trouble getting cart')
@@ -31,7 +31,8 @@ export const Query: QueryResolvers.Type<TypeMap> = {
   },
   feed: async (parent, args, context: Context, info): Promise<ProductParent[]> => {
     try {
-      const products = await context.db.query.products({first: 50}).then(res => res)
+      const products = await context.db.products({first: 50}).then(res => res)
+      console.log(context.db.products)
       return products as any
 
     }catch(err) {

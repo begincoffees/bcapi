@@ -1912,6 +1912,12 @@ export interface Invoice {
   amount?: String;
   email: String;
   record?: Json;
+  items: ProductUpdateManyInput;
+  created?: Number;
+  stripePaymentId?: String;
+  stripeCustomerId?: String;
+  customer?: UserConnectionPromise;
+  vendors: UserConnectionPromise;
 }
 
 export interface InvoicePromise extends Promise<Invoice>, Fragmentable {

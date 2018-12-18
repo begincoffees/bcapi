@@ -6,14 +6,14 @@ projects:
         default: http://localhost:4466
   database:
     schemaPath: src/generated/prisma.graphql
-      includes: [
-        "prisma.graphql",
-        "datamodel.graphql",
-      ]
-      extensions:
-        prisma: prisma.yml
-        codegen:
-          - generator: prisma-binding
-            language: typescript
-            output:
-              binding: src/generated/prisma.ts
+    includes: [
+      "prisma.graphql",
+      "datamodel.graphql",
+    ]
+    extensions:
+      prisma: prisma.yml
+      codegen:
+        - generator: prisma-binding
+          language: typescript
+          output:
+            binding: src/generated/prisma.ts
