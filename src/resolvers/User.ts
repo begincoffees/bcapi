@@ -63,6 +63,7 @@ export const User: UserResolvers.Type<TypeMap> = {
     try {
       const id = getUserId(context)
       const purchases = await context.db.query.invoices({where:{vendors_some: {id}}}).then(res => res)
+      console.log(purchases)
       return purchases as any
     }catch {
       console.debug('trouble getting vendor sales')

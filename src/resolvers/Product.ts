@@ -25,8 +25,8 @@ export const Product: ProductResolvers.Type<TypeMap> = {
       const user = await context.db.query
         .users({where: {
           products_some: {id: parent.id}
-        }})
-        .then(res => res)
+        }}).then(res => res[0])
+      console.log(user)
 
       return user as any
     }catch(err) {
