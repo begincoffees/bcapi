@@ -68,6 +68,7 @@ export const Mutation: MutationResolvers.Type<TypeMap> = {
             "read:sales"
           ]
         },
+        
       })
       const token = jwt.sign({ userId: vendor.id }, process.env.APP_SECRET, {expiresIn: '1y'})
       return {

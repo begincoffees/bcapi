@@ -23,7 +23,7 @@ type Cart {
 
 type Invoice {
   id: ID! @unique
-  items: [Product!]!
+  items: [Product!]! @relation(name: "INVOICE_ITEMS")
   amount: String
   email: String!
   record: Json
@@ -53,4 +53,5 @@ type Product {
   varietal: String
   vendor: User @unique
   carts: [Cart!]! @relation(name: "CART_ITEMS")
+  purchases: [Invoice] @relation(name: "INVOICE_ITEMS")
 }

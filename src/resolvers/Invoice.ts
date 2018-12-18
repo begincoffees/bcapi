@@ -20,7 +20,15 @@ export interface InvoiceParent {
 
 export const Invoice: InvoiceResolvers.Type<TypeMap> = {
   id: parent => parent.id,
-  items: (parent, args) => parent.items,
+  items: async (parent, args, context) => {
+     try{
+      // const items = await context.db.query.products({where: {}})
+      return parent.items
+     } catch(err){
+       console.log(err.message)
+      return []
+     }
+  },
   amount: parent => parent.amount,
   email: parent => parent.email,
   record: parent => parent.record,
