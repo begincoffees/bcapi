@@ -1,8 +1,8 @@
 # import * from './generated/prisma.graphql'
 
 type AuthPayload {
-  token: String
-  user: User
+  token: String!
+  user: User!
 }
 
 type Viewer {
@@ -11,24 +11,6 @@ type Viewer {
   purchases(id: String): [Invoice!]!
   sales(id: Int): [Invoice!]!
   products(id: Int): [Product!]!
-}
-
-input cartAddItem {
-  id: ID
-}
-
-input invoiceItem {
-  id: ID
-  name: String
-  price: String
-  description: String
-  varietal: String
-}
-
-input invoiceCreate {
-  items: invoiceItem
-  amount: String
-  email: String
 }
 
 type MutationResult {
@@ -45,7 +27,7 @@ type Mutation {
   customerSignup(email: String!, password: String!, firstName: String!, lastName: String!,): AuthPayload!
   vendorSignup(name: String!, email: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
-  checkout(items: [ProductWhereInput], amount: String, email: String, vendors: [UserWhereInput]): MutationResult!
+  checkout(items: [ProductWhereInput], amount: String, email: String, vendors: [UserWhereInput], token: String!, stripeId: String): MutationResult!
   createNewInvoice(items: [ProductWhereInput], amount: String, email: String, vendors: [UserWhereInput]): MutationResult!
   createNewProduct(name: String!, price: String!, description: String!, imageUrl: String, varietal: String!, vendor: String!): MutationResult!
 }

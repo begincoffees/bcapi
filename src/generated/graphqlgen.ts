@@ -94,6 +94,8 @@ type UserOrderByInput =
   | "bizName_DESC"
   | "password_ASC"
   | "password_DESC"
+  | "stripeId_ASC"
+  | "stripeId_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
   | "createdAt_ASC"
@@ -256,7 +258,9 @@ export namespace UserResolvers {
     bizName: (parent: User) =>
       parent.bizName === undefined ? null : parent.bizName,
     password: (parent: User) =>
-      parent.password === undefined ? null : parent.password
+      parent.password === undefined ? null : parent.password,
+    stripeId: (parent: User) =>
+      parent.stripeId === undefined ? null : parent.stripeId
   };
 
   export interface CartWhereInput {
@@ -382,9 +386,9 @@ export namespace UserResolvers {
     carts_every: CartWhereInput | null;
     carts_some: CartWhereInput | null;
     carts_none: CartWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_every: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_some: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_none: InvoiceWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
   }
   export interface UserWhereInput {
     AND: UserWhereInput[];
@@ -488,6 +492,20 @@ export namespace UserResolvers {
     password_not_starts_with: string | null;
     password_ends_with: string | null;
     password_not_ends_with: string | null;
+    stripeId: string | null;
+    stripeId_not: string | null;
+    stripeId_in: string[];
+    stripeId_not_in: string[];
+    stripeId_lt: string | null;
+    stripeId_lte: string | null;
+    stripeId_gt: string | null;
+    stripeId_gte: string | null;
+    stripeId_contains: string | null;
+    stripeId_not_contains: string | null;
+    stripeId_starts_with: string | null;
+    stripeId_not_starts_with: string | null;
+    stripeId_ends_with: string | null;
+    stripeId_not_ends_with: string | null;
     cart: CartWhereInput | null;
     purchases_every: InvoiceWhereInput | null;
     purchases_some: InvoiceWhereInput | null;
@@ -784,6 +802,13 @@ export namespace UserResolvers {
     info: GraphQLResolveInfo
   ) => Cart | null | Promise<Cart | null>;
 
+  export type StripeIdResolver = (
+    parent: User,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | null | Promise<string | null>;
+
   export type PurchasesResolver = (
     parent: User,
     args: ArgsPurchases,
@@ -868,6 +893,13 @@ export namespace UserResolvers {
       ctx: Context,
       info: GraphQLResolveInfo
     ) => Cart | null | Promise<Cart | null>;
+
+    stripeId: (
+      parent: User,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | null | Promise<string | null>;
 
     purchases: (
       parent: User,
@@ -979,9 +1011,9 @@ export namespace CartResolvers {
     carts_every: CartWhereInput | null;
     carts_some: CartWhereInput | null;
     carts_none: CartWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_every: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_some: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_none: InvoiceWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
   }
   export interface UserWhereInput {
     AND: UserWhereInput[];
@@ -1085,6 +1117,20 @@ export namespace CartResolvers {
     password_not_starts_with: string | null;
     password_ends_with: string | null;
     password_not_ends_with: string | null;
+    stripeId: string | null;
+    stripeId_not: string | null;
+    stripeId_in: string[];
+    stripeId_not_in: string[];
+    stripeId_lt: string | null;
+    stripeId_lte: string | null;
+    stripeId_gt: string | null;
+    stripeId_gte: string | null;
+    stripeId_contains: string | null;
+    stripeId_not_contains: string | null;
+    stripeId_starts_with: string | null;
+    stripeId_not_starts_with: string | null;
+    stripeId_ends_with: string | null;
+    stripeId_not_ends_with: string | null;
     cart: CartWhereInput | null;
     purchases_every: InvoiceWhereInput | null;
     purchases_some: InvoiceWhereInput | null;
@@ -1530,6 +1576,20 @@ export namespace ProductResolvers {
     password_not_starts_with: string | null;
     password_ends_with: string | null;
     password_not_ends_with: string | null;
+    stripeId: string | null;
+    stripeId_not: string | null;
+    stripeId_in: string[];
+    stripeId_not_in: string[];
+    stripeId_lt: string | null;
+    stripeId_lte: string | null;
+    stripeId_gt: string | null;
+    stripeId_gte: string | null;
+    stripeId_contains: string | null;
+    stripeId_not_contains: string | null;
+    stripeId_starts_with: string | null;
+    stripeId_not_starts_with: string | null;
+    stripeId_ends_with: string | null;
+    stripeId_not_ends_with: string | null;
     cart: CartWhereInput | null;
     purchases_every: InvoiceWhereInput | null;
     purchases_some: InvoiceWhereInput | null;
@@ -1664,9 +1724,9 @@ export namespace ProductResolvers {
     carts_every: CartWhereInput | null;
     carts_some: CartWhereInput | null;
     carts_none: CartWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_every: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_some: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_none: InvoiceWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
   }
   export interface InvoiceWhereInput {
     AND: InvoiceWhereInput[];
@@ -1870,6 +1930,16 @@ export namespace ProductResolvers {
     last: number | null;
   }
 
+  export interface ArgsPurchases {
+    where: InvoiceWhereInput | null;
+    orderBy: InvoiceOrderByInput | null;
+    skip: number | null;
+    after: string | null;
+    before: string | null;
+    first: number | null;
+    last: number | null;
+  }
+
   export type IdResolver = (
     parent: Product,
     args: {},
@@ -1918,6 +1988,13 @@ export namespace ProductResolvers {
     ctx: Context,
     info: GraphQLResolveInfo
   ) => Cart[] | Promise<Cart[]>;
+
+  export type PurchasesResolver = (
+    parent: Product,
+    args: ArgsPurchases,
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => Invoice[] | Promise<Invoice[]>;
 
   export interface Type {
     id: (
@@ -1968,6 +2045,13 @@ export namespace ProductResolvers {
       ctx: Context,
       info: GraphQLResolveInfo
     ) => Cart[] | Promise<Cart[]>;
+
+    purchases: (
+      parent: Product,
+      args: ArgsPurchases,
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => Invoice[] | Promise<Invoice[]>;
   }
 }
 
@@ -2065,9 +2149,9 @@ export namespace InvoiceResolvers {
     carts_every: CartWhereInput | null;
     carts_some: CartWhereInput | null;
     carts_none: CartWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_every: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_some: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_none: InvoiceWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
   }
   export interface UserWhereInput {
     AND: UserWhereInput[];
@@ -2171,6 +2255,20 @@ export namespace InvoiceResolvers {
     password_not_starts_with: string | null;
     password_ends_with: string | null;
     password_not_ends_with: string | null;
+    stripeId: string | null;
+    stripeId_not: string | null;
+    stripeId_in: string[];
+    stripeId_not_in: string[];
+    stripeId_lt: string | null;
+    stripeId_lte: string | null;
+    stripeId_gt: string | null;
+    stripeId_gte: string | null;
+    stripeId_contains: string | null;
+    stripeId_not_contains: string | null;
+    stripeId_starts_with: string | null;
+    stripeId_not_starts_with: string | null;
+    stripeId_ends_with: string | null;
+    stripeId_not_ends_with: string | null;
     cart: CartWhereInput | null;
     purchases_every: InvoiceWhereInput | null;
     purchases_some: InvoiceWhereInput | null;
@@ -2799,9 +2897,9 @@ export namespace MutationResolvers {
     carts_every: CartWhereInput | null;
     carts_some: CartWhereInput | null;
     carts_none: CartWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_every: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_some: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToProduct_none: InvoiceWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
   }
   export interface UserWhereInput {
     AND: UserWhereInput[];
@@ -2905,6 +3003,20 @@ export namespace MutationResolvers {
     password_not_starts_with: string | null;
     password_ends_with: string | null;
     password_not_ends_with: string | null;
+    stripeId: string | null;
+    stripeId_not: string | null;
+    stripeId_in: string[];
+    stripeId_not_in: string[];
+    stripeId_lt: string | null;
+    stripeId_lte: string | null;
+    stripeId_gt: string | null;
+    stripeId_gte: string | null;
+    stripeId_contains: string | null;
+    stripeId_not_contains: string | null;
+    stripeId_starts_with: string | null;
+    stripeId_not_starts_with: string | null;
+    stripeId_ends_with: string | null;
+    stripeId_not_ends_with: string | null;
     cart: CartWhereInput | null;
     purchases_every: InvoiceWhereInput | null;
     purchases_some: InvoiceWhereInput | null;
@@ -3172,6 +3284,8 @@ export namespace MutationResolvers {
     amount: string | null;
     email: string | null;
     vendors: UserWhereInput[] | null;
+    token: string;
+    stripeId: string | null;
   }
 
   export interface ArgsCreateNewInvoice {
@@ -3280,7 +3394,9 @@ export namespace MutationResolvers {
 export namespace AuthPayloadResolvers {
   export const defaultResolvers = {
     token: (parent: AuthPayload) =>
-      parent.token === undefined ? null : parent.token
+      parent.token === undefined ? null : parent.token,
+    user: (parent: AuthPayload) =>
+      parent.user === undefined ? null : parent.user
   };
 
   export type TokenResolver = (

@@ -10,6 +10,7 @@ export interface Viewer {
 }
 export interface AuthPayload {
   token: string | null
+  user: User | null
 }
 export interface MutationResult {
   success: boolean | null

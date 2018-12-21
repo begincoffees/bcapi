@@ -4,4 +4,5 @@ export interface Context {
   db: Prisma;
   request: any
   Authorization: any
+  stripe: any;
 }

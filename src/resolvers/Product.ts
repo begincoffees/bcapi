@@ -31,5 +31,6 @@ export const Product: ProductResolvers.Type = {
       console.debug('trouble getting products vendor')
     }
   },
+  purchases: (parent, args) => null,
   carts: (parent, args) => null
 };

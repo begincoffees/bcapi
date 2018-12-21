@@ -1,4 +1,38 @@
 // STRIPE CHARGE DATA SHAPE
+const clientTokenizedPayment = {
+  token:{
+    card:{
+      address_city: null,
+      address_country: null,
+      address_line1: null,
+      address_line1_check: null,
+      address_line2: null,
+      address_state: null,
+      address_zip: "78752",
+      address_zip_check: "unchecked",
+      brand: "Visa",
+      country: "US",
+      cvc_check: "unchecked",
+      dynamic_last4: null,
+      exp_month: 2,
+      exp_year: 2021,
+      funding: "debit",
+      id: "card_1DjqhdH5PCWGQOSIY8TYRHA8",
+      last4: "3009",
+      metadata: {},
+      name: null,
+      object: "card",
+      tokenization_method: null,
+    },
+    client_ip: "108.166.30.189",
+    created: 1545409101,
+    id: "tok_1DjqhdH5PCWGQOSIYB8wDf6p",
+    livemode: false,
+    object: "token",
+    type: "card",
+    used: false,
+  }
+}
 const stripeDataShape = { 
   id: 'ch_1DfzQvH5PCWGQOSIO812NGeX',
   object: 'charge',

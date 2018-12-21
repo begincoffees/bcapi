@@ -24,7 +24,9 @@ export const Invoice: InvoiceResolvers.Type = {
   id: parent => parent.id,
   items: async (parent, args, context) => {
      try{
-      const items = await context.db.products({where: {invoices_some: {id: parent.id}}}).then(res => res)
+      const items = await context.db
+        .products({where: {invoices_some: {id: parent.id}}})
+        .then(res => res)
       return items || []
      } catch(err){
        console.log(err.message)

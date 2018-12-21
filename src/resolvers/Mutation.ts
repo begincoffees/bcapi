@@ -3,7 +3,7 @@ import * as bcrypt from 'bcryptjs'
 import { UserParent } from "./User";
 import { getUserId } from "../utils";
 import { Context } from "./types/Context";
-import { createGuestInvoice } from "../utils/stripe";
+import { createGuestInvoice, createUserInvoice } from "../utils/stripe";
 import { MutationResolvers } from "../generated/graphqlgen";
 
 export interface MutationParent {}
@@ -18,7 +18,7 @@ export const Mutation: MutationResolvers.Type = {
       }).then((customer) => {
         return customer.id;
       })
-      console.log(stripeId)
+
       if (stripeId){
         const password = await bcrypt.hash(_args.password, 10)
         const customer = await context.db.createUser({
@@ -62,7 +62,7 @@ export const Mutation: MutationResolvers.Type = {
       }).then((customer) => {
         return customer.id;
       })
-      console.log(stripeId)
+
       if(stripeId !== undefined){
         const password = await bcrypt.hash(_args.password, 10).then(res => res)
         const vendor = await context.db.createUser({
@@ -90,7 +90,9 @@ export const Mutation: MutationResolvers.Type = {
         
           
         })
+        
         const token = jwt.sign({ userId: vendor.id }, process.env.APP_SECRET, {expiresIn: '1y'})
+
         return {
           token,
           user: vendor as UserParent
@@ -103,9 +105,10 @@ export const Mutation: MutationResolvers.Type = {
     }
   },
   login: async (_parent, {email, password}, context: Context, _info) => {
-    const user = await context.db.user({email}).then(res => res)
+    try {
+      const user = await context.db.user({email}).then(res => res)
+      
 
-    if(user){
       const session = { 
         userId: user.id, 
         role: user.role, 
@@ -113,39 +116,55 @@ export const Mutation: MutationResolvers.Type = {
       }
       const token = jwt.sign({...session},process.env.APP_SECRET)
 
-      return {
+      const res = {
         token,
-        user: user as UserParent
+        user
       }
-    } else {
+      return {...res}
+    } catch(err) {
+      console.log(err.message)
       throw new Error("I'm having completing your log in. Would you mind trying again?")
     }
   },
   checkout: async (_parent, _args: any, context: Context, _info) => {
+    let stripePayment
     try {
       const id = getUserId(context)
-      const record = await createGuestInvoice(_args.email)
-      const created = await record.created
-      const customer = await record.customer
-      const stripePaymentId = await record.id
 
-      // instead we need to return the record to the client as a token 
-      // client sends the token to another resolver to create the invoice and
-      // save in db
+      /**  guest checkout */
+      if(!id){
+        stripePayment = await createGuestInvoice(
+          context.stripe,
+          _args.email, 
+          _args.amount
+        )
+      }
+      
+      /** user checkout */
+      if(id && _args.stripeId){
+        stripePayment = await createUserInvoice(
+          context.stripe,
+          _args.stripeId, 
+          _args.amount
+        )
+  } 
 
+      /**
+       * save the payment data to db
+       */
       await context.db.createInvoice({
         amount: _args.amount,
         email: _args.email,
-        created,
-        stripePaymentId,
-        stripeCustomerId: customer,
+        created: stripePayment.created,
+        stripePaymentId: stripePayment.id,
+        stripeCustomerId: stripePayment.customer,
         vendors:{connect: [..._args.vendors]},
-        customer: {connect: {id}},
+        customer: id ? {connect: {id}} : null,
         items: {connect: [..._args.items]}
       } as any)
 
-
       return {success: true}
+
     } catch(err) {
       console.debug(err.message)
       throw new Error('error checkout')

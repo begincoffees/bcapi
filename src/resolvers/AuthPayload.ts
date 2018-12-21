@@ -1,6 +1,9 @@
 
 import { UserParent } from "./User";
 import { AuthPayloadResolvers } from "../generated/graphqlgen";
+import { getUserId } from "../utils";
+import { Context } from "./types/Context";
+import { User } from "../generated/prisma-client";
 
 export interface AuthPayloadParent {
   token?: string;
@@ -9,5 +12,5 @@ export interface AuthPayloadParent {
 
 export const AuthPayload: AuthPayloadResolvers.Type= {
   token: parent => parent.token,
-  user: parent => null
+  user: parent => parent.user
 };

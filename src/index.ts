@@ -30,11 +30,6 @@ const server = new GraphQLServer({
   context: req => withDB(req)
 } as any)
 
-
-// proxy: {
-//   path: '*',
-//   target: `http://localhost:${ process.env.PORT }/bcgraph`
-// }
 const port = process.env.PORT || 6006
 const options = {
   port,
