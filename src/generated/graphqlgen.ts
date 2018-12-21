@@ -2,24 +2,16 @@
 
 import { GraphQLResolveInfo } from "graphql";
 import {
+  Viewer,
   User,
   Cart,
   Product,
   Invoice,
   PaymentRecord,
+  AuthPayload,
+  MutationResult
 } from "./prisma-client";
 type Context = any;
-
-export interface Viewer {
-
-}
-export interface AuthPayload {
-  token: string | null
-}
-export interface MutationResult {
-  success: boolean | null
-}
-
 
 type ProductOrderByInput =
   | "id_ASC"
@@ -1986,7 +1978,13 @@ export namespace InvoiceResolvers {
       parent.amount === undefined ? null : parent.amount,
     email: (parent: Invoice) => parent.email,
     record: (parent: Invoice) =>
-      parent.record === undefined ? null : parent.record
+      parent.record === undefined ? null : parent.record,
+    created: (parent: Invoice) =>
+      parent.created === undefined ? null : parent.created,
+    stripePaymentId: (parent: Invoice) =>
+      parent.stripePaymentId === undefined ? null : parent.stripePaymentId,
+    stripeCustomerId: (parent: Invoice) =>
+      parent.stripeCustomerId === undefined ? null : parent.stripeCustomerId
   };
 
   export interface ProductWhereInput {

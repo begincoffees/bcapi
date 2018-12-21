@@ -1,4 +1,4 @@
-import { TypeMap } from "./types/TypeMap";
+
 import { PaymentRecordResolvers } from "../generated/graphqlgen";
 
 export interface PaymentRecordParent {
@@ -12,6 +12,7 @@ export interface PaymentRecordParent {
 }
 
 export const PaymentRecord: PaymentRecordResolvers.Type = {
+  ...PaymentRecordResolvers.defaultResolvers,
   amount: parent => parent.amount,
   balanceTransaction: parent => parent.balanceTransaction,
   created: parent => parent.created,

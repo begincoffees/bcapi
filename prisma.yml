@@ -4,7 +4,7 @@ datamodel: src/datamodel.graphql
 secret: ${env:PRISMA_SECRET}
 generate:
   - generator: typescript-client
-    output: ../src/generated/prisma-client/
+    output: src/generated/prisma-client/
 # seed:
 #   import: seed.graphql
 hooks:

@@ -3,6 +3,8 @@ import { makeExecutableSchema } from '../node_modules/graphql-tools';
 import { Prisma } from './generated/prisma-client/'
 import { typeDefs} from './generated/prisma-client/prisma-schema';
 import { resolvers } from './resolvers';
+import * as Stripe from 'stripe';
+
 
 const schema = makeExecutableSchema({typeDefs})
 
@@ -15,9 +17,10 @@ const withDB = (req) => ({
   db: new Prisma({
     schema,
     resolvers,
-    endpoint: process.env.PRISMA_ENDPOINT,
+    endpoint: process.env.PRISMA_ENDPOINT, // 'http://localhost:4466',
     secret: process.env.PRISMA_SECRET || 'bigboi',
-  } as any)
+  } as any),
+  stripe: new Stripe(process.env.STRIPE_SECRET)
 })
 
 
@@ -27,11 +30,17 @@ const server = new GraphQLServer({
   context: req => withDB(req)
 } as any)
 
+
+// proxy: {
+//   path: '*',
+//   target: `http://localhost:${ process.env.PORT }/bcgraph`
+// }
+const port = process.env.PORT || 6006
 const options = {
-  port: process.env.PORT,
+  port,
   endpoint: '/bcgraph'
 }
 
 server.start(options).then(() => {
-  console.log(`Server is up ${process.env.PORT}`)
+  console.log(`Server is up ${port}`)
 });

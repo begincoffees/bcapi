@@ -1,11 +1,10 @@
-import { ViewerResolvers } from "../generated/resolvers";
-import { TypeMap } from "./types/TypeMap";
 import { UserParent } from "./User";
 import { InvoiceParent } from "./Invoice";
 import { ProductParent } from "./Product";
 import { Context } from "./types/Context";
 import { getUserId } from "../utils";
 import { CartParent } from "./Cart";
+import { ViewerResolvers } from "../generated/graphqlgen";
 
 export interface ViewerParent {
   me: UserParent;
@@ -15,15 +14,17 @@ export interface ViewerParent {
   products: ProductParent[];
 }
 
-export const Viewer: ViewerResolvers.Type<TypeMap> = {
-  me: async (parent, args, context: Context): Promise<UserParent> => {
+
+export const Viewer: ViewerResolvers.Type = {
+  ...ViewerResolvers.defaultResolvers,
+  me: async (parent, args, context: Context)=> {
     const id = getUserId(context)
     if(id){
-      const me = await context.db.user({id}).then(res => res)
+      const me = await context.db.user({id})
       return me as any
     }
   },
-  cart: async (parent, args, context: Context): Promise<CartParent> => {
+  cart: async (parent, args, context: Context)=> {
     try {
       const id = getUserId(context)
       const me = await context.db.carts({where: {user:{id}}})
@@ -33,7 +34,7 @@ export const Viewer: ViewerResolvers.Type<TypeMap> = {
       console.log('Viewer.cart error')
     }
   },
-  purchases: parent => parent.purchases || [],
-  sales: parent => parent.sales || [],
-  products: parent => parent.products || []
+  purchases: (parent, args, context) => [],
+  sales: (parent, args, context) => [],
+  products: (parent, args, context) => [],
 };

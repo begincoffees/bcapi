@@ -1,5 +1,5 @@
 # source: https://begincoffeesprisma.herokuapp.com/bcprisma/test
-# timestamp: Thu Dec 13 2018 17:36:14 GMT-0600 (CST)
+# timestamp: Thu Dec 20 2018 18:48:04 GMT-0600 (CST)
 
 type AggregateCart {
   count: Int!
@@ -345,7 +345,7 @@ input InvoiceCreateInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
-  items: ProductCreateManyInput
+  items: ProductCreateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordCreateManyInput
   customer: UserCreateOneWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
@@ -353,6 +353,11 @@ input InvoiceCreateInput {
 
 input InvoiceCreateManyWithoutCustomerInput {
   create: [InvoiceCreateWithoutCustomerInput!]
+  connect: [InvoiceWhereUniqueInput!]
+}
+
+input InvoiceCreateManyWithoutItemsInput {
+  create: [InvoiceCreateWithoutItemsInput!]
   connect: [InvoiceWhereUniqueInput!]
 }
 
@@ -368,8 +373,20 @@ input InvoiceCreateWithoutCustomerInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
-  items: ProductCreateManyInput
+  items: ProductCreateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordCreateManyInput
+  vendors: UserCreateManyWithoutSalesInput
+}
+
+input InvoiceCreateWithoutItemsInput {
+  amount: String
+  email: String!
+  record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
+  stripeRecord: PaymentRecordCreateManyInput
+  customer: UserCreateOneWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
 }
 
@@ -380,7 +397,7 @@ input InvoiceCreateWithoutVendorsInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
-  items: ProductCreateManyInput
+  items: ProductCreateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordCreateManyInput
   customer: UserCreateOneWithoutPurchasesInput
 }
@@ -471,7 +488,7 @@ input InvoiceUpdateInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
-  items: ProductUpdateManyInput
+  items: ProductUpdateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordUpdateManyInput
   customer: UserUpdateOneWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
@@ -484,6 +501,15 @@ input InvoiceUpdateManyWithoutCustomerInput {
   delete: [InvoiceWhereUniqueInput!]
   update: [InvoiceUpdateWithWhereUniqueWithoutCustomerInput!]
   upsert: [InvoiceUpsertWithWhereUniqueWithoutCustomerInput!]
+}
+
+input InvoiceUpdateManyWithoutItemsInput {
+  create: [InvoiceCreateWithoutItemsInput!]
+  connect: [InvoiceWhereUniqueInput!]
+  disconnect: [InvoiceWhereUniqueInput!]
+  delete: [InvoiceWhereUniqueInput!]
+  update: [InvoiceUpdateWithWhereUniqueWithoutItemsInput!]
+  upsert: [InvoiceUpsertWithWhereUniqueWithoutItemsInput!]
 }
 
 input InvoiceUpdateManyWithoutVendorsInput {
@@ -502,8 +528,20 @@ input InvoiceUpdateWithoutCustomerDataInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
-  items: ProductUpdateManyInput
+  items: ProductUpdateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordUpdateManyInput
+  vendors: UserUpdateManyWithoutSalesInput
+}
+
+input InvoiceUpdateWithoutItemsDataInput {
+  amount: String
+  email: String
+  record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
+  stripeRecord: PaymentRecordUpdateManyInput
+  customer: UserUpdateOneWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
 }
 
@@ -514,7 +552,7 @@ input InvoiceUpdateWithoutVendorsDataInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
-  items: ProductUpdateManyInput
+  items: ProductUpdateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordUpdateManyInput
   customer: UserUpdateOneWithoutPurchasesInput
 }
@@ -522,6 +560,11 @@ input InvoiceUpdateWithoutVendorsDataInput {
 input InvoiceUpdateWithWhereUniqueWithoutCustomerInput {
   where: InvoiceWhereUniqueInput!
   data: InvoiceUpdateWithoutCustomerDataInput!
+}
+
+input InvoiceUpdateWithWhereUniqueWithoutItemsInput {
+  where: InvoiceWhereUniqueInput!
+  data: InvoiceUpdateWithoutItemsDataInput!
 }
 
 input InvoiceUpdateWithWhereUniqueWithoutVendorsInput {
@@ -533,6 +576,12 @@ input InvoiceUpsertWithWhereUniqueWithoutCustomerInput {
   where: InvoiceWhereUniqueInput!
   update: InvoiceUpdateWithoutCustomerDataInput!
   create: InvoiceCreateWithoutCustomerInput!
+}
+
+input InvoiceUpsertWithWhereUniqueWithoutItemsInput {
+  where: InvoiceWhereUniqueInput!
+  update: InvoiceUpdateWithoutItemsDataInput!
+  create: InvoiceCreateWithoutItemsInput!
 }
 
 input InvoiceUpsertWithWhereUniqueWithoutVendorsInput {
@@ -1249,6 +1298,7 @@ type Product implements Node {
   varietal: String
   vendor(where: UserWhereInput): User
   carts(where: CartWhereInput, orderBy: CartOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Cart!]
+  purchases(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice!]
 }
 
 """A connection to a list of items."""
@@ -1268,15 +1318,16 @@ input ProductCreateInput {
   varietal: String
   vendor: UserCreateOneWithoutProductsInput
   carts: CartCreateManyWithoutItemsInput
-}
-
-input ProductCreateManyInput {
-  create: [ProductCreateInput!]
-  connect: [ProductWhereUniqueInput!]
+  purchases: InvoiceCreateManyWithoutItemsInput
 }
 
 input ProductCreateManyWithoutCartsInput {
   create: [ProductCreateWithoutCartsInput!]
+  connect: [ProductWhereUniqueInput!]
+}
+
+input ProductCreateManyWithoutPurchasesInput {
+  create: [ProductCreateWithoutPurchasesInput!]
   connect: [ProductWhereUniqueInput!]
 }
 
@@ -1291,6 +1342,16 @@ input ProductCreateWithoutCartsInput {
   description: String
   varietal: String
   vendor: UserCreateOneWithoutProductsInput
+  purchases: InvoiceCreateManyWithoutItemsInput
+}
+
+input ProductCreateWithoutPurchasesInput {
+  name: String
+  price: String
+  description: String
+  varietal: String
+  vendor: UserCreateOneWithoutProductsInput
+  carts: CartCreateManyWithoutItemsInput
 }
 
 input ProductCreateWithoutVendorInput {
@@ -1299,6 +1360,7 @@ input ProductCreateWithoutVendorInput {
   description: String
   varietal: String
   carts: CartCreateManyWithoutItemsInput
+  purchases: InvoiceCreateManyWithoutItemsInput
 }
 
 """An edge in a connection."""
@@ -1374,15 +1436,6 @@ input ProductSubscriptionWhereInput {
   node: ProductWhereInput
 }
 
-input ProductUpdateDataInput {
-  name: String
-  price: String
-  description: String
-  varietal: String
-  vendor: UserUpdateOneWithoutProductsInput
-  carts: CartUpdateManyWithoutItemsInput
-}
-
 input ProductUpdateInput {
   name: String
   price: String
@@ -1390,15 +1443,7 @@ input ProductUpdateInput {
   varietal: String
   vendor: UserUpdateOneWithoutProductsInput
   carts: CartUpdateManyWithoutItemsInput
-}
-
-input ProductUpdateManyInput {
-  create: [ProductCreateInput!]
-  connect: [ProductWhereUniqueInput!]
-  disconnect: [ProductWhereUniqueInput!]
-  delete: [ProductWhereUniqueInput!]
-  update: [ProductUpdateWithWhereUniqueNestedInput!]
-  upsert: [ProductUpsertWithWhereUniqueNestedInput!]
+  purchases: InvoiceUpdateManyWithoutItemsInput
 }
 
 input ProductUpdateManyWithoutCartsInput {
@@ -1408,6 +1453,15 @@ input ProductUpdateManyWithoutCartsInput {
   delete: [ProductWhereUniqueInput!]
   update: [ProductUpdateWithWhereUniqueWithoutCartsInput!]
   upsert: [ProductUpsertWithWhereUniqueWithoutCartsInput!]
+}
+
+input ProductUpdateManyWithoutPurchasesInput {
+  create: [ProductCreateWithoutPurchasesInput!]
+  connect: [ProductWhereUniqueInput!]
+  disconnect: [ProductWhereUniqueInput!]
+  delete: [ProductWhereUniqueInput!]
+  update: [ProductUpdateWithWhereUniqueWithoutPurchasesInput!]
+  upsert: [ProductUpsertWithWhereUniqueWithoutPurchasesInput!]
 }
 
 input ProductUpdateManyWithoutVendorInput {
@@ -1425,6 +1479,16 @@ input ProductUpdateWithoutCartsDataInput {
   description: String
   varietal: String
   vendor: UserUpdateOneWithoutProductsInput
+  purchases: InvoiceUpdateManyWithoutItemsInput
+}
+
+input ProductUpdateWithoutPurchasesDataInput {
+  name: String
+  price: String
+  description: String
+  varietal: String
+  vendor: UserUpdateOneWithoutProductsInput
+  carts: CartUpdateManyWithoutItemsInput
 }
 
 input ProductUpdateWithoutVendorDataInput {
@@ -1433,11 +1497,7 @@ input ProductUpdateWithoutVendorDataInput {
   description: String
   varietal: String
   carts: CartUpdateManyWithoutItemsInput
-}
-
-input ProductUpdateWithWhereUniqueNestedInput {
-  where: ProductWhereUniqueInput!
-  data: ProductUpdateDataInput!
+  purchases: InvoiceUpdateManyWithoutItemsInput
 }
 
 input ProductUpdateWithWhereUniqueWithoutCartsInput {
@@ -1445,21 +1505,26 @@ input ProductUpdateWithWhereUniqueWithoutCartsInput {
   data: ProductUpdateWithoutCartsDataInput!
 }
 
+input ProductUpdateWithWhereUniqueWithoutPurchasesInput {
+  where: ProductWhereUniqueInput!
+  data: ProductUpdateWithoutPurchasesDataInput!
+}
+
 input ProductUpdateWithWhereUniqueWithoutVendorInput {
   where: ProductWhereUniqueInput!
   data: ProductUpdateWithoutVendorDataInput!
-}
-
-input ProductUpsertWithWhereUniqueNestedInput {
-  where: ProductWhereUniqueInput!
-  update: ProductUpdateDataInput!
-  create: ProductCreateInput!
 }
 
 input ProductUpsertWithWhereUniqueWithoutCartsInput {
   where: ProductWhereUniqueInput!
   update: ProductUpdateWithoutCartsDataInput!
   create: ProductCreateWithoutCartsInput!
+}
+
+input ProductUpsertWithWhereUniqueWithoutPurchasesInput {
+  where: ProductWhereUniqueInput!
+  update: ProductUpdateWithoutPurchasesDataInput!
+  create: ProductCreateWithoutPurchasesInput!
 }
 
 input ProductUpsertWithWhereUniqueWithoutVendorInput {
@@ -1681,9 +1746,9 @@ input ProductWhereInput {
   carts_every: CartWhereInput
   carts_some: CartWhereInput
   carts_none: CartWhereInput
-  _MagicalBackRelation_InvoiceToProduct_every: InvoiceWhereInput
-  _MagicalBackRelation_InvoiceToProduct_some: InvoiceWhereInput
-  _MagicalBackRelation_InvoiceToProduct_none: InvoiceWhereInput
+  purchases_every: InvoiceWhereInput
+  purchases_some: InvoiceWhereInput
+  purchases_none: InvoiceWhereInput
 }
 
 input ProductWhereUniqueInput {
@@ -1731,6 +1796,7 @@ type User implements Node {
   bizName: String
   password: String
   cart(where: CartWhereInput): Cart
+  stripeId: String
   purchases(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice!]
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
   sales(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice!]
@@ -1753,6 +1819,7 @@ input UserCreateInput {
   lastName: String
   bizName: String
   password: String
+  stripeId: String
   permissions: UserCreatepermissionsInput
   cart: CartCreateOneWithoutUserInput
   purchases: InvoiceCreateManyWithoutCustomerInput
@@ -1791,6 +1858,7 @@ input UserCreateWithoutCartInput {
   lastName: String
   bizName: String
   password: String
+  stripeId: String
   permissions: UserCreatepermissionsInput
   purchases: InvoiceCreateManyWithoutCustomerInput
   products: ProductCreateManyWithoutVendorInput
@@ -1804,6 +1872,7 @@ input UserCreateWithoutProductsInput {
   lastName: String
   bizName: String
   password: String
+  stripeId: String
   permissions: UserCreatepermissionsInput
   cart: CartCreateOneWithoutUserInput
   purchases: InvoiceCreateManyWithoutCustomerInput
@@ -1817,6 +1886,7 @@ input UserCreateWithoutPurchasesInput {
   lastName: String
   bizName: String
   password: String
+  stripeId: String
   permissions: UserCreatepermissionsInput
   cart: CartCreateOneWithoutUserInput
   products: ProductCreateManyWithoutVendorInput
@@ -1830,6 +1900,7 @@ input UserCreateWithoutSalesInput {
   lastName: String
   bizName: String
   password: String
+  stripeId: String
   permissions: UserCreatepermissionsInput
   cart: CartCreateOneWithoutUserInput
   purchases: InvoiceCreateManyWithoutCustomerInput
@@ -1860,6 +1931,8 @@ enum UserOrderByInput {
   bizName_DESC
   password_ASC
   password_DESC
+  stripeId_ASC
+  stripeId_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1875,6 +1948,7 @@ type UserPreviousValues {
   lastName: String
   bizName: String
   password: String
+  stripeId: String
 }
 
 type UserSubscriptionPayload {
@@ -1923,6 +1997,7 @@ input UserUpdateInput {
   lastName: String
   bizName: String
   password: String
+  stripeId: String
   permissions: UserUpdatepermissionsInput
   cart: CartUpdateOneWithoutUserInput
   purchases: InvoiceUpdateManyWithoutCustomerInput
@@ -1976,6 +2051,7 @@ input UserUpdateWithoutCartDataInput {
   lastName: String
   bizName: String
   password: String
+  stripeId: String
   permissions: UserUpdatepermissionsInput
   purchases: InvoiceUpdateManyWithoutCustomerInput
   products: ProductUpdateManyWithoutVendorInput
@@ -1989,6 +2065,7 @@ input UserUpdateWithoutProductsDataInput {
   lastName: String
   bizName: String
   password: String
+  stripeId: String
   permissions: UserUpdatepermissionsInput
   cart: CartUpdateOneWithoutUserInput
   purchases: InvoiceUpdateManyWithoutCustomerInput
@@ -2002,6 +2079,7 @@ input UserUpdateWithoutPurchasesDataInput {
   lastName: String
   bizName: String
   password: String
+  stripeId: String
   permissions: UserUpdatepermissionsInput
   cart: CartUpdateOneWithoutUserInput
   products: ProductUpdateManyWithoutVendorInput
@@ -2015,6 +2093,7 @@ input UserUpdateWithoutSalesDataInput {
   lastName: String
   bizName: String
   password: String
+  stripeId: String
   permissions: UserUpdatepermissionsInput
   cart: CartUpdateOneWithoutUserInput
   purchases: InvoiceUpdateManyWithoutCustomerInput
@@ -2336,6 +2415,46 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
+  stripeId: String
+
+  """All values that are not equal to given value."""
+  stripeId_not: String
+
+  """All values that are contained in given list."""
+  stripeId_in: [String!]
+
+  """All values that are not contained in given list."""
+  stripeId_not_in: [String!]
+
+  """All values less than the given value."""
+  stripeId_lt: String
+
+  """All values less than or equal the given value."""
+  stripeId_lte: String
+
+  """All values greater than the given value."""
+  stripeId_gt: String
+
+  """All values greater than or equal the given value."""
+  stripeId_gte: String
+
+  """All values containing the given string."""
+  stripeId_contains: String
+
+  """All values not containing the given string."""
+  stripeId_not_contains: String
+
+  """All values starting with the given string."""
+  stripeId_starts_with: String
+
+  """All values not starting with the given string."""
+  stripeId_not_starts_with: String
+
+  """All values ending with the given string."""
+  stripeId_ends_with: String
+
+  """All values not ending with the given string."""
+  stripeId_not_ends_with: String
   cart: CartWhereInput
   purchases_every: InvoiceWhereInput
   purchases_some: InvoiceWhereInput
@@ -2351,4 +2470,5 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
+  stripeId: String
 }

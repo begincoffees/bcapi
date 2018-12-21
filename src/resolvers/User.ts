@@ -1,10 +1,9 @@
-import { UserResolvers } from "../generated/resolvers";
-import { TypeMap } from "./types/TypeMap";
 import { CartParent } from "./Cart";
 import { InvoiceParent } from "./Invoice";
 import { ProductParent } from "./Product";
 import { getUserId } from "../utils";
 import { Context } from "./types/Context";
+import { UserResolvers } from "../generated/graphqlgen";
 
 export interface UserParent {
   id: string;
@@ -21,7 +20,8 @@ export interface UserParent {
   sales: InvoiceParent[];
 }
 
-export const User: UserResolvers.Type<TypeMap> = {
+export const User: UserResolvers.Type = {
+  ...UserResolvers.defaultResolvers,
   id: parent => parent.id,
   role: parent => parent.role,
   permissions: parent => parent.permissions,
@@ -30,7 +30,7 @@ export const User: UserResolvers.Type<TypeMap> = {
   lastName: parent => parent.lastName,
   bizName: parent => parent.bizName,
   password: parent => parent.password,
-  cart: async (parent, args, context: any, info): Promise<CartParent> => {
+  cart: async (parent, args, context: any, info) => {
     try {
       const id = getUserId(context)
       const cart = await context.db.user({id}).cart()
@@ -39,17 +39,18 @@ export const User: UserResolvers.Type<TypeMap> = {
       throw new Error('Trouble getting users cart')
     }
   },
-  purchases: async (parent, args, context: Context, info): Promise<InvoiceParent[]> => {
+  purchases: async (parent, args, context: Context, info) => {
     try {
       const id = getUserId(context)
-      const purchases = await await context.db.user({id}).purchases()
+      const purchases = await context.db.user({id}).purchases().then(res=>res)
+      console.log(purchases[19].stripeCustomerId)
       return purchases as any
     }catch {
       console.debug('trouble getting user purchases')
       return []
     }
   },
-  products: async (parent, args, context: Context, info): Promise<ProductParent[]> => {
+  products: async (parent, args, context: Context, info)=> {
     try {
       const id = getUserId(context)
       const products= await context.db.user({id}).products()
@@ -59,7 +60,7 @@ export const User: UserResolvers.Type<TypeMap> = {
       return []
     }
   },
-  sales: async (parent, args, context: Context, info): Promise<InvoiceParent[]> => {
+  sales: async (parent, args, context: Context, info) => {
     try {
       const id = getUserId(context)
       const purchases = await context.db.user({id}).sales()

@@ -1,4 +1,4 @@
-type User {  
+type User {
   id: ID! @unique
   role: String
   permissions: [String!]!
@@ -8,6 +8,7 @@ type User {
   bizName: String
   password: String
   cart: Cart @unique
+  stripeId: String @unique
   purchases: [Invoice!]! @relation(name: "CUSTOMER")
   products: [Product!]!
   sales: [Invoice!]! @relation(name: "VENDOR")
@@ -23,7 +24,7 @@ type Cart {
 
 type Invoice {
   id: ID! @unique
-  items: [Product!]!
+  items: [Product!]! @relation(name: "INVOICE_ITEMS")
   amount: String
   email: String!
   record: Json
@@ -53,4 +54,5 @@ type Product {
   varietal: String
   vendor: User @unique
   carts: [Cart!]! @relation(name: "CART_ITEMS")
+  purchases: [Invoice!]! @relation(name: "INVOICE_ITEMS")
 }

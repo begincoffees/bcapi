@@ -1,8 +1,7 @@
-import { ProductResolvers } from "../generated/resolvers";
-import { TypeMap } from "./types/TypeMap";
 import { UserParent } from "./User";
 import { CartParent } from "./Cart";
 import { Context } from "./types/Context";
+import { ProductResolvers } from "../generated/graphqlgen";
 
 export interface ProductParent {
   id: string;
@@ -14,14 +13,14 @@ export interface ProductParent {
   carts: CartParent[];
 }
 
-export const Product: ProductResolvers.Type<TypeMap> = {
+export const Product: ProductResolvers.Type = {
   id: parent => parent.id,
   name: parent => parent.name,
   price: parent => parent.price,
   description: parent => parent.description,
   varietal: parent => parent.varietal,
-  vendor: async (parent, args, context: Context, info): Promise<UserParent> => {
-    try {
+  vendor: async (parent, args, context: Context, info) => {
+    try { 
       const user = await context.db
         .users({where: {
           products_some: {id: parent.id}
@@ -32,5 +31,5 @@ export const Product: ProductResolvers.Type<TypeMap> = {
       console.debug('trouble getting products vendor')
     }
   },
-  carts: (parent, args) => parent.carts
+  carts: (parent, args) => null
 };

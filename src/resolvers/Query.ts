@@ -1,13 +1,14 @@
-import { QueryResolvers } from "../generated/resolvers";
-import { TypeMap } from "./types/TypeMap";
+
 import { getUserId } from "../utils";
 import { ProductParent } from "./Product";
 import { CartParent } from "./Cart";
 import { Context } from "./types/Context";
+import { QueryResolvers } from "../generated/graphqlgen";
 
 export interface QueryParent {}
 
-export const Query: QueryResolvers.Type<TypeMap> = {
+export const Query: QueryResolvers.Type = {
+  ...QueryResolvers.defaultResolvers,
   viewer: () => ({
     me: null,
     cart: null,
@@ -15,7 +16,7 @@ export const Query: QueryResolvers.Type<TypeMap> = {
     sales: null,
     products: null
   } as any),
-  cart: async (parent, args, context: Context, info): Promise<CartParent> => {
+  cart: async (parent, args, context: Context, info) => {
     try {
       const id = getUserId(context)
       const cart = await context.db.carts({where: {user: {id}}})[0] || {}
@@ -29,10 +30,9 @@ export const Query: QueryResolvers.Type<TypeMap> = {
       } as any
     }
   },
-  feed: async (parent, args, context: Context, info): Promise<ProductParent[]> => {
+  feed: async (parent, args, context: Context, info) => {
     try {
       const products = await context.db.products({first: 50}).then(res => res)
-      console.log(context.db.products)
       return products as any
 
     }catch(err) {

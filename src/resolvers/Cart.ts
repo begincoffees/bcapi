@@ -1,7 +1,7 @@
-import { CartResolvers } from "../generated/resolvers";
-import { TypeMap } from "./types/TypeMap";
+
 import { ProductParent } from "./Product";
 import { UserParent } from "./User";
+import { CartResolvers } from "../generated/graphqlgen";
 
 export interface CartParent {
   id: string;
@@ -11,10 +11,11 @@ export interface CartParent {
   user: UserParent;
 }
 
-export const Cart: CartResolvers.Type<TypeMap> = {
+export const Cart: CartResolvers.Type= {
+  ...CartResolvers.defaultResolvers,
   id: parent => parent.id,
   itemCount: parent => parent.itemCount,
   totalPrice: parent => parent.totalPrice,
-  items: (parent, args) => parent.items,
-  user: (parent, args) => parent.user
+  items: (parent, args) => null,
+  user: (parent, args) => null
 };

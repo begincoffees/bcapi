@@ -1,7 +1,5 @@
 import * as jwt from 'jsonwebtoken'
-import { Prisma } from './generated/prisma'
 import { Context } from './resolvers/types/Context';
-import { resolve } from 'path';
 
 export function getUserId(ctx: Context) {
   const Authorization = ctx.request.headers.authorization

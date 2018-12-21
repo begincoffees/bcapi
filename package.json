@@ -6,10 +6,7 @@
     "dev": "NODE_ENV=development npm-run-all --parallel start playground",
     "debug": "dotenv -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
     "build": "rm -rf dist && graphql codegen && tsc",
-    "playground": "graphql playground",
-    "resolver-interfaces": "graphql-resolver-codegen interfaces -s src/schema.graphql -o ./src/generated/resolvers.ts",
-    "resolver-scaffold": "graphql-resolver-codegen scaffold -s src/schema.graphql -o ./src/resolvers/ -i ../generated/resolvers -f",
-    "resolver-codegen": "npm-run-all resolver-interfaces resolver-scaffold"
+    "playground": "graphql playground"
   },
   "dependencies": {
     "apollo-link-context": "^1.0.10",
