@@ -33,7 +33,11 @@ export const User: UserResolvers.Type = {
   cart: async (parent, args, context: any, info) => {
     try {
       const id = getUserId(context)
-      const cart = await context.db.user({id}).cart()
+      
+      const cart = await context.db
+        .user({id})
+        .cart()
+
       return cart[0]
     }catch {
       throw new Error('Trouble getting users cart')
@@ -42,9 +46,12 @@ export const User: UserResolvers.Type = {
   purchases: async (parent, args, context: Context, info) => {
     try {
       const id = getUserId(context)
-      const purchases = await context.db.user({id}).purchases().then(res=>res)
-      console.log(purchases[19].stripeCustomerId)
-      return purchases as any
+
+      const purchases = await context.db
+        .invoices({where: {customer: {id}}})
+        .then(res => res)
+
+      return purchases
     }catch {
       console.debug('trouble getting user purchases')
       return []
@@ -53,8 +60,13 @@ export const User: UserResolvers.Type = {
   products: async (parent, args, context: Context, info)=> {
     try {
       const id = getUserId(context)
-      const products= await context.db.user({id}).products()
-      return products as any
+
+      const products = await context.db
+        .user({id})
+        .products()
+        .then(res => res)
+
+      return products
     }catch {
       console.debug('trouble getting vendor products')
       return []
@@ -63,7 +75,12 @@ export const User: UserResolvers.Type = {
   sales: async (parent, args, context: Context, info) => {
     try {
       const id = getUserId(context)
-      const purchases = await context.db.user({id}).sales()
+      
+      const purchases = await context.db
+        .user({id})
+        .sales()
+        .then(res => res)
+        
       return purchases as any
     }catch {
       console.debug('trouble getting vendor sales')

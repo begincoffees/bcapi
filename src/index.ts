@@ -17,7 +17,7 @@ const withDB = (req) => ({
   db: new Prisma({
     schema,
     resolvers,
-    endpoint: process.env.PRISMA_ENDPOINT, // 'http://localhost:4466',
+    endpoint: process.env.PRISMA_ENDPOINT,
     secret: process.env.PRISMA_SECRET || 'bigboi',
   } as any),
   stripe: new Stripe(process.env.STRIPE_SECRET)
