@@ -92,6 +92,7 @@ export interface Prisma {
       last?: Int;
     }
   ) => InvoiceConnectionPromise;
+  paymentRecord: (where: PaymentRecordWhereUniqueInput) => PaymentRecordPromise;
   paymentRecords: (
     args?: {
       where?: PaymentRecordWhereInput;
@@ -199,12 +200,28 @@ export interface Prisma {
   deleteInvoice: (where: InvoiceWhereUniqueInput) => InvoicePromise;
   deleteManyInvoices: (where?: InvoiceWhereInput) => BatchPayloadPromise;
   createPaymentRecord: (data: PaymentRecordCreateInput) => PaymentRecordPromise;
+  updatePaymentRecord: (
+    args: {
+      data: PaymentRecordUpdateInput;
+      where: PaymentRecordWhereUniqueInput;
+    }
+  ) => PaymentRecordPromise;
   updateManyPaymentRecords: (
     args: {
       data: PaymentRecordUpdateManyMutationInput;
       where?: PaymentRecordWhereInput;
     }
   ) => BatchPayloadPromise;
+  upsertPaymentRecord: (
+    args: {
+      where: PaymentRecordWhereUniqueInput;
+      create: PaymentRecordCreateInput;
+      update: PaymentRecordUpdateInput;
+    }
+  ) => PaymentRecordPromise;
+  deletePaymentRecord: (
+    where: PaymentRecordWhereUniqueInput
+  ) => PaymentRecordPromise;
   deleteManyPaymentRecords: (
     where?: PaymentRecordWhereInput
   ) => BatchPayloadPromise;
@@ -274,25 +291,11 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type ProductOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "price_ASC"
-  | "price_DESC"
-  | "description_ASC"
-  | "description_DESC"
-  | "varietal_ASC"
-  | "varietal_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
 export type InvoiceOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "dateCreated_ASC"
+  | "dateCreated_DESC"
   | "amount_ASC"
   | "amount_DESC"
   | "email_ASC"
@@ -310,7 +313,43 @@ export type InvoiceOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
+export type ProductOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "dateCreated_ASC"
+  | "dateCreated_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "price_ASC"
+  | "price_DESC"
+  | "description_ASC"
+  | "description_DESC"
+  | "varietal_ASC"
+  | "varietal_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type CartOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "dateCreated_ASC"
+  | "dateCreated_DESC"
+  | "itemCount_ASC"
+  | "itemCount_DESC"
+  | "totalPrice_ASC"
+  | "totalPrice_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
 export type PaymentRecordOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "dateCreated_ASC"
+  | "dateCreated_DESC"
   | "amount_ASC"
   | "amount_DESC"
   | "balanceTransaction_ASC"
@@ -325,8 +364,8 @@ export type PaymentRecordOrderByInput =
   | "stripePaymentId_DESC"
   | "status_ASC"
   | "status_DESC"
-  | "id_ASC"
-  | "id_DESC"
+  | "data_ASC"
+  | "data_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -335,6 +374,8 @@ export type PaymentRecordOrderByInput =
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "dateCreated_ASC"
+  | "dateCreated_DESC"
   | "role_ASC"
   | "role_DESC"
   | "email_ASC"
@@ -354,36 +395,196 @@ export type UserOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type CartOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "itemCount_ASC"
-  | "itemCount_DESC"
-  | "totalPrice_ASC"
-  | "totalPrice_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface InvoiceUpdateWithWhereUniqueWithoutCustomerInput {
-  where: InvoiceWhereUniqueInput;
-  data: InvoiceUpdateWithoutCustomerDataInput;
+export interface CartUpdateOneWithoutUserInput {
+  create?: CartCreateWithoutUserInput;
+  update?: CartUpdateWithoutUserDataInput;
+  upsert?: CartUpsertWithoutUserInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CartWhereUniqueInput;
 }
 
 export type CartWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface ProductUpdateWithoutPurchasesDataInput {
+export interface ProductUpdateWithoutCartsDataInput {
+  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
   varietal?: String;
   vendor?: UserUpdateOneWithoutProductsInput;
-  carts?: CartUpdateManyWithoutItemsInput;
+  purchases?: InvoiceUpdateManyWithoutItemsInput;
+}
+
+export interface ProductWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  dateCreated?: DateTimeInput;
+  dateCreated_not?: DateTimeInput;
+  dateCreated_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_lt?: DateTimeInput;
+  dateCreated_lte?: DateTimeInput;
+  dateCreated_gt?: DateTimeInput;
+  dateCreated_gte?: DateTimeInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  price?: String;
+  price_not?: String;
+  price_in?: String[] | String;
+  price_not_in?: String[] | String;
+  price_lt?: String;
+  price_lte?: String;
+  price_gt?: String;
+  price_gte?: String;
+  price_contains?: String;
+  price_not_contains?: String;
+  price_starts_with?: String;
+  price_not_starts_with?: String;
+  price_ends_with?: String;
+  price_not_ends_with?: String;
+  description?: String;
+  description_not?: String;
+  description_in?: String[] | String;
+  description_not_in?: String[] | String;
+  description_lt?: String;
+  description_lte?: String;
+  description_gt?: String;
+  description_gte?: String;
+  description_contains?: String;
+  description_not_contains?: String;
+  description_starts_with?: String;
+  description_not_starts_with?: String;
+  description_ends_with?: String;
+  description_not_ends_with?: String;
+  varietal?: String;
+  varietal_not?: String;
+  varietal_in?: String[] | String;
+  varietal_not_in?: String[] | String;
+  varietal_lt?: String;
+  varietal_lte?: String;
+  varietal_gt?: String;
+  varietal_gte?: String;
+  varietal_contains?: String;
+  varietal_not_contains?: String;
+  varietal_starts_with?: String;
+  varietal_not_starts_with?: String;
+  varietal_ends_with?: String;
+  varietal_not_ends_with?: String;
+  vendor?: UserWhereInput;
+  carts_every?: CartWhereInput;
+  carts_some?: CartWhereInput;
+  carts_none?: CartWhereInput;
+  purchases_every?: InvoiceWhereInput;
+  purchases_some?: InvoiceWhereInput;
+  purchases_none?: InvoiceWhereInput;
+  AND?: ProductWhereInput[] | ProductWhereInput;
+  OR?: ProductWhereInput[] | ProductWhereInput;
+  NOT?: ProductWhereInput[] | ProductWhereInput;
+}
+
+export interface InvoiceUpdateManyWithoutItemsInput {
+  create?: InvoiceCreateWithoutItemsInput[] | InvoiceCreateWithoutItemsInput;
+  delete?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
+  disconnect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
+  update?:
+    | InvoiceUpdateWithWhereUniqueWithoutItemsInput[]
+    | InvoiceUpdateWithWhereUniqueWithoutItemsInput;
+  upsert?:
+    | InvoiceUpsertWithWhereUniqueWithoutItemsInput[]
+    | InvoiceUpsertWithWhereUniqueWithoutItemsInput;
+  deleteMany?: InvoiceScalarWhereInput[] | InvoiceScalarWhereInput;
+  updateMany?:
+    | InvoiceUpdateManyWithWhereNestedInput[]
+    | InvoiceUpdateManyWithWhereNestedInput;
+}
+
+export interface CartWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  dateCreated?: DateTimeInput;
+  dateCreated_not?: DateTimeInput;
+  dateCreated_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_lt?: DateTimeInput;
+  dateCreated_lte?: DateTimeInput;
+  dateCreated_gt?: DateTimeInput;
+  dateCreated_gte?: DateTimeInput;
+  itemCount?: Int;
+  itemCount_not?: Int;
+  itemCount_in?: Int[] | Int;
+  itemCount_not_in?: Int[] | Int;
+  itemCount_lt?: Int;
+  itemCount_lte?: Int;
+  itemCount_gt?: Int;
+  itemCount_gte?: Int;
+  totalPrice?: String;
+  totalPrice_not?: String;
+  totalPrice_in?: String[] | String;
+  totalPrice_not_in?: String[] | String;
+  totalPrice_lt?: String;
+  totalPrice_lte?: String;
+  totalPrice_gt?: String;
+  totalPrice_gte?: String;
+  totalPrice_contains?: String;
+  totalPrice_not_contains?: String;
+  totalPrice_starts_with?: String;
+  totalPrice_not_starts_with?: String;
+  totalPrice_ends_with?: String;
+  totalPrice_not_ends_with?: String;
+  user?: UserWhereInput;
+  items_every?: ProductWhereInput;
+  items_some?: ProductWhereInput;
+  items_none?: ProductWhereInput;
+  AND?: CartWhereInput[] | CartWhereInput;
+  OR?: CartWhereInput[] | CartWhereInput;
+  NOT?: CartWhereInput[] | CartWhereInput;
+}
+
+export interface InvoiceUpdateWithWhereUniqueWithoutItemsInput {
+  where: InvoiceWhereUniqueInput;
+  data: InvoiceUpdateWithoutItemsDataInput;
 }
 
 export interface InvoiceWhereInput {
@@ -401,6 +602,14 @@ export interface InvoiceWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  dateCreated?: DateTimeInput;
+  dateCreated_not?: DateTimeInput;
+  dateCreated_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_lt?: DateTimeInput;
+  dateCreated_lte?: DateTimeInput;
+  dateCreated_gt?: DateTimeInput;
+  dateCreated_gte?: DateTimeInput;
   items_every?: ProductWhereInput;
   items_some?: ProductWhereInput;
   items_none?: ProductWhereInput;
@@ -480,115 +689,52 @@ export interface InvoiceWhereInput {
   NOT?: InvoiceWhereInput[] | InvoiceWhereInput;
 }
 
-export interface CartUpdateManyWithoutItemsInput {
-  create?: CartCreateWithoutItemsInput[] | CartCreateWithoutItemsInput;
-  delete?: CartWhereUniqueInput[] | CartWhereUniqueInput;
-  connect?: CartWhereUniqueInput[] | CartWhereUniqueInput;
-  disconnect?: CartWhereUniqueInput[] | CartWhereUniqueInput;
-  update?:
-    | CartUpdateWithWhereUniqueWithoutItemsInput[]
-    | CartUpdateWithWhereUniqueWithoutItemsInput;
-  upsert?:
-    | CartUpsertWithWhereUniqueWithoutItemsInput[]
-    | CartUpsertWithWhereUniqueWithoutItemsInput;
-  deleteMany?: CartScalarWhereInput[] | CartScalarWhereInput;
-  updateMany?:
-    | CartUpdateManyWithWhereNestedInput[]
-    | CartUpdateManyWithWhereNestedInput;
-}
-
-export interface CartWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
+export interface CartUpdateInput {
+  dateCreated?: DateTimeInput;
   itemCount?: Int;
-  itemCount_not?: Int;
-  itemCount_in?: Int[] | Int;
-  itemCount_not_in?: Int[] | Int;
-  itemCount_lt?: Int;
-  itemCount_lte?: Int;
-  itemCount_gt?: Int;
-  itemCount_gte?: Int;
   totalPrice?: String;
-  totalPrice_not?: String;
-  totalPrice_in?: String[] | String;
-  totalPrice_not_in?: String[] | String;
-  totalPrice_lt?: String;
-  totalPrice_lte?: String;
-  totalPrice_gt?: String;
-  totalPrice_gte?: String;
-  totalPrice_contains?: String;
-  totalPrice_not_contains?: String;
-  totalPrice_starts_with?: String;
-  totalPrice_not_starts_with?: String;
-  totalPrice_ends_with?: String;
-  totalPrice_not_ends_with?: String;
-  items_every?: ProductWhereInput;
-  items_some?: ProductWhereInput;
-  items_none?: ProductWhereInput;
-  user?: UserWhereInput;
-  AND?: CartWhereInput[] | CartWhereInput;
-  OR?: CartWhereInput[] | CartWhereInput;
-  NOT?: CartWhereInput[] | CartWhereInput;
+  user?: UserUpdateOneRequiredWithoutCartInput;
+  items?: ProductUpdateManyWithoutCartsInput;
 }
 
-export interface UserCreateWithoutSalesInput {
+export interface UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput;
+  data: UserUpdateManyDataInput;
+}
+
+export interface UserUpdateOneRequiredWithoutCartInput {
+  create?: UserCreateWithoutCartInput;
+  update?: UserUpdateWithoutCartDataInput;
+  upsert?: UserUpsertWithoutCartInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface InvoiceUpdateWithoutItemsDataInput {
+  dateCreated?: DateTimeInput;
+  amount?: String;
+  email?: String;
+  record?: Json;
+  stripeRecord?: PaymentRecordUpdateManyInput;
+  created?: Int;
+  stripePaymentId?: String;
+  stripeCustomerId?: String;
+  customer?: UserUpdateOneWithoutPurchasesInput;
+  vendors?: UserUpdateManyWithoutSalesInput;
+}
+
+export interface UserUpdateWithoutCartDataInput {
+  dateCreated?: DateTimeInput;
   role?: String;
-  permissions?: UserCreatepermissionsInput;
+  permissions?: UserUpdatepermissionsInput;
   email?: String;
   firstName?: String;
   lastName?: String;
   bizName?: String;
   password?: String;
-  cart?: CartCreateOneWithoutUserInput;
   stripeId?: String;
-  purchases?: InvoiceCreateManyWithoutCustomerInput;
-  products?: ProductCreateManyWithoutVendorInput;
-}
-
-export interface UserUpsertWithoutCartInput {
-  update: UserUpdateWithoutCartDataInput;
-  create: UserCreateWithoutCartInput;
-}
-
-export interface CartUpdateInput {
-  itemCount?: Int;
-  totalPrice?: String;
-  items?: ProductUpdateManyWithoutCartsInput;
-  user?: UserUpdateOneRequiredWithoutCartInput;
-}
-
-export interface CartUpdateWithWhereUniqueWithoutItemsInput {
-  where: CartWhereUniqueInput;
-  data: CartUpdateWithoutItemsDataInput;
-}
-
-export interface ProductUpdateManyWithoutCartsInput {
-  create?: ProductCreateWithoutCartsInput[] | ProductCreateWithoutCartsInput;
-  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
-  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
-  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
-  update?:
-    | ProductUpdateWithWhereUniqueWithoutCartsInput[]
-    | ProductUpdateWithWhereUniqueWithoutCartsInput;
-  upsert?:
-    | ProductUpsertWithWhereUniqueWithoutCartsInput[]
-    | ProductUpsertWithWhereUniqueWithoutCartsInput;
-  deleteMany?: ProductScalarWhereInput[] | ProductScalarWhereInput;
-  updateMany?:
-    | ProductUpdateManyWithWhereNestedInput[]
-    | ProductUpdateManyWithWhereNestedInput;
+  purchases?: InvoiceUpdateManyWithoutCustomerInput;
+  products?: ProductUpdateManyWithoutVendorInput;
+  sales?: InvoiceUpdateManyWithoutVendorsInput;
 }
 
 export interface ProductSubscriptionWhereInput {
@@ -602,147 +748,19 @@ export interface ProductSubscriptionWhereInput {
   NOT?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput;
 }
 
-export interface ProductUpdateWithWhereUniqueWithoutCartsInput {
-  where: ProductWhereUniqueInput;
-  data: ProductUpdateWithoutCartsDataInput;
-}
-
-export interface PaymentRecordSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: PaymentRecordWhereInput;
-  AND?:
-    | PaymentRecordSubscriptionWhereInput[]
-    | PaymentRecordSubscriptionWhereInput;
-  OR?:
-    | PaymentRecordSubscriptionWhereInput[]
-    | PaymentRecordSubscriptionWhereInput;
-  NOT?:
-    | PaymentRecordSubscriptionWhereInput[]
-    | PaymentRecordSubscriptionWhereInput;
-}
-
-export interface ProductUpdateWithoutCartsDataInput {
-  name?: String;
-  price?: String;
-  description?: String;
-  varietal?: String;
-  vendor?: UserUpdateOneWithoutProductsInput;
-  purchases?: InvoiceUpdateManyWithoutItemsInput;
-}
-
-export interface CartSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CartWhereInput;
-  AND?: CartSubscriptionWhereInput[] | CartSubscriptionWhereInput;
-  OR?: CartSubscriptionWhereInput[] | CartSubscriptionWhereInput;
-  NOT?: CartSubscriptionWhereInput[] | CartSubscriptionWhereInput;
-}
-
-export interface UserUpdateOneWithoutProductsInput {
-  create?: UserCreateWithoutProductsInput;
-  update?: UserUpdateWithoutProductsDataInput;
-  upsert?: UserUpsertWithoutProductsInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserUpdateInput {
-  role?: String;
-  permissions?: UserUpdatepermissionsInput;
-  email?: String;
-  firstName?: String;
-  lastName?: String;
-  bizName?: String;
-  password?: String;
-  cart?: CartUpdateOneWithoutUserInput;
-  stripeId?: String;
-  purchases?: InvoiceUpdateManyWithoutCustomerInput;
-  products?: ProductUpdateManyWithoutVendorInput;
-  sales?: InvoiceUpdateManyWithoutVendorsInput;
-}
-
-export interface UserUpdateWithoutProductsDataInput {
-  role?: String;
-  permissions?: UserUpdatepermissionsInput;
-  email?: String;
-  firstName?: String;
-  lastName?: String;
-  bizName?: String;
-  password?: String;
-  cart?: CartUpdateOneWithoutUserInput;
-  stripeId?: String;
-  purchases?: InvoiceUpdateManyWithoutCustomerInput;
-  sales?: InvoiceUpdateManyWithoutVendorsInput;
-}
-
-export interface ProductUpdateManyMutationInput {
-  name?: String;
-  price?: String;
-  description?: String;
-  varietal?: String;
-}
-
 export interface UserUpdatepermissionsInput {
   set?: String[] | String;
 }
 
-export type InvoiceWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface CartUpdateOneWithoutUserInput {
-  create?: CartCreateWithoutUserInput;
-  update?: CartUpdateWithoutUserDataInput;
-  upsert?: CartUpsertWithoutUserInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: CartWhereUniqueInput;
-}
-
-export interface PaymentRecordUpdateManyMutationInput {
-  amount?: Int;
-  balanceTransaction?: String;
-  created?: Int;
-  currency?: String;
-  stripeCustomerId?: String;
-  stripePaymentId?: String;
-  status?: String;
-}
-
-export interface CartUpdateWithoutUserDataInput {
-  itemCount?: Int;
-  totalPrice?: String;
-  items?: ProductUpdateManyWithoutCartsInput;
-}
-
-export interface InvoiceUpdateInput {
-  items?: ProductUpdateManyWithoutPurchasesInput;
-  amount?: String;
-  email?: String;
-  record?: Json;
-  stripeRecord?: PaymentRecordUpdateManyInput;
-  created?: Int;
-  stripePaymentId?: String;
-  stripeCustomerId?: String;
-  customer?: UserUpdateOneWithoutPurchasesInput;
-  vendors?: UserUpdateManyWithoutSalesInput;
-}
-
-export interface CartUpsertWithoutUserInput {
-  update: CartUpdateWithoutUserDataInput;
-  create: CartCreateWithoutUserInput;
-}
-
-export interface CartUpdateManyMutationInput {
-  itemCount?: Int;
-  totalPrice?: String;
+export interface InvoiceSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: InvoiceWhereInput;
+  AND?: InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput;
+  OR?: InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput;
+  NOT?: InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput;
 }
 
 export interface InvoiceUpdateManyWithoutCustomerInput {
@@ -764,61 +782,41 @@ export interface InvoiceUpdateManyWithoutCustomerInput {
     | InvoiceUpdateManyWithWhereNestedInput;
 }
 
-export interface ProductUpsertWithWhereUniqueWithoutCartsInput {
-  where: ProductWhereUniqueInput;
-  update: ProductUpdateWithoutCartsDataInput;
-  create: ProductCreateWithoutCartsInput;
+export interface UserUpdateManyMutationInput {
+  dateCreated?: DateTimeInput;
+  role?: String;
+  permissions?: UserUpdatepermissionsInput;
+  email?: String;
+  firstName?: String;
+  lastName?: String;
+  bizName?: String;
+  password?: String;
+  stripeId?: String;
 }
 
-export interface CartScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  itemCount?: Int;
-  itemCount_not?: Int;
-  itemCount_in?: Int[] | Int;
-  itemCount_not_in?: Int[] | Int;
-  itemCount_lt?: Int;
-  itemCount_lte?: Int;
-  itemCount_gt?: Int;
-  itemCount_gte?: Int;
-  totalPrice?: String;
-  totalPrice_not?: String;
-  totalPrice_in?: String[] | String;
-  totalPrice_not_in?: String[] | String;
-  totalPrice_lt?: String;
-  totalPrice_lte?: String;
-  totalPrice_gt?: String;
-  totalPrice_gte?: String;
-  totalPrice_contains?: String;
-  totalPrice_not_contains?: String;
-  totalPrice_starts_with?: String;
-  totalPrice_not_starts_with?: String;
-  totalPrice_ends_with?: String;
-  totalPrice_not_ends_with?: String;
-  AND?: CartScalarWhereInput[] | CartScalarWhereInput;
-  OR?: CartScalarWhereInput[] | CartScalarWhereInput;
-  NOT?: CartScalarWhereInput[] | CartScalarWhereInput;
-}
-
-export interface InvoiceUpsertWithWhereUniqueWithoutCustomerInput {
+export interface InvoiceUpdateWithWhereUniqueWithoutCustomerInput {
   where: InvoiceWhereUniqueInput;
-  update: InvoiceUpdateWithoutCustomerDataInput;
-  create: InvoiceCreateWithoutCustomerInput;
+  data: InvoiceUpdateWithoutCustomerDataInput;
+}
+
+export interface UserCreateInput {
+  dateCreated?: DateTimeInput;
+  role?: String;
+  permissions?: UserCreatepermissionsInput;
+  email?: String;
+  firstName?: String;
+  lastName?: String;
+  bizName?: String;
+  password?: String;
+  cart?: CartCreateOneWithoutUserInput;
+  stripeId?: String;
+  purchases?: InvoiceCreateManyWithoutCustomerInput;
+  products?: ProductCreateManyWithoutVendorInput;
+  sales?: InvoiceCreateManyWithoutVendorsInput;
 }
 
 export interface InvoiceUpdateWithoutCustomerDataInput {
+  dateCreated?: DateTimeInput;
   items?: ProductUpdateManyWithoutPurchasesInput;
   amount?: String;
   email?: String;
@@ -830,10 +828,15 @@ export interface InvoiceUpdateWithoutCustomerDataInput {
   vendors?: UserUpdateManyWithoutSalesInput;
 }
 
-export interface ProductUpsertWithWhereUniqueWithoutPurchasesInput {
-  where: ProductWhereUniqueInput;
-  update: ProductUpdateWithoutPurchasesDataInput;
-  create: ProductCreateWithoutPurchasesInput;
+export interface ProductUpdateInput {
+  dateCreated?: DateTimeInput;
+  name?: String;
+  price?: String;
+  description?: String;
+  varietal?: String;
+  vendor?: UserUpdateOneWithoutProductsInput;
+  carts?: CartUpdateManyWithoutItemsInput;
+  purchases?: InvoiceUpdateManyWithoutItemsInput;
 }
 
 export interface ProductUpdateManyWithoutPurchasesInput {
@@ -855,9 +858,15 @@ export interface ProductUpdateManyWithoutPurchasesInput {
     | ProductUpdateManyWithWhereNestedInput;
 }
 
-export interface CartUpdateManyWithWhereNestedInput {
-  where: CartScalarWhereInput;
-  data: CartUpdateManyDataInput;
+export interface ProductCreateInput {
+  dateCreated?: DateTimeInput;
+  name?: String;
+  price?: String;
+  description?: String;
+  varietal?: String;
+  vendor?: UserCreateOneWithoutProductsInput;
+  carts?: CartCreateManyWithoutItemsInput;
+  purchases?: InvoiceCreateManyWithoutItemsInput;
 }
 
 export interface ProductUpdateWithWhereUniqueWithoutPurchasesInput {
@@ -865,132 +874,140 @@ export interface ProductUpdateWithWhereUniqueWithoutPurchasesInput {
   data: ProductUpdateWithoutPurchasesDataInput;
 }
 
-export interface CartCreateInput {
-  itemCount?: Int;
-  totalPrice?: String;
-  items?: ProductCreateManyWithoutCartsInput;
-  user: UserCreateOneWithoutCartInput;
-}
-
-export interface PaymentRecordWhereInput {
+export interface PaymentRecordUpdateInput {
+  dateCreated?: DateTimeInput;
   amount?: Int;
-  amount_not?: Int;
-  amount_in?: Int[] | Int;
-  amount_not_in?: Int[] | Int;
-  amount_lt?: Int;
-  amount_lte?: Int;
-  amount_gt?: Int;
-  amount_gte?: Int;
   balanceTransaction?: String;
-  balanceTransaction_not?: String;
-  balanceTransaction_in?: String[] | String;
-  balanceTransaction_not_in?: String[] | String;
-  balanceTransaction_lt?: String;
-  balanceTransaction_lte?: String;
-  balanceTransaction_gt?: String;
-  balanceTransaction_gte?: String;
-  balanceTransaction_contains?: String;
-  balanceTransaction_not_contains?: String;
-  balanceTransaction_starts_with?: String;
-  balanceTransaction_not_starts_with?: String;
-  balanceTransaction_ends_with?: String;
-  balanceTransaction_not_ends_with?: String;
   created?: Int;
-  created_not?: Int;
-  created_in?: Int[] | Int;
-  created_not_in?: Int[] | Int;
-  created_lt?: Int;
-  created_lte?: Int;
-  created_gt?: Int;
-  created_gte?: Int;
   currency?: String;
-  currency_not?: String;
-  currency_in?: String[] | String;
-  currency_not_in?: String[] | String;
-  currency_lt?: String;
-  currency_lte?: String;
-  currency_gt?: String;
-  currency_gte?: String;
-  currency_contains?: String;
-  currency_not_contains?: String;
-  currency_starts_with?: String;
-  currency_not_starts_with?: String;
-  currency_ends_with?: String;
-  currency_not_ends_with?: String;
   stripeCustomerId?: String;
-  stripeCustomerId_not?: String;
-  stripeCustomerId_in?: String[] | String;
-  stripeCustomerId_not_in?: String[] | String;
-  stripeCustomerId_lt?: String;
-  stripeCustomerId_lte?: String;
-  stripeCustomerId_gt?: String;
-  stripeCustomerId_gte?: String;
-  stripeCustomerId_contains?: String;
-  stripeCustomerId_not_contains?: String;
-  stripeCustomerId_starts_with?: String;
-  stripeCustomerId_not_starts_with?: String;
-  stripeCustomerId_ends_with?: String;
-  stripeCustomerId_not_ends_with?: String;
   stripePaymentId?: String;
-  stripePaymentId_not?: String;
-  stripePaymentId_in?: String[] | String;
-  stripePaymentId_not_in?: String[] | String;
-  stripePaymentId_lt?: String;
-  stripePaymentId_lte?: String;
-  stripePaymentId_gt?: String;
-  stripePaymentId_gte?: String;
-  stripePaymentId_contains?: String;
-  stripePaymentId_not_contains?: String;
-  stripePaymentId_starts_with?: String;
-  stripePaymentId_not_starts_with?: String;
-  stripePaymentId_ends_with?: String;
-  stripePaymentId_not_ends_with?: String;
   status?: String;
-  status_not?: String;
-  status_in?: String[] | String;
-  status_not_in?: String[] | String;
-  status_lt?: String;
-  status_lte?: String;
-  status_gt?: String;
-  status_gte?: String;
-  status_contains?: String;
-  status_not_contains?: String;
-  status_starts_with?: String;
-  status_not_starts_with?: String;
-  status_ends_with?: String;
-  status_not_ends_with?: String;
-  AND?: PaymentRecordWhereInput[] | PaymentRecordWhereInput;
-  OR?: PaymentRecordWhereInput[] | PaymentRecordWhereInput;
-  NOT?: PaymentRecordWhereInput[] | PaymentRecordWhereInput;
+  data?: Json;
 }
 
-export interface ProductCreateWithoutCartsInput {
+export interface ProductUpdateWithoutPurchasesDataInput {
+  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
   varietal?: String;
-  vendor?: UserCreateOneWithoutProductsInput;
-  purchases?: InvoiceCreateManyWithoutItemsInput;
+  vendor?: UserUpdateOneWithoutProductsInput;
+  carts?: CartUpdateManyWithoutItemsInput;
 }
 
-export interface CartUpsertWithWhereUniqueWithoutItemsInput {
-  where: CartWhereUniqueInput;
-  update: CartUpdateWithoutItemsDataInput;
-  create: CartCreateWithoutItemsInput;
+export interface InvoiceUpdateManyMutationInput {
+  dateCreated?: DateTimeInput;
+  amount?: String;
+  email?: String;
+  record?: Json;
+  created?: Int;
+  stripePaymentId?: String;
+  stripeCustomerId?: String;
 }
 
-export interface UserCreateWithoutProductsInput {
+export interface UserUpdateOneWithoutProductsInput {
+  create?: UserCreateWithoutProductsInput;
+  update?: UserUpdateWithoutProductsDataInput;
+  upsert?: UserUpsertWithoutProductsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface InvoiceCreateInput {
+  dateCreated?: DateTimeInput;
+  items?: ProductCreateManyWithoutPurchasesInput;
+  amount?: String;
+  email: String;
+  record?: Json;
+  stripeRecord?: PaymentRecordCreateManyInput;
+  created?: Int;
+  stripePaymentId?: String;
+  stripeCustomerId?: String;
+  customer?: UserCreateOneWithoutPurchasesInput;
+  vendors?: UserCreateManyWithoutSalesInput;
+}
+
+export interface UserUpdateWithoutProductsDataInput {
+  dateCreated?: DateTimeInput;
   role?: String;
-  permissions?: UserCreatepermissionsInput;
+  permissions?: UserUpdatepermissionsInput;
   email?: String;
   firstName?: String;
   lastName?: String;
   bizName?: String;
   password?: String;
-  cart?: CartCreateOneWithoutUserInput;
+  cart?: CartUpdateOneWithoutUserInput;
   stripeId?: String;
-  purchases?: InvoiceCreateManyWithoutCustomerInput;
-  sales?: InvoiceCreateManyWithoutVendorsInput;
+  purchases?: InvoiceUpdateManyWithoutCustomerInput;
+  sales?: InvoiceUpdateManyWithoutVendorsInput;
+}
+
+export interface CartUpdateManyMutationInput {
+  dateCreated?: DateTimeInput;
+  itemCount?: Int;
+  totalPrice?: String;
+}
+
+export interface ProductUpsertWithWhereUniqueWithoutCartsInput {
+  where: ProductWhereUniqueInput;
+  update: ProductUpdateWithoutCartsDataInput;
+  create: ProductCreateWithoutCartsInput;
+}
+
+export interface InvoiceUpsertWithWhereUniqueWithoutCustomerInput {
+  where: InvoiceWhereUniqueInput;
+  update: InvoiceUpdateWithoutCustomerDataInput;
+  create: InvoiceCreateWithoutCustomerInput;
+}
+
+export interface CartUpdateWithoutUserDataInput {
+  dateCreated?: DateTimeInput;
+  itemCount?: Int;
+  totalPrice?: String;
+  items?: ProductUpdateManyWithoutCartsInput;
+}
+
+export interface ProductUpsertWithWhereUniqueWithoutPurchasesInput {
+  where: ProductWhereUniqueInput;
+  update: ProductUpdateWithoutPurchasesDataInput;
+  create: ProductCreateWithoutPurchasesInput;
+}
+
+export interface ProductUpdateManyWithoutCartsInput {
+  create?: ProductCreateWithoutCartsInput[] | ProductCreateWithoutCartsInput;
+  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
+  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
+  update?:
+    | ProductUpdateWithWhereUniqueWithoutCartsInput[]
+    | ProductUpdateWithWhereUniqueWithoutCartsInput;
+  upsert?:
+    | ProductUpsertWithWhereUniqueWithoutCartsInput[]
+    | ProductUpsertWithWhereUniqueWithoutCartsInput;
+  deleteMany?: ProductScalarWhereInput[] | ProductScalarWhereInput;
+  updateMany?:
+    | ProductUpdateManyWithWhereNestedInput[]
+    | ProductUpdateManyWithWhereNestedInput;
+}
+
+export interface CartUpsertWithoutUserInput {
+  update: CartUpdateWithoutUserDataInput;
+  create: CartCreateWithoutUserInput;
+}
+
+export interface ProductUpdateWithWhereUniqueWithoutCartsInput {
+  where: ProductWhereUniqueInput;
+  data: ProductUpdateWithoutCartsDataInput;
+}
+
+export interface CartCreateInput {
+  dateCreated?: DateTimeInput;
+  itemCount?: Int;
+  totalPrice?: String;
+  user: UserCreateOneWithoutCartInput;
+  items?: ProductCreateManyWithoutCartsInput;
 }
 
 export interface UserWhereInput {
@@ -1008,6 +1025,14 @@ export interface UserWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  dateCreated?: DateTimeInput;
+  dateCreated_not?: DateTimeInput;
+  dateCreated_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_lt?: DateTimeInput;
+  dateCreated_lte?: DateTimeInput;
+  dateCreated_gt?: DateTimeInput;
+  dateCreated_gte?: DateTimeInput;
   role?: String;
   role_not?: String;
   role_in?: String[] | String;
@@ -1121,15 +1146,133 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface CartCreateOneWithoutUserInput {
-  create?: CartCreateWithoutUserInput;
-  connect?: CartWhereUniqueInput;
+export interface UserCreateWithoutCartInput {
+  dateCreated?: DateTimeInput;
+  role?: String;
+  permissions?: UserCreatepermissionsInput;
+  email?: String;
+  firstName?: String;
+  lastName?: String;
+  bizName?: String;
+  password?: String;
+  stripeId?: String;
+  purchases?: InvoiceCreateManyWithoutCustomerInput;
+  products?: ProductCreateManyWithoutVendorInput;
+  sales?: InvoiceCreateManyWithoutVendorsInput;
 }
 
-export interface CartUpdateWithoutItemsDataInput {
-  itemCount?: Int;
-  totalPrice?: String;
-  user?: UserUpdateOneRequiredWithoutCartInput;
+export interface PaymentRecordWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  dateCreated?: DateTimeInput;
+  dateCreated_not?: DateTimeInput;
+  dateCreated_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_lt?: DateTimeInput;
+  dateCreated_lte?: DateTimeInput;
+  dateCreated_gt?: DateTimeInput;
+  dateCreated_gte?: DateTimeInput;
+  amount?: Int;
+  amount_not?: Int;
+  amount_in?: Int[] | Int;
+  amount_not_in?: Int[] | Int;
+  amount_lt?: Int;
+  amount_lte?: Int;
+  amount_gt?: Int;
+  amount_gte?: Int;
+  balanceTransaction?: String;
+  balanceTransaction_not?: String;
+  balanceTransaction_in?: String[] | String;
+  balanceTransaction_not_in?: String[] | String;
+  balanceTransaction_lt?: String;
+  balanceTransaction_lte?: String;
+  balanceTransaction_gt?: String;
+  balanceTransaction_gte?: String;
+  balanceTransaction_contains?: String;
+  balanceTransaction_not_contains?: String;
+  balanceTransaction_starts_with?: String;
+  balanceTransaction_not_starts_with?: String;
+  balanceTransaction_ends_with?: String;
+  balanceTransaction_not_ends_with?: String;
+  created?: Int;
+  created_not?: Int;
+  created_in?: Int[] | Int;
+  created_not_in?: Int[] | Int;
+  created_lt?: Int;
+  created_lte?: Int;
+  created_gt?: Int;
+  created_gte?: Int;
+  currency?: String;
+  currency_not?: String;
+  currency_in?: String[] | String;
+  currency_not_in?: String[] | String;
+  currency_lt?: String;
+  currency_lte?: String;
+  currency_gt?: String;
+  currency_gte?: String;
+  currency_contains?: String;
+  currency_not_contains?: String;
+  currency_starts_with?: String;
+  currency_not_starts_with?: String;
+  currency_ends_with?: String;
+  currency_not_ends_with?: String;
+  stripeCustomerId?: String;
+  stripeCustomerId_not?: String;
+  stripeCustomerId_in?: String[] | String;
+  stripeCustomerId_not_in?: String[] | String;
+  stripeCustomerId_lt?: String;
+  stripeCustomerId_lte?: String;
+  stripeCustomerId_gt?: String;
+  stripeCustomerId_gte?: String;
+  stripeCustomerId_contains?: String;
+  stripeCustomerId_not_contains?: String;
+  stripeCustomerId_starts_with?: String;
+  stripeCustomerId_not_starts_with?: String;
+  stripeCustomerId_ends_with?: String;
+  stripeCustomerId_not_ends_with?: String;
+  stripePaymentId?: String;
+  stripePaymentId_not?: String;
+  stripePaymentId_in?: String[] | String;
+  stripePaymentId_not_in?: String[] | String;
+  stripePaymentId_lt?: String;
+  stripePaymentId_lte?: String;
+  stripePaymentId_gt?: String;
+  stripePaymentId_gte?: String;
+  stripePaymentId_contains?: String;
+  stripePaymentId_not_contains?: String;
+  stripePaymentId_starts_with?: String;
+  stripePaymentId_not_starts_with?: String;
+  stripePaymentId_ends_with?: String;
+  stripePaymentId_not_ends_with?: String;
+  status?: String;
+  status_not?: String;
+  status_in?: String[] | String;
+  status_not_in?: String[] | String;
+  status_lt?: String;
+  status_lte?: String;
+  status_gt?: String;
+  status_gte?: String;
+  status_contains?: String;
+  status_not_contains?: String;
+  status_starts_with?: String;
+  status_not_starts_with?: String;
+  status_ends_with?: String;
+  status_not_ends_with?: String;
+  AND?: PaymentRecordWhereInput[] | PaymentRecordWhereInput;
+  OR?: PaymentRecordWhereInput[] | PaymentRecordWhereInput;
+  NOT?: PaymentRecordWhereInput[] | PaymentRecordWhereInput;
 }
 
 export interface InvoiceCreateManyWithoutCustomerInput {
@@ -1139,11 +1282,10 @@ export interface InvoiceCreateManyWithoutCustomerInput {
   connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
 }
 
-export interface UserUpdateOneRequiredWithoutCartInput {
-  create?: UserCreateWithoutCartInput;
-  update?: UserUpdateWithoutCartDataInput;
-  upsert?: UserUpsertWithoutCartInput;
-  connect?: UserWhereUniqueInput;
+export interface InvoiceUpsertWithWhereUniqueWithoutItemsInput {
+  where: InvoiceWhereUniqueInput;
+  update: InvoiceUpdateWithoutItemsDataInput;
+  create: InvoiceCreateWithoutItemsInput;
 }
 
 export interface ProductCreateManyWithoutPurchasesInput {
@@ -1153,7 +1295,8 @@ export interface ProductCreateManyWithoutPurchasesInput {
   connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
 }
 
-export interface UserUpdateWithoutCartDataInput {
+export interface UserUpdateManyDataInput {
+  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserUpdatepermissionsInput;
   email?: String;
@@ -1162,55 +1305,55 @@ export interface UserUpdateWithoutCartDataInput {
   bizName?: String;
   password?: String;
   stripeId?: String;
-  purchases?: InvoiceUpdateManyWithoutCustomerInput;
-  products?: ProductUpdateManyWithoutVendorInput;
-  sales?: InvoiceUpdateManyWithoutVendorsInput;
 }
 
-export interface CartCreateManyWithoutItemsInput {
-  create?: CartCreateWithoutItemsInput[] | CartCreateWithoutItemsInput;
-  connect?: CartWhereUniqueInput[] | CartWhereUniqueInput;
-}
-
-export interface ProductUpdateManyWithoutVendorInput {
-  create?: ProductCreateWithoutVendorInput[] | ProductCreateWithoutVendorInput;
-  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
-  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
-  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
-  update?:
-    | ProductUpdateWithWhereUniqueWithoutVendorInput[]
-    | ProductUpdateWithWhereUniqueWithoutVendorInput;
-  upsert?:
-    | ProductUpsertWithWhereUniqueWithoutVendorInput[]
-    | ProductUpsertWithWhereUniqueWithoutVendorInput;
-  deleteMany?: ProductScalarWhereInput[] | ProductScalarWhereInput;
-  updateMany?:
-    | ProductUpdateManyWithWhereNestedInput[]
-    | ProductUpdateManyWithWhereNestedInput;
-}
-
-export interface UserCreateOneWithoutCartInput {
-  create?: UserCreateWithoutCartInput;
+export interface UserCreateOneWithoutProductsInput {
+  create?: UserCreateWithoutProductsInput;
   connect?: UserWhereUniqueInput;
 }
 
-export interface ProductUpdateWithWhereUniqueWithoutVendorInput {
-  where: ProductWhereUniqueInput;
-  data: ProductUpdateWithoutVendorDataInput;
+export interface PaymentRecordUpdateManyInput {
+  create?: PaymentRecordCreateInput[] | PaymentRecordCreateInput;
+  update?:
+    | PaymentRecordUpdateWithWhereUniqueNestedInput[]
+    | PaymentRecordUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | PaymentRecordUpsertWithWhereUniqueNestedInput[]
+    | PaymentRecordUpsertWithWhereUniqueNestedInput;
+  delete?: PaymentRecordWhereUniqueInput[] | PaymentRecordWhereUniqueInput;
+  connect?: PaymentRecordWhereUniqueInput[] | PaymentRecordWhereUniqueInput;
+  disconnect?: PaymentRecordWhereUniqueInput[] | PaymentRecordWhereUniqueInput;
+  deleteMany?: PaymentRecordScalarWhereInput[] | PaymentRecordScalarWhereInput;
+  updateMany?:
+    | PaymentRecordUpdateManyWithWhereNestedInput[]
+    | PaymentRecordUpdateManyWithWhereNestedInput;
 }
 
-export interface ProductCreateManyWithoutVendorInput {
-  create?: ProductCreateWithoutVendorInput[] | ProductCreateWithoutVendorInput;
+export interface CartCreateOneWithoutUserInput {
+  create?: CartCreateWithoutUserInput;
+  connect?: CartWhereUniqueInput;
+}
+
+export interface PaymentRecordUpdateWithWhereUniqueNestedInput {
+  where: PaymentRecordWhereUniqueInput;
+  data: PaymentRecordUpdateDataInput;
+}
+
+export interface ProductCreateManyWithoutCartsInput {
+  create?: ProductCreateWithoutCartsInput[] | ProductCreateWithoutCartsInput;
   connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
 }
 
-export interface ProductUpdateWithoutVendorDataInput {
-  name?: String;
-  price?: String;
-  description?: String;
-  varietal?: String;
-  carts?: CartUpdateManyWithoutItemsInput;
-  purchases?: InvoiceUpdateManyWithoutItemsInput;
+export interface PaymentRecordUpdateDataInput {
+  dateCreated?: DateTimeInput;
+  amount?: Int;
+  balanceTransaction?: String;
+  created?: Int;
+  currency?: String;
+  stripeCustomerId?: String;
+  stripePaymentId?: String;
+  status?: String;
+  data?: Json;
 }
 
 export interface InvoiceCreateManyWithoutItemsInput {
@@ -1218,70 +1361,40 @@ export interface InvoiceCreateManyWithoutItemsInput {
   connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
 }
 
-export interface InvoiceUpdateManyWithoutItemsInput {
-  create?: InvoiceCreateWithoutItemsInput[] | InvoiceCreateWithoutItemsInput;
-  delete?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
-  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
-  disconnect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
-  update?:
-    | InvoiceUpdateWithWhereUniqueWithoutItemsInput[]
-    | InvoiceUpdateWithWhereUniqueWithoutItemsInput;
-  upsert?:
-    | InvoiceUpsertWithWhereUniqueWithoutItemsInput[]
-    | InvoiceUpsertWithWhereUniqueWithoutItemsInput;
-  deleteMany?: InvoiceScalarWhereInput[] | InvoiceScalarWhereInput;
-  updateMany?:
-    | InvoiceUpdateManyWithWhereNestedInput[]
-    | InvoiceUpdateManyWithWhereNestedInput;
+export interface PaymentRecordUpsertWithWhereUniqueNestedInput {
+  where: PaymentRecordWhereUniqueInput;
+  update: PaymentRecordUpdateDataInput;
+  create: PaymentRecordCreateInput;
 }
 
 export interface PaymentRecordCreateManyInput {
   create?: PaymentRecordCreateInput[] | PaymentRecordCreateInput;
-}
-
-export interface InvoiceUpdateWithWhereUniqueWithoutItemsInput {
-  where: InvoiceWhereUniqueInput;
-  data: InvoiceUpdateWithoutItemsDataInput;
-}
-
-export interface UserCreateOneWithoutPurchasesInput {
-  create?: UserCreateWithoutPurchasesInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface InvoiceUpdateWithoutItemsDataInput {
-  amount?: String;
-  email?: String;
-  record?: Json;
-  stripeRecord?: PaymentRecordUpdateManyInput;
-  created?: Int;
-  stripePaymentId?: String;
-  stripeCustomerId?: String;
-  customer?: UserUpdateOneWithoutPurchasesInput;
-  vendors?: UserUpdateManyWithoutSalesInput;
-}
-
-export interface InvoiceCreateManyWithoutVendorsInput {
-  create?:
-    | InvoiceCreateWithoutVendorsInput[]
-    | InvoiceCreateWithoutVendorsInput;
-  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
-}
-
-export interface PaymentRecordUpdateManyInput {
-  create?: PaymentRecordCreateInput[] | PaymentRecordCreateInput;
-  deleteMany?: PaymentRecordScalarWhereInput[] | PaymentRecordScalarWhereInput;
-  updateMany?:
-    | PaymentRecordUpdateManyWithWhereNestedInput[]
-    | PaymentRecordUpdateManyWithWhereNestedInput;
-}
-
-export interface UserCreateManyWithoutSalesInput {
-  create?: UserCreateWithoutSalesInput[] | UserCreateWithoutSalesInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: PaymentRecordWhereUniqueInput[] | PaymentRecordWhereUniqueInput;
 }
 
 export interface PaymentRecordScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  dateCreated?: DateTimeInput;
+  dateCreated_not?: DateTimeInput;
+  dateCreated_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_lt?: DateTimeInput;
+  dateCreated_lte?: DateTimeInput;
+  dateCreated_gt?: DateTimeInput;
+  dateCreated_gte?: DateTimeInput;
   amount?: Int;
   amount_not?: Int;
   amount_in?: Int[] | Int;
@@ -1373,7 +1486,208 @@ export interface PaymentRecordScalarWhereInput {
   NOT?: PaymentRecordScalarWhereInput[] | PaymentRecordScalarWhereInput;
 }
 
-export interface ProductWhereInput {
+export interface UserCreateOneWithoutPurchasesInput {
+  create?: UserCreateWithoutPurchasesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface PaymentRecordUpdateManyWithWhereNestedInput {
+  where: PaymentRecordScalarWhereInput;
+  data: PaymentRecordUpdateManyDataInput;
+}
+
+export interface ProductCreateManyWithoutVendorInput {
+  create?: ProductCreateWithoutVendorInput[] | ProductCreateWithoutVendorInput;
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
+}
+
+export interface PaymentRecordUpdateManyDataInput {
+  dateCreated?: DateTimeInput;
+  amount?: Int;
+  balanceTransaction?: String;
+  created?: Int;
+  currency?: String;
+  stripeCustomerId?: String;
+  stripePaymentId?: String;
+  status?: String;
+  data?: Json;
+}
+
+export interface CartCreateManyWithoutItemsInput {
+  create?: CartCreateWithoutItemsInput[] | CartCreateWithoutItemsInput;
+  connect?: CartWhereUniqueInput[] | CartWhereUniqueInput;
+}
+
+export interface UserUpdateOneWithoutPurchasesInput {
+  create?: UserCreateWithoutPurchasesInput;
+  update?: UserUpdateWithoutPurchasesDataInput;
+  upsert?: UserUpsertWithoutPurchasesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface InvoiceCreateManyWithoutVendorsInput {
+  create?:
+    | InvoiceCreateWithoutVendorsInput[]
+    | InvoiceCreateWithoutVendorsInput;
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput;
+}
+
+export interface UserUpdateWithoutPurchasesDataInput {
+  dateCreated?: DateTimeInput;
+  role?: String;
+  permissions?: UserUpdatepermissionsInput;
+  email?: String;
+  firstName?: String;
+  lastName?: String;
+  bizName?: String;
+  password?: String;
+  cart?: CartUpdateOneWithoutUserInput;
+  stripeId?: String;
+  products?: ProductUpdateManyWithoutVendorInput;
+  sales?: InvoiceUpdateManyWithoutVendorsInput;
+}
+
+export interface UserCreateManyWithoutSalesInput {
+  create?: UserCreateWithoutSalesInput[] | UserCreateWithoutSalesInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface ProductUpdateManyWithoutVendorInput {
+  create?: ProductCreateWithoutVendorInput[] | ProductCreateWithoutVendorInput;
+  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
+  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
+  update?:
+    | ProductUpdateWithWhereUniqueWithoutVendorInput[]
+    | ProductUpdateWithWhereUniqueWithoutVendorInput;
+  upsert?:
+    | ProductUpsertWithWhereUniqueWithoutVendorInput[]
+    | ProductUpsertWithWhereUniqueWithoutVendorInput;
+  deleteMany?: ProductScalarWhereInput[] | ProductScalarWhereInput;
+  updateMany?:
+    | ProductUpdateManyWithWhereNestedInput[]
+    | ProductUpdateManyWithWhereNestedInput;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface ProductUpdateWithWhereUniqueWithoutVendorInput {
+  where: ProductWhereUniqueInput;
+  data: ProductUpdateWithoutVendorDataInput;
+}
+
+export interface CartSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CartWhereInput;
+  AND?: CartSubscriptionWhereInput[] | CartSubscriptionWhereInput;
+  OR?: CartSubscriptionWhereInput[] | CartSubscriptionWhereInput;
+  NOT?: CartSubscriptionWhereInput[] | CartSubscriptionWhereInput;
+}
+
+export interface ProductUpdateWithoutVendorDataInput {
+  dateCreated?: DateTimeInput;
+  name?: String;
+  price?: String;
+  description?: String;
+  varietal?: String;
+  carts?: CartUpdateManyWithoutItemsInput;
+  purchases?: InvoiceUpdateManyWithoutItemsInput;
+}
+
+export interface ProductUpdateManyMutationInput {
+  dateCreated?: DateTimeInput;
+  name?: String;
+  price?: String;
+  description?: String;
+  varietal?: String;
+}
+
+export interface CartUpdateManyWithoutItemsInput {
+  create?: CartCreateWithoutItemsInput[] | CartCreateWithoutItemsInput;
+  delete?: CartWhereUniqueInput[] | CartWhereUniqueInput;
+  connect?: CartWhereUniqueInput[] | CartWhereUniqueInput;
+  disconnect?: CartWhereUniqueInput[] | CartWhereUniqueInput;
+  update?:
+    | CartUpdateWithWhereUniqueWithoutItemsInput[]
+    | CartUpdateWithWhereUniqueWithoutItemsInput;
+  upsert?:
+    | CartUpsertWithWhereUniqueWithoutItemsInput[]
+    | CartUpsertWithWhereUniqueWithoutItemsInput;
+  deleteMany?: CartScalarWhereInput[] | CartScalarWhereInput;
+  updateMany?:
+    | CartUpdateManyWithWhereNestedInput[]
+    | CartUpdateManyWithWhereNestedInput;
+}
+
+export interface PaymentRecordUpdateManyMutationInput {
+  dateCreated?: DateTimeInput;
+  amount?: Int;
+  balanceTransaction?: String;
+  created?: Int;
+  currency?: String;
+  stripeCustomerId?: String;
+  stripePaymentId?: String;
+  status?: String;
+  data?: Json;
+}
+
+export interface CartUpdateWithWhereUniqueWithoutItemsInput {
+  where: CartWhereUniqueInput;
+  data: CartUpdateWithoutItemsDataInput;
+}
+
+export interface InvoiceUpdateInput {
+  dateCreated?: DateTimeInput;
+  items?: ProductUpdateManyWithoutPurchasesInput;
+  amount?: String;
+  email?: String;
+  record?: Json;
+  stripeRecord?: PaymentRecordUpdateManyInput;
+  created?: Int;
+  stripePaymentId?: String;
+  stripeCustomerId?: String;
+  customer?: UserUpdateOneWithoutPurchasesInput;
+  vendors?: UserUpdateManyWithoutSalesInput;
+}
+
+export interface CartUpdateWithoutItemsDataInput {
+  dateCreated?: DateTimeInput;
+  itemCount?: Int;
+  totalPrice?: String;
+  user?: UserUpdateOneRequiredWithoutCartInput;
+}
+
+export interface UserUpsertWithoutCartInput {
+  update: UserUpdateWithoutCartDataInput;
+  create: UserCreateWithoutCartInput;
+}
+
+export interface CartUpsertWithWhereUniqueWithoutItemsInput {
+  where: CartWhereUniqueInput;
+  update: CartUpdateWithoutItemsDataInput;
+  create: CartCreateWithoutItemsInput;
+}
+
+export interface UserUpsertWithoutProductsInput {
+  update: UserUpdateWithoutProductsDataInput;
+  create: UserCreateWithoutProductsInput;
+}
+
+export interface CartScalarWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -1388,6 +1702,124 @@ export interface ProductWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  dateCreated?: DateTimeInput;
+  dateCreated_not?: DateTimeInput;
+  dateCreated_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_lt?: DateTimeInput;
+  dateCreated_lte?: DateTimeInput;
+  dateCreated_gt?: DateTimeInput;
+  dateCreated_gte?: DateTimeInput;
+  itemCount?: Int;
+  itemCount_not?: Int;
+  itemCount_in?: Int[] | Int;
+  itemCount_not_in?: Int[] | Int;
+  itemCount_lt?: Int;
+  itemCount_lte?: Int;
+  itemCount_gt?: Int;
+  itemCount_gte?: Int;
+  totalPrice?: String;
+  totalPrice_not?: String;
+  totalPrice_in?: String[] | String;
+  totalPrice_not_in?: String[] | String;
+  totalPrice_lt?: String;
+  totalPrice_lte?: String;
+  totalPrice_gt?: String;
+  totalPrice_gte?: String;
+  totalPrice_contains?: String;
+  totalPrice_not_contains?: String;
+  totalPrice_starts_with?: String;
+  totalPrice_not_starts_with?: String;
+  totalPrice_ends_with?: String;
+  totalPrice_not_ends_with?: String;
+  AND?: CartScalarWhereInput[] | CartScalarWhereInput;
+  OR?: CartScalarWhereInput[] | CartScalarWhereInput;
+  NOT?: CartScalarWhereInput[] | CartScalarWhereInput;
+}
+
+export interface UserCreateOneWithoutCartInput {
+  create?: UserCreateWithoutCartInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface CartUpdateManyWithWhereNestedInput {
+  where: CartScalarWhereInput;
+  data: CartUpdateManyDataInput;
+}
+
+export interface InvoiceCreateWithoutCustomerInput {
+  dateCreated?: DateTimeInput;
+  items?: ProductCreateManyWithoutPurchasesInput;
+  amount?: String;
+  email: String;
+  record?: Json;
+  stripeRecord?: PaymentRecordCreateManyInput;
+  created?: Int;
+  stripePaymentId?: String;
+  stripeCustomerId?: String;
+  vendors?: UserCreateManyWithoutSalesInput;
+}
+
+export interface CartUpdateManyDataInput {
+  dateCreated?: DateTimeInput;
+  itemCount?: Int;
+  totalPrice?: String;
+}
+
+export interface UserCreateWithoutProductsInput {
+  dateCreated?: DateTimeInput;
+  role?: String;
+  permissions?: UserCreatepermissionsInput;
+  email?: String;
+  firstName?: String;
+  lastName?: String;
+  bizName?: String;
+  password?: String;
+  cart?: CartCreateOneWithoutUserInput;
+  stripeId?: String;
+  purchases?: InvoiceCreateManyWithoutCustomerInput;
+  sales?: InvoiceCreateManyWithoutVendorsInput;
+}
+
+export interface ProductUpsertWithWhereUniqueWithoutVendorInput {
+  where: ProductWhereUniqueInput;
+  update: ProductUpdateWithoutVendorDataInput;
+  create: ProductCreateWithoutVendorInput;
+}
+
+export interface ProductCreateWithoutCartsInput {
+  dateCreated?: DateTimeInput;
+  name?: String;
+  price?: String;
+  description?: String;
+  varietal?: String;
+  vendor?: UserCreateOneWithoutProductsInput;
+  purchases?: InvoiceCreateManyWithoutItemsInput;
+}
+
+export interface ProductScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  dateCreated?: DateTimeInput;
+  dateCreated_not?: DateTimeInput;
+  dateCreated_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_lt?: DateTimeInput;
+  dateCreated_lte?: DateTimeInput;
+  dateCreated_gt?: DateTimeInput;
+  dateCreated_gte?: DateTimeInput;
   name?: String;
   name_not?: String;
   name_in?: String[] | String;
@@ -1444,89 +1876,58 @@ export interface ProductWhereInput {
   varietal_not_starts_with?: String;
   varietal_ends_with?: String;
   varietal_not_ends_with?: String;
-  vendor?: UserWhereInput;
-  carts_every?: CartWhereInput;
-  carts_some?: CartWhereInput;
-  carts_none?: CartWhereInput;
-  purchases_every?: InvoiceWhereInput;
-  purchases_some?: InvoiceWhereInput;
-  purchases_none?: InvoiceWhereInput;
-  AND?: ProductWhereInput[] | ProductWhereInput;
-  OR?: ProductWhereInput[] | ProductWhereInput;
-  NOT?: ProductWhereInput[] | ProductWhereInput;
+  AND?: ProductScalarWhereInput[] | ProductScalarWhereInput;
+  OR?: ProductScalarWhereInput[] | ProductScalarWhereInput;
+  NOT?: ProductScalarWhereInput[] | ProductScalarWhereInput;
 }
 
-export interface PaymentRecordUpdateManyWithWhereNestedInput {
-  where: PaymentRecordScalarWhereInput;
-  data: PaymentRecordUpdateManyDataInput;
+export interface PaymentRecordCreateInput {
+  dateCreated: DateTimeInput;
+  amount: Int;
+  balanceTransaction: String;
+  created: Int;
+  currency: String;
+  stripeCustomerId: String;
+  stripePaymentId: String;
+  status: String;
+  data?: Json;
 }
 
-export interface UserUpdateManyMutationInput {
-  role?: String;
-  permissions?: UserUpdatepermissionsInput;
-  email?: String;
-  firstName?: String;
-  lastName?: String;
-  bizName?: String;
-  password?: String;
-  stripeId?: String;
+export interface ProductUpdateManyWithWhereNestedInput {
+  where: ProductScalarWhereInput;
+  data: ProductUpdateManyDataInput;
 }
 
-export interface PaymentRecordUpdateManyDataInput {
-  amount?: Int;
-  balanceTransaction?: String;
-  created?: Int;
-  currency?: String;
-  stripeCustomerId?: String;
-  stripePaymentId?: String;
-  status?: String;
-}
-
-export interface ProductUpdateInput {
+export interface ProductCreateWithoutVendorInput {
+  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
   varietal?: String;
-  vendor?: UserUpdateOneWithoutProductsInput;
-  carts?: CartUpdateManyWithoutItemsInput;
-  purchases?: InvoiceUpdateManyWithoutItemsInput;
+  carts?: CartCreateManyWithoutItemsInput;
+  purchases?: InvoiceCreateManyWithoutItemsInput;
 }
 
-export interface UserUpdateOneWithoutPurchasesInput {
-  create?: UserCreateWithoutPurchasesInput;
-  update?: UserUpdateWithoutPurchasesDataInput;
-  upsert?: UserUpsertWithoutPurchasesInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
+export interface ProductUpdateManyDataInput {
+  dateCreated?: DateTimeInput;
+  name?: String;
+  price?: String;
+  description?: String;
+  varietal?: String;
 }
 
-export interface InvoiceUpdateManyMutationInput {
+export interface InvoiceCreateWithoutVendorsInput {
+  dateCreated?: DateTimeInput;
+  items?: ProductCreateManyWithoutPurchasesInput;
   amount?: String;
-  email?: String;
+  email: String;
   record?: Json;
+  stripeRecord?: PaymentRecordCreateManyInput;
   created?: Int;
   stripePaymentId?: String;
   stripeCustomerId?: String;
+  customer?: UserCreateOneWithoutPurchasesInput;
 }
-
-export interface UserUpdateWithoutPurchasesDataInput {
-  role?: String;
-  permissions?: UserUpdatepermissionsInput;
-  email?: String;
-  firstName?: String;
-  lastName?: String;
-  bizName?: String;
-  password?: String;
-  cart?: CartUpdateOneWithoutUserInput;
-  stripeId?: String;
-  products?: ProductUpdateManyWithoutVendorInput;
-  sales?: InvoiceUpdateManyWithoutVendorsInput;
-}
-
-export type ProductWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
 
 export interface InvoiceUpdateManyWithoutVendorsInput {
   create?:
@@ -1547,23 +1948,34 @@ export interface InvoiceUpdateManyWithoutVendorsInput {
     | InvoiceUpdateManyWithWhereNestedInput;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  email?: String;
-  stripeId?: String;
-}>;
+export interface PaymentRecordSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: PaymentRecordWhereInput;
+  AND?:
+    | PaymentRecordSubscriptionWhereInput[]
+    | PaymentRecordSubscriptionWhereInput;
+  OR?:
+    | PaymentRecordSubscriptionWhereInput[]
+    | PaymentRecordSubscriptionWhereInput;
+  NOT?:
+    | PaymentRecordSubscriptionWhereInput[]
+    | PaymentRecordSubscriptionWhereInput;
+}
 
 export interface InvoiceUpdateWithWhereUniqueWithoutVendorsInput {
   where: InvoiceWhereUniqueInput;
   data: InvoiceUpdateWithoutVendorsDataInput;
 }
 
-export interface UserCreateOneWithoutProductsInput {
-  create?: UserCreateWithoutProductsInput;
-  connect?: UserWhereUniqueInput;
-}
+export type InvoiceWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface InvoiceUpdateWithoutVendorsDataInput {
+  dateCreated?: DateTimeInput;
   items?: ProductUpdateManyWithoutPurchasesInput;
   amount?: String;
   email?: String;
@@ -1575,11 +1987,9 @@ export interface InvoiceUpdateWithoutVendorsDataInput {
   customer?: UserUpdateOneWithoutPurchasesInput;
 }
 
-export interface CartCreateWithoutUserInput {
-  itemCount?: Int;
-  totalPrice?: String;
-  items?: ProductCreateManyWithoutCartsInput;
-}
+export type ProductWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface InvoiceUpsertWithWhereUniqueWithoutVendorsInput {
   where: InvoiceWhereUniqueInput;
@@ -1588,6 +1998,7 @@ export interface InvoiceUpsertWithWhereUniqueWithoutVendorsInput {
 }
 
 export interface ProductCreateWithoutPurchasesInput {
+  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
@@ -1611,6 +2022,14 @@ export interface InvoiceScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  dateCreated?: DateTimeInput;
+  dateCreated_not?: DateTimeInput;
+  dateCreated_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_lt?: DateTimeInput;
+  dateCreated_lte?: DateTimeInput;
+  dateCreated_gt?: DateTimeInput;
+  dateCreated_gte?: DateTimeInput;
   amount?: String;
   amount_not?: String;
   amount_in?: String[] | String;
@@ -1680,26 +2099,8 @@ export interface InvoiceScalarWhereInput {
   NOT?: InvoiceScalarWhereInput[] | InvoiceScalarWhereInput;
 }
 
-export interface UserCreateWithoutCartInput {
-  role?: String;
-  permissions?: UserCreatepermissionsInput;
-  email?: String;
-  firstName?: String;
-  lastName?: String;
-  bizName?: String;
-  password?: String;
-  stripeId?: String;
-  purchases?: InvoiceCreateManyWithoutCustomerInput;
-  products?: ProductCreateManyWithoutVendorInput;
-  sales?: InvoiceCreateManyWithoutVendorsInput;
-}
-
-export interface InvoiceUpdateManyWithWhereNestedInput {
-  where: InvoiceScalarWhereInput;
-  data: InvoiceUpdateManyDataInput;
-}
-
 export interface InvoiceCreateWithoutItemsInput {
+  dateCreated?: DateTimeInput;
   amount?: String;
   email: String;
   record?: Json;
@@ -1711,7 +2112,20 @@ export interface InvoiceCreateWithoutItemsInput {
   vendors?: UserCreateManyWithoutSalesInput;
 }
 
+export interface InvoiceUpdateManyWithWhereNestedInput {
+  where: InvoiceScalarWhereInput;
+  data: InvoiceUpdateManyDataInput;
+}
+
+export interface CartCreateWithoutItemsInput {
+  dateCreated?: DateTimeInput;
+  itemCount?: Int;
+  totalPrice?: String;
+  user: UserCreateOneWithoutCartInput;
+}
+
 export interface InvoiceUpdateManyDataInput {
+  dateCreated?: DateTimeInput;
   amount?: String;
   email?: String;
   record?: Json;
@@ -1720,18 +2134,20 @@ export interface InvoiceUpdateManyDataInput {
   stripeCustomerId?: String;
 }
 
-export interface UserCreateWithoutPurchasesInput {
+export interface UserUpdateInput {
+  dateCreated?: DateTimeInput;
   role?: String;
-  permissions?: UserCreatepermissionsInput;
+  permissions?: UserUpdatepermissionsInput;
   email?: String;
   firstName?: String;
   lastName?: String;
   bizName?: String;
   password?: String;
-  cart?: CartCreateOneWithoutUserInput;
+  cart?: CartUpdateOneWithoutUserInput;
   stripeId?: String;
-  products?: ProductCreateManyWithoutVendorInput;
-  sales?: InvoiceCreateManyWithoutVendorsInput;
+  purchases?: InvoiceUpdateManyWithoutCustomerInput;
+  products?: ProductUpdateManyWithoutVendorInput;
+  sales?: InvoiceUpdateManyWithoutVendorsInput;
 }
 
 export interface UserUpsertWithoutPurchasesInput {
@@ -1739,16 +2155,11 @@ export interface UserUpsertWithoutPurchasesInput {
   create: UserCreateWithoutPurchasesInput;
 }
 
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+  stripeId?: String;
+}>;
 
 export interface UserUpdateManyWithoutSalesInput {
   create?: UserCreateWithoutSalesInput[] | UserCreateWithoutSalesInput;
@@ -1767,66 +2178,11 @@ export interface UserUpdateManyWithoutSalesInput {
     | UserUpdateManyWithWhereNestedInput;
 }
 
-export interface UserCreateInput {
-  role?: String;
-  permissions?: UserCreatepermissionsInput;
-  email?: String;
-  firstName?: String;
-  lastName?: String;
-  bizName?: String;
-  password?: String;
-  cart?: CartCreateOneWithoutUserInput;
-  stripeId?: String;
-  purchases?: InvoiceCreateManyWithoutCustomerInput;
-  products?: ProductCreateManyWithoutVendorInput;
-  sales?: InvoiceCreateManyWithoutVendorsInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutSalesInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutSalesDataInput;
-}
-
-export interface InvoiceCreateInput {
-  items?: ProductCreateManyWithoutPurchasesInput;
-  amount?: String;
-  email: String;
-  record?: Json;
-  stripeRecord?: PaymentRecordCreateManyInput;
-  created?: Int;
-  stripePaymentId?: String;
-  stripeCustomerId?: String;
-  customer?: UserCreateOneWithoutPurchasesInput;
-  vendors?: UserCreateManyWithoutSalesInput;
-}
-
-export interface UserUpdateWithoutSalesDataInput {
-  role?: String;
-  permissions?: UserUpdatepermissionsInput;
-  email?: String;
-  firstName?: String;
-  lastName?: String;
-  bizName?: String;
-  password?: String;
-  cart?: CartUpdateOneWithoutUserInput;
-  stripeId?: String;
-  purchases?: InvoiceUpdateManyWithoutCustomerInput;
-  products?: ProductUpdateManyWithoutVendorInput;
-}
-
-export interface CartUpdateManyDataInput {
+export interface CartCreateWithoutUserInput {
+  dateCreated?: DateTimeInput;
   itemCount?: Int;
   totalPrice?: String;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutSalesInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutSalesDataInput;
-  create: UserCreateWithoutSalesInput;
-}
-
-export interface UserCreatepermissionsInput {
-  set?: String[] | String;
+  items?: ProductCreateManyWithoutCartsInput;
 }
 
 export interface UserScalarWhereInput {
@@ -1844,6 +2200,14 @@ export interface UserScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  dateCreated?: DateTimeInput;
+  dateCreated_not?: DateTimeInput;
+  dateCreated_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
+  dateCreated_lt?: DateTimeInput;
+  dateCreated_lte?: DateTimeInput;
+  dateCreated_gt?: DateTimeInput;
+  dateCreated_gte?: DateTimeInput;
   role?: String;
   role_not?: String;
   role_in?: String[] | String;
@@ -1947,28 +2311,14 @@ export interface UserScalarWhereInput {
   NOT?: UserScalarWhereInput[] | UserScalarWhereInput;
 }
 
-export interface CartCreateWithoutItemsInput {
-  itemCount?: Int;
-  totalPrice?: String;
-  user: UserCreateOneWithoutCartInput;
+export interface UserUpsertWithWhereUniqueWithoutSalesInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutSalesDataInput;
+  create: UserCreateWithoutSalesInput;
 }
 
-export interface UserUpdateManyWithWhereNestedInput {
-  where: UserScalarWhereInput;
-  data: UserUpdateManyDataInput;
-}
-
-export interface PaymentRecordCreateInput {
-  amount: Int;
-  balanceTransaction: String;
-  created: Int;
-  currency: String;
-  stripeCustomerId: String;
-  stripePaymentId: String;
-  status: String;
-}
-
-export interface UserUpdateManyDataInput {
+export interface UserUpdateWithoutSalesDataInput {
+  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserUpdatepermissionsInput;
   email?: String;
@@ -1976,171 +2326,53 @@ export interface UserUpdateManyDataInput {
   lastName?: String;
   bizName?: String;
   password?: String;
+  cart?: CartUpdateOneWithoutUserInput;
   stripeId?: String;
+  purchases?: InvoiceUpdateManyWithoutCustomerInput;
+  products?: ProductUpdateManyWithoutVendorInput;
 }
 
-export interface InvoiceSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: InvoiceWhereInput;
-  AND?: InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput;
-  OR?: InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput;
-  NOT?: InvoiceSubscriptionWhereInput[] | InvoiceSubscriptionWhereInput;
+export interface UserUpdateWithWhereUniqueWithoutSalesInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutSalesDataInput;
 }
 
-export interface InvoiceUpsertWithWhereUniqueWithoutItemsInput {
-  where: InvoiceWhereUniqueInput;
-  update: InvoiceUpdateWithoutItemsDataInput;
-  create: InvoiceCreateWithoutItemsInput;
+export interface UserCreateWithoutPurchasesInput {
+  dateCreated?: DateTimeInput;
+  role?: String;
+  permissions?: UserCreatepermissionsInput;
+  email?: String;
+  firstName?: String;
+  lastName?: String;
+  bizName?: String;
+  password?: String;
+  cart?: CartCreateOneWithoutUserInput;
+  stripeId?: String;
+  products?: ProductCreateManyWithoutVendorInput;
+  sales?: InvoiceCreateManyWithoutVendorsInput;
 }
 
-export interface UserUpsertWithoutProductsInput {
-  update: UserUpdateWithoutProductsDataInput;
-  create: UserCreateWithoutProductsInput;
+export interface UserCreatepermissionsInput {
+  set?: String[] | String;
 }
 
-export interface ProductUpdateManyDataInput {
-  name?: String;
-  price?: String;
-  description?: String;
-  varietal?: String;
-}
+export type PaymentRecordWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
-export interface ProductUpdateManyWithWhereNestedInput {
-  where: ProductScalarWhereInput;
-  data: ProductUpdateManyDataInput;
-}
-
-export interface ProductScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  price?: String;
-  price_not?: String;
-  price_in?: String[] | String;
-  price_not_in?: String[] | String;
-  price_lt?: String;
-  price_lte?: String;
-  price_gt?: String;
-  price_gte?: String;
-  price_contains?: String;
-  price_not_contains?: String;
-  price_starts_with?: String;
-  price_not_starts_with?: String;
-  price_ends_with?: String;
-  price_not_ends_with?: String;
-  description?: String;
-  description_not?: String;
-  description_in?: String[] | String;
-  description_not_in?: String[] | String;
-  description_lt?: String;
-  description_lte?: String;
-  description_gt?: String;
-  description_gte?: String;
-  description_contains?: String;
-  description_not_contains?: String;
-  description_starts_with?: String;
-  description_not_starts_with?: String;
-  description_ends_with?: String;
-  description_not_ends_with?: String;
-  varietal?: String;
-  varietal_not?: String;
-  varietal_in?: String[] | String;
-  varietal_not_in?: String[] | String;
-  varietal_lt?: String;
-  varietal_lte?: String;
-  varietal_gt?: String;
-  varietal_gte?: String;
-  varietal_contains?: String;
-  varietal_not_contains?: String;
-  varietal_starts_with?: String;
-  varietal_not_starts_with?: String;
-  varietal_ends_with?: String;
-  varietal_not_ends_with?: String;
-  AND?: ProductScalarWhereInput[] | ProductScalarWhereInput;
-  OR?: ProductScalarWhereInput[] | ProductScalarWhereInput;
-  NOT?: ProductScalarWhereInput[] | ProductScalarWhereInput;
-}
-
-export interface ProductUpsertWithWhereUniqueWithoutVendorInput {
-  where: ProductWhereUniqueInput;
-  update: ProductUpdateWithoutVendorDataInput;
-  create: ProductCreateWithoutVendorInput;
-}
-
-export interface ProductCreateManyWithoutCartsInput {
-  create?: ProductCreateWithoutCartsInput[] | ProductCreateWithoutCartsInput;
-  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput;
-}
-
-export interface ProductCreateInput {
-  name?: String;
-  price?: String;
-  description?: String;
-  varietal?: String;
-  vendor?: UserCreateOneWithoutProductsInput;
-  carts?: CartCreateManyWithoutItemsInput;
-  purchases?: InvoiceCreateManyWithoutItemsInput;
-}
-
-export interface InvoiceCreateWithoutVendorsInput {
-  items?: ProductCreateManyWithoutPurchasesInput;
-  amount?: String;
-  email: String;
-  record?: Json;
-  stripeRecord?: PaymentRecordCreateManyInput;
-  created?: Int;
-  stripePaymentId?: String;
-  stripeCustomerId?: String;
-  customer?: UserCreateOneWithoutPurchasesInput;
-}
-
-export interface ProductCreateWithoutVendorInput {
-  name?: String;
-  price?: String;
-  description?: String;
-  varietal?: String;
-  carts?: CartCreateManyWithoutItemsInput;
-  purchases?: InvoiceCreateManyWithoutItemsInput;
-}
-
-export interface InvoiceCreateWithoutCustomerInput {
-  items?: ProductCreateManyWithoutPurchasesInput;
-  amount?: String;
-  email: String;
-  record?: Json;
-  stripeRecord?: PaymentRecordCreateManyInput;
-  created?: Int;
-  stripePaymentId?: String;
-  stripeCustomerId?: String;
-  vendors?: UserCreateManyWithoutSalesInput;
+export interface UserCreateWithoutSalesInput {
+  dateCreated?: DateTimeInput;
+  role?: String;
+  permissions?: UserCreatepermissionsInput;
+  email?: String;
+  firstName?: String;
+  lastName?: String;
+  bizName?: String;
+  password?: String;
+  cart?: CartCreateOneWithoutUserInput;
+  stripeId?: String;
+  purchases?: InvoiceCreateManyWithoutCustomerInput;
+  products?: ProductCreateManyWithoutVendorInput;
 }
 
 export interface NodeNode {
@@ -2149,6 +2381,7 @@ export interface NodeNode {
 
 export interface UserPreviousValues {
   id: ID_Output;
+  dateCreated?: DateTimeOutput;
   role?: String;
   permissions: String[];
   email?: String;
@@ -2163,6 +2396,7 @@ export interface UserPreviousValuesPromise
   extends Promise<UserPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  dateCreated: () => Promise<DateTimeOutput>;
   role: () => Promise<String>;
   permissions: () => Promise<String[]>;
   email: () => Promise<String>;
@@ -2177,6 +2411,7 @@ export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
   role: () => Promise<AsyncIterator<String>>;
   permissions: () => Promise<AsyncIterator<String[]>>;
   email: () => Promise<AsyncIterator<String>>;
@@ -2189,6 +2424,7 @@ export interface UserPreviousValuesSubscription
 
 export interface User {
   id: ID_Output;
+  dateCreated?: DateTimeOutput;
   role?: String;
   permissions: String[];
   email?: String;
@@ -2201,6 +2437,7 @@ export interface User {
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
+  dateCreated: () => Promise<DateTimeOutput>;
   role: () => Promise<String>;
   permissions: () => Promise<String[]>;
   email: () => Promise<String>;
@@ -2249,6 +2486,7 @@ export interface UserSubscription
   extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
   role: () => Promise<AsyncIterator<String>>;
   permissions: () => Promise<AsyncIterator<String[]>>;
   email: () => Promise<AsyncIterator<String>>;
@@ -2295,6 +2533,7 @@ export interface UserSubscription
 
 export interface Product {
   id: ID_Output;
+  dateCreated?: DateTimeOutput;
   name?: String;
   price?: String;
   description?: String;
@@ -2303,6 +2542,7 @@ export interface Product {
 
 export interface ProductPromise extends Promise<Product>, Fragmentable {
   id: () => Promise<ID_Output>;
+  dateCreated: () => Promise<DateTimeOutput>;
   name: () => Promise<String>;
   price: () => Promise<String>;
   description: () => Promise<String>;
@@ -2336,6 +2576,7 @@ export interface ProductSubscription
   extends Promise<AsyncIterator<Product>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
   name: () => Promise<AsyncIterator<String>>;
   price: () => Promise<AsyncIterator<String>>;
   description: () => Promise<AsyncIterator<String>>;
@@ -2365,6 +2606,81 @@ export interface ProductSubscription
   ) => T;
 }
 
+export interface AggregateCart {
+  count: Int;
+}
+
+export interface AggregateCartPromise
+  extends Promise<AggregateCart>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCartSubscription
+  extends Promise<AsyncIterator<AggregateCart>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface PaymentRecordPreviousValues {
+  id: ID_Output;
+  dateCreated: DateTimeOutput;
+  amount: Int;
+  balanceTransaction: String;
+  created: Int;
+  currency: String;
+  stripeCustomerId: String;
+  stripePaymentId: String;
+  status: String;
+  data?: Json;
+}
+
+export interface PaymentRecordPreviousValuesPromise
+  extends Promise<PaymentRecordPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  dateCreated: () => Promise<DateTimeOutput>;
+  amount: () => Promise<Int>;
+  balanceTransaction: () => Promise<String>;
+  created: () => Promise<Int>;
+  currency: () => Promise<String>;
+  stripeCustomerId: () => Promise<String>;
+  stripePaymentId: () => Promise<String>;
+  status: () => Promise<String>;
+  data: () => Promise<Json>;
+}
+
+export interface PaymentRecordPreviousValuesSubscription
+  extends Promise<AsyncIterator<PaymentRecordPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  amount: () => Promise<AsyncIterator<Int>>;
+  balanceTransaction: () => Promise<AsyncIterator<String>>;
+  created: () => Promise<AsyncIterator<Int>>;
+  currency: () => Promise<AsyncIterator<String>>;
+  stripeCustomerId: () => Promise<AsyncIterator<String>>;
+  stripePaymentId: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<String>>;
+  data: () => Promise<AsyncIterator<Json>>;
+}
+
+export interface CartEdge {
+  cursor: String;
+}
+
+export interface CartEdgePromise extends Promise<CartEdge>, Fragmentable {
+  node: <T = CartPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CartEdgeSubscription
+  extends Promise<AsyncIterator<CartEdge>>,
+    Fragmentable {
+  node: <T = CartSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
 export interface PageInfo {
   hasNextPage: Boolean;
   hasPreviousPage: Boolean;
@@ -2388,571 +2704,9 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface CartConnection {}
-
-export interface CartConnectionPromise
-  extends Promise<CartConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<CartEdge>>() => T;
-  aggregate: <T = AggregateCartPromise>() => T;
-}
-
-export interface CartConnectionSubscription
-  extends Promise<AsyncIterator<CartConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<CartEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateCartSubscription>() => T;
-}
-
-export interface UserConnection {}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
-}
-
-export interface UserEdge {
-  cursor: String;
-}
-
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ProductSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface ProductSubscriptionPayloadPromise
-  extends Promise<ProductSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = ProductPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ProductPreviousValuesPromise>() => T;
-}
-
-export interface ProductSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ProductSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ProductSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ProductPreviousValuesSubscription>() => T;
-}
-
-export interface AggregateProduct {
-  count: Int;
-}
-
-export interface AggregateProductPromise
-  extends Promise<AggregateProduct>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateProductSubscription
-  extends Promise<AsyncIterator<AggregateProduct>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface ProductEdge {
-  cursor: String;
-}
-
-export interface ProductEdgePromise extends Promise<ProductEdge>, Fragmentable {
-  node: <T = ProductPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ProductEdgeSubscription
-  extends Promise<AsyncIterator<ProductEdge>>,
-    Fragmentable {
-  node: <T = ProductSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ProductConnection {}
-
-export interface ProductConnectionPromise
-  extends Promise<ProductConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ProductEdge>>() => T;
-  aggregate: <T = AggregateProductPromise>() => T;
-}
-
-export interface ProductConnectionSubscription
-  extends Promise<AsyncIterator<ProductConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ProductEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateProductSubscription>() => T;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface Cart {
-  id: ID_Output;
-  itemCount?: Int;
-  totalPrice?: String;
-}
-
-export interface CartPromise extends Promise<Cart>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  itemCount: () => Promise<Int>;
-  totalPrice: () => Promise<String>;
-  items: <T = FragmentableArray<Product>>(
-    args?: {
-      where?: ProductWhereInput;
-      orderBy?: ProductOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  user: <T = UserPromise>() => T;
-}
-
-export interface CartSubscription
-  extends Promise<AsyncIterator<Cart>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  itemCount: () => Promise<AsyncIterator<Int>>;
-  totalPrice: () => Promise<AsyncIterator<String>>;
-  items: <T = Promise<AsyncIterator<ProductSubscription>>>(
-    args?: {
-      where?: ProductWhereInput;
-      orderBy?: ProductOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  user: <T = UserSubscription>() => T;
-}
-
-export interface PaymentRecordEdge {
-  cursor: String;
-}
-
-export interface PaymentRecordEdgePromise
-  extends Promise<PaymentRecordEdge>,
-    Fragmentable {
-  node: <T = PaymentRecordPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface PaymentRecordEdgeSubscription
-  extends Promise<AsyncIterator<PaymentRecordEdge>>,
-    Fragmentable {
-  node: <T = PaymentRecordSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CartSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface CartSubscriptionPayloadPromise
-  extends Promise<CartSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = CartPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = CartPreviousValuesPromise>() => T;
-}
-
-export interface CartSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<CartSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = CartSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = CartPreviousValuesSubscription>() => T;
-}
-
-export interface AggregateInvoice {
-  count: Int;
-}
-
-export interface AggregateInvoicePromise
-  extends Promise<AggregateInvoice>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateInvoiceSubscription
-  extends Promise<AsyncIterator<AggregateInvoice>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface CartPreviousValues {
-  id: ID_Output;
-  itemCount?: Int;
-  totalPrice?: String;
-}
-
-export interface CartPreviousValuesPromise
-  extends Promise<CartPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  itemCount: () => Promise<Int>;
-  totalPrice: () => Promise<String>;
-}
-
-export interface CartPreviousValuesSubscription
-  extends Promise<AsyncIterator<CartPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  itemCount: () => Promise<AsyncIterator<Int>>;
-  totalPrice: () => Promise<AsyncIterator<String>>;
-}
-
-export interface InvoiceConnection {}
-
-export interface InvoiceConnectionPromise
-  extends Promise<InvoiceConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<InvoiceEdge>>() => T;
-  aggregate: <T = AggregateInvoicePromise>() => T;
-}
-
-export interface InvoiceConnectionSubscription
-  extends Promise<AsyncIterator<InvoiceConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<InvoiceEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateInvoiceSubscription>() => T;
-}
-
-export interface ProductPreviousValues {
-  id: ID_Output;
-  name?: String;
-  price?: String;
-  description?: String;
-  varietal?: String;
-}
-
-export interface ProductPreviousValuesPromise
-  extends Promise<ProductPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  price: () => Promise<String>;
-  description: () => Promise<String>;
-  varietal: () => Promise<String>;
-}
-
-export interface ProductPreviousValuesSubscription
-  extends Promise<AsyncIterator<ProductPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  price: () => Promise<AsyncIterator<String>>;
-  description: () => Promise<AsyncIterator<String>>;
-  varietal: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CartEdge {
-  cursor: String;
-}
-
-export interface CartEdgePromise extends Promise<CartEdge>, Fragmentable {
-  node: <T = CartPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CartEdgeSubscription
-  extends Promise<AsyncIterator<CartEdge>>,
-    Fragmentable {
-  node: <T = CartSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface InvoiceSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface InvoiceSubscriptionPayloadPromise
-  extends Promise<InvoiceSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = InvoicePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = InvoicePreviousValuesPromise>() => T;
-}
-
-export interface InvoiceSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<InvoiceSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = InvoiceSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = InvoicePreviousValuesSubscription>() => T;
-}
-
-export interface AggregatePaymentRecord {
-  count: Int;
-}
-
-export interface AggregatePaymentRecordPromise
-  extends Promise<AggregatePaymentRecord>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregatePaymentRecordSubscription
-  extends Promise<AsyncIterator<AggregatePaymentRecord>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface PaymentRecordConnection {}
-
-export interface PaymentRecordConnectionPromise
-  extends Promise<PaymentRecordConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<PaymentRecordEdge>>() => T;
-  aggregate: <T = AggregatePaymentRecordPromise>() => T;
-}
-
-export interface PaymentRecordConnectionSubscription
-  extends Promise<AsyncIterator<PaymentRecordConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<PaymentRecordEdgeSubscription>>>() => T;
-  aggregate: <T = AggregatePaymentRecordSubscription>() => T;
-}
-
-export interface PaymentRecordPreviousValues {
-  amount: Int;
-  balanceTransaction: String;
-  created: Int;
-  currency: String;
-  stripeCustomerId: String;
-  stripePaymentId: String;
-  status: String;
-}
-
-export interface PaymentRecordPreviousValuesPromise
-  extends Promise<PaymentRecordPreviousValues>,
-    Fragmentable {
-  amount: () => Promise<Int>;
-  balanceTransaction: () => Promise<String>;
-  created: () => Promise<Int>;
-  currency: () => Promise<String>;
-  stripeCustomerId: () => Promise<String>;
-  stripePaymentId: () => Promise<String>;
-  status: () => Promise<String>;
-}
-
-export interface PaymentRecordPreviousValuesSubscription
-  extends Promise<AsyncIterator<PaymentRecordPreviousValues>>,
-    Fragmentable {
-  amount: () => Promise<AsyncIterator<Int>>;
-  balanceTransaction: () => Promise<AsyncIterator<String>>;
-  created: () => Promise<AsyncIterator<Int>>;
-  currency: () => Promise<AsyncIterator<String>>;
-  stripeCustomerId: () => Promise<AsyncIterator<String>>;
-  stripePaymentId: () => Promise<AsyncIterator<String>>;
-  status: () => Promise<AsyncIterator<String>>;
-}
-
-export interface PaymentRecordSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface PaymentRecordSubscriptionPayloadPromise
-  extends Promise<PaymentRecordSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = PaymentRecordPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = PaymentRecordPreviousValuesPromise>() => T;
-}
-
-export interface PaymentRecordSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<PaymentRecordSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = PaymentRecordSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = PaymentRecordPreviousValuesSubscription>() => T;
-}
-
-export interface PaymentRecord {
-  amount: Int;
-  balanceTransaction: String;
-  created: Int;
-  currency: String;
-  stripeCustomerId: String;
-  stripePaymentId: String;
-  status: String;
-}
-
-export interface PaymentRecordPromise
-  extends Promise<PaymentRecord>,
-    Fragmentable {
-  amount: () => Promise<Int>;
-  balanceTransaction: () => Promise<String>;
-  created: () => Promise<Int>;
-  currency: () => Promise<String>;
-  stripeCustomerId: () => Promise<String>;
-  stripePaymentId: () => Promise<String>;
-  status: () => Promise<String>;
-}
-
-export interface PaymentRecordSubscription
-  extends Promise<AsyncIterator<PaymentRecord>>,
-    Fragmentable {
-  amount: () => Promise<AsyncIterator<Int>>;
-  balanceTransaction: () => Promise<AsyncIterator<String>>;
-  created: () => Promise<AsyncIterator<Int>>;
-  currency: () => Promise<AsyncIterator<String>>;
-  stripeCustomerId: () => Promise<AsyncIterator<String>>;
-  stripePaymentId: () => Promise<AsyncIterator<String>>;
-  status: () => Promise<AsyncIterator<String>>;
-}
-
-export interface InvoicePreviousValues {
-  id: ID_Output;
-  amount?: String;
-  email: String;
-  record?: Json;
-  created?: Int;
-  stripePaymentId?: String;
-  stripeCustomerId?: String;
-}
-
-export interface InvoicePreviousValuesPromise
-  extends Promise<InvoicePreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  amount: () => Promise<String>;
-  email: () => Promise<String>;
-  record: () => Promise<Json>;
-  created: () => Promise<Int>;
-  stripePaymentId: () => Promise<String>;
-  stripeCustomerId: () => Promise<String>;
-}
-
-export interface InvoicePreviousValuesSubscription
-  extends Promise<AsyncIterator<InvoicePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  amount: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
-  record: () => Promise<AsyncIterator<Json>>;
-  created: () => Promise<AsyncIterator<Int>>;
-  stripePaymentId: () => Promise<AsyncIterator<String>>;
-  stripeCustomerId: () => Promise<AsyncIterator<String>>;
-}
-
-export interface InvoiceEdge {
-  cursor: String;
-}
-
-export interface InvoiceEdgePromise extends Promise<InvoiceEdge>, Fragmentable {
-  node: <T = InvoicePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface InvoiceEdgeSubscription
-  extends Promise<AsyncIterator<InvoiceEdge>>,
-    Fragmentable {
-  node: <T = InvoiceSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface UserSubscriptionPayloadPromise
-  extends Promise<UserSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValuesPromise>() => T;
-}
-
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
-}
-
 export interface Invoice {
   id: ID_Output;
+  dateCreated?: DateTimeOutput;
   amount?: String;
   email: String;
   record?: Json;
@@ -2963,6 +2717,7 @@ export interface Invoice {
 
 export interface InvoicePromise extends Promise<Invoice>, Fragmentable {
   id: () => Promise<ID_Output>;
+  dateCreated: () => Promise<DateTimeOutput>;
   items: <T = FragmentableArray<Product>>(
     args?: {
       where?: ProductWhereInput;
@@ -3009,6 +2764,7 @@ export interface InvoiceSubscription
   extends Promise<AsyncIterator<Invoice>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
   items: <T = Promise<AsyncIterator<ProductSubscription>>>(
     args?: {
       where?: ProductWhereInput;
@@ -3051,33 +2807,544 @@ export interface InvoiceSubscription
   ) => T;
 }
 
-export interface AggregateCart {
+export interface UserConnection {}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface AggregateUser {
   count: Int;
 }
 
-export interface AggregateCartPromise
-  extends Promise<AggregateCart>,
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateCartSubscription
-  extends Promise<AsyncIterator<AggregateCart>>,
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number;
+export interface ProductEdge {
+  cursor: String;
+}
+
+export interface ProductEdgePromise extends Promise<ProductEdge>, Fragmentable {
+  node: <T = ProductPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ProductEdgeSubscription
+  extends Promise<AsyncIterator<ProductEdge>>,
+    Fragmentable {
+  node: <T = ProductSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CartConnection {}
+
+export interface CartConnectionPromise
+  extends Promise<CartConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CartEdge>>() => T;
+  aggregate: <T = AggregateCartPromise>() => T;
+}
+
+export interface CartConnectionSubscription
+  extends Promise<AsyncIterator<CartConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CartEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCartSubscription>() => T;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface ProductPreviousValues {
+  id: ID_Output;
+  dateCreated?: DateTimeOutput;
+  name?: String;
+  price?: String;
+  description?: String;
+  varietal?: String;
+}
+
+export interface ProductPreviousValuesPromise
+  extends Promise<ProductPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  dateCreated: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  price: () => Promise<String>;
+  description: () => Promise<String>;
+  varietal: () => Promise<String>;
+}
+
+export interface ProductPreviousValuesSubscription
+  extends Promise<AsyncIterator<ProductPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  price: () => Promise<AsyncIterator<String>>;
+  description: () => Promise<AsyncIterator<String>>;
+  varietal: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregatePaymentRecord {
+  count: Int;
+}
+
+export interface AggregatePaymentRecordPromise
+  extends Promise<AggregatePaymentRecord>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregatePaymentRecordSubscription
+  extends Promise<AsyncIterator<AggregatePaymentRecord>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface Cart {
+  id: ID_Output;
+  dateCreated?: DateTimeOutput;
+  itemCount?: Int;
+  totalPrice?: String;
+}
+
+export interface CartPromise extends Promise<Cart>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  dateCreated: () => Promise<DateTimeOutput>;
+  itemCount: () => Promise<Int>;
+  totalPrice: () => Promise<String>;
+  user: <T = UserPromise>() => T;
+  items: <T = FragmentableArray<Product>>(
+    args?: {
+      where?: ProductWhereInput;
+      orderBy?: ProductOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface CartSubscription
+  extends Promise<AsyncIterator<Cart>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  itemCount: () => Promise<AsyncIterator<Int>>;
+  totalPrice: () => Promise<AsyncIterator<String>>;
+  user: <T = UserSubscription>() => T;
+  items: <T = Promise<AsyncIterator<ProductSubscription>>>(
+    args?: {
+      where?: ProductWhereInput;
+      orderBy?: ProductOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface PaymentRecordConnection {}
+
+export interface PaymentRecordConnectionPromise
+  extends Promise<PaymentRecordConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<PaymentRecordEdge>>() => T;
+  aggregate: <T = AggregatePaymentRecordPromise>() => T;
+}
+
+export interface PaymentRecordConnectionSubscription
+  extends Promise<AsyncIterator<PaymentRecordConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<PaymentRecordEdgeSubscription>>>() => T;
+  aggregate: <T = AggregatePaymentRecordSubscription>() => T;
+}
+
+export interface CartSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface CartSubscriptionPayloadPromise
+  extends Promise<CartSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = CartPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = CartPreviousValuesPromise>() => T;
+}
+
+export interface CartSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CartSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = CartSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = CartPreviousValuesSubscription>() => T;
+}
+
+export interface InvoiceEdge {
+  cursor: String;
+}
+
+export interface InvoiceEdgePromise extends Promise<InvoiceEdge>, Fragmentable {
+  node: <T = InvoicePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface InvoiceEdgeSubscription
+  extends Promise<AsyncIterator<InvoiceEdge>>,
+    Fragmentable {
+  node: <T = InvoiceSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CartPreviousValues {
+  id: ID_Output;
+  dateCreated?: DateTimeOutput;
+  itemCount?: Int;
+  totalPrice?: String;
+}
+
+export interface CartPreviousValuesPromise
+  extends Promise<CartPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  dateCreated: () => Promise<DateTimeOutput>;
+  itemCount: () => Promise<Int>;
+  totalPrice: () => Promise<String>;
+}
+
+export interface CartPreviousValuesSubscription
+  extends Promise<AsyncIterator<CartPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  itemCount: () => Promise<AsyncIterator<Int>>;
+  totalPrice: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserEdge {
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PaymentRecord {
+  id: ID_Output;
+  dateCreated: DateTimeOutput;
+  amount: Int;
+  balanceTransaction: String;
+  created: Int;
+  currency: String;
+  stripeCustomerId: String;
+  stripePaymentId: String;
+  status: String;
+  data?: Json;
+}
+
+export interface PaymentRecordPromise
+  extends Promise<PaymentRecord>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  dateCreated: () => Promise<DateTimeOutput>;
+  amount: () => Promise<Int>;
+  balanceTransaction: () => Promise<String>;
+  created: () => Promise<Int>;
+  currency: () => Promise<String>;
+  stripeCustomerId: () => Promise<String>;
+  stripePaymentId: () => Promise<String>;
+  status: () => Promise<String>;
+  data: () => Promise<Json>;
+}
+
+export interface PaymentRecordSubscription
+  extends Promise<AsyncIterator<PaymentRecord>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  amount: () => Promise<AsyncIterator<Int>>;
+  balanceTransaction: () => Promise<AsyncIterator<String>>;
+  created: () => Promise<AsyncIterator<Int>>;
+  currency: () => Promise<AsyncIterator<String>>;
+  stripeCustomerId: () => Promise<AsyncIterator<String>>;
+  stripePaymentId: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<String>>;
+  data: () => Promise<AsyncIterator<Json>>;
+}
+
+export interface ProductConnection {}
+
+export interface ProductConnectionPromise
+  extends Promise<ProductConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ProductEdge>>() => T;
+  aggregate: <T = AggregateProductPromise>() => T;
+}
+
+export interface ProductConnectionSubscription
+  extends Promise<AsyncIterator<ProductConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ProductEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateProductSubscription>() => T;
+}
+
+export interface PaymentRecordEdge {
+  cursor: String;
+}
+
+export interface PaymentRecordEdgePromise
+  extends Promise<PaymentRecordEdge>,
+    Fragmentable {
+  node: <T = PaymentRecordPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface PaymentRecordEdgeSubscription
+  extends Promise<AsyncIterator<PaymentRecordEdge>>,
+    Fragmentable {
+  node: <T = PaymentRecordSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PaymentRecordSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface PaymentRecordSubscriptionPayloadPromise
+  extends Promise<PaymentRecordSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = PaymentRecordPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = PaymentRecordPreviousValuesPromise>() => T;
+}
+
+export interface PaymentRecordSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<PaymentRecordSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = PaymentRecordSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = PaymentRecordPreviousValuesSubscription>() => T;
+}
+
+export interface ProductSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface ProductSubscriptionPayloadPromise
+  extends Promise<ProductSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ProductPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ProductPreviousValuesPromise>() => T;
+}
+
+export interface ProductSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ProductSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ProductSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ProductPreviousValuesSubscription>() => T;
+}
+
+export interface InvoicePreviousValues {
+  id: ID_Output;
+  dateCreated?: DateTimeOutput;
+  amount?: String;
+  email: String;
+  record?: Json;
+  created?: Int;
+  stripePaymentId?: String;
+  stripeCustomerId?: String;
+}
+
+export interface InvoicePreviousValuesPromise
+  extends Promise<InvoicePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  dateCreated: () => Promise<DateTimeOutput>;
+  amount: () => Promise<String>;
+  email: () => Promise<String>;
+  record: () => Promise<Json>;
+  created: () => Promise<Int>;
+  stripePaymentId: () => Promise<String>;
+  stripeCustomerId: () => Promise<String>;
+}
+
+export interface InvoicePreviousValuesSubscription
+  extends Promise<AsyncIterator<InvoicePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  amount: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  record: () => Promise<AsyncIterator<Json>>;
+  created: () => Promise<AsyncIterator<Int>>;
+  stripePaymentId: () => Promise<AsyncIterator<String>>;
+  stripeCustomerId: () => Promise<AsyncIterator<String>>;
+}
+
+export interface InvoiceSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface InvoiceSubscriptionPayloadPromise
+  extends Promise<InvoiceSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = InvoicePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = InvoicePreviousValuesPromise>() => T;
+}
+
+export interface InvoiceSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<InvoiceSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = InvoiceSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = InvoicePreviousValuesSubscription>() => T;
+}
+
+export interface AggregateInvoice {
+  count: Int;
+}
+
+export interface AggregateInvoicePromise
+  extends Promise<AggregateInvoice>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateInvoiceSubscription
+  extends Promise<AsyncIterator<AggregateInvoice>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateProduct {
+  count: Int;
+}
+
+export interface AggregateProductPromise
+  extends Promise<AggregateProduct>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateProductSubscription
+  extends Promise<AsyncIterator<AggregateProduct>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface InvoiceConnection {}
+
+export interface InvoiceConnectionPromise
+  extends Promise<InvoiceConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<InvoiceEdge>>() => T;
+  aggregate: <T = AggregateInvoicePromise>() => T;
+}
+
+export interface InvoiceConnectionSubscription
+  extends Promise<AsyncIterator<InvoiceConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<InvoiceEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateInvoiceSubscription>() => T;
+}
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
-
-export type Long = string;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -3085,10 +3352,27 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 export type ID_Input = string | number;
 export type ID_Output = string;
 
+export type Long = string;
+
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
+
+/*
+DateTime scalar input type, allowing Date
+*/
+export type DateTimeInput = Date | string;
+
+/*
+DateTime scalar output type, which is always a string
+*/
+export type DateTimeOutput = string;
+
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number;
 
 export type Json = any;
 

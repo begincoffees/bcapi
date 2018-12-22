@@ -1,6 +1,6 @@
 type User {
   id: ID! @unique
-  dateCreated: Date
+  dateCreated: DateTime
   role: String
   permissions: [String!]!
   email: String @unique
@@ -17,7 +17,7 @@ type User {
 
 type Cart {
   id: ID! @unique
-  dateCreated: Date
+  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   user: User! @unique
@@ -26,7 +26,7 @@ type Cart {
 
 type Invoice {
   id: ID! @unique
-  dateCreated: Date
+  dateCreated: DateTime
   items: [Product!]! @relation(name: "INVOICE_ITEMS")
   amount: String
   email: String!
@@ -40,8 +40,8 @@ type Invoice {
 }
 
 type PaymentRecord {
-  id: ID!
-  dateCreated: Date!
+  id: ID! @unique
+  dateCreated: DateTime!
   amount: Int!
   balanceTransaction: String!
   created: Int!
@@ -54,7 +54,7 @@ type PaymentRecord {
 
 type Product {
   id: ID! @unique
-  dateCreated: Date
+  dateCreated: DateTime
   name: String
   price: String
   description: String
