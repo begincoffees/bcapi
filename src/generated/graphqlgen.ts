@@ -120,7 +120,7 @@ export namespace QueryResolvers {
     args: ArgsCart,
     ctx: Context,
     info: GraphQLResolveInfo
-  ) => Cart | Promise<Cart>;
+  ) => Cart | null | Promise<Cart | null>;
 
   export type FeedResolver = (
     parent: undefined,
@@ -142,7 +142,7 @@ export namespace QueryResolvers {
       args: ArgsCart,
       ctx: Context,
       info: GraphQLResolveInfo
-    ) => Cart | Promise<Cart>;
+    ) => Cart | null | Promise<Cart | null>;
 
     feed: (
       parent: undefined,
@@ -160,52 +160,19 @@ export namespace ViewerResolvers {
     id: string | null;
   }
 
-  export interface ArgsPurchases {
-    id: string | null;
-  }
-
-  export interface ArgsSales {
-    id: number | null;
-  }
-
-  export interface ArgsProducts {
-    id: number | null;
-  }
-
   export type MeResolver = (
     parent: Viewer,
     args: {},
     ctx: Context,
     info: GraphQLResolveInfo
-  ) => User | Promise<User>;
+  ) => User | null | Promise<User | null>;
 
   export type CartResolver = (
     parent: Viewer,
     args: ArgsCart,
     ctx: Context,
     info: GraphQLResolveInfo
-  ) => Cart | Promise<Cart>;
-
-  export type PurchasesResolver = (
-    parent: Viewer,
-    args: ArgsPurchases,
-    ctx: Context,
-    info: GraphQLResolveInfo
-  ) => Invoice[] | Promise<Invoice[]>;
-
-  export type SalesResolver = (
-    parent: Viewer,
-    args: ArgsSales,
-    ctx: Context,
-    info: GraphQLResolveInfo
-  ) => Invoice[] | Promise<Invoice[]>;
-
-  export type ProductsResolver = (
-    parent: Viewer,
-    args: ArgsProducts,
-    ctx: Context,
-    info: GraphQLResolveInfo
-  ) => Product[] | Promise<Product[]>;
+  ) => Cart | null | Promise<Cart | null>;
 
   export interface Type {
     me: (
@@ -213,35 +180,14 @@ export namespace ViewerResolvers {
       args: {},
       ctx: Context,
       info: GraphQLResolveInfo
-    ) => User | Promise<User>;
+    ) => User | null | Promise<User | null>;
 
     cart: (
       parent: Viewer,
       args: ArgsCart,
       ctx: Context,
       info: GraphQLResolveInfo
-    ) => Cart | Promise<Cart>;
-
-    purchases: (
-      parent: Viewer,
-      args: ArgsPurchases,
-      ctx: Context,
-      info: GraphQLResolveInfo
-    ) => Invoice[] | Promise<Invoice[]>;
-
-    sales: (
-      parent: Viewer,
-      args: ArgsSales,
-      ctx: Context,
-      info: GraphQLResolveInfo
-    ) => Invoice[] | Promise<Invoice[]>;
-
-    products: (
-      parent: Viewer,
-      args: ArgsProducts,
-      ctx: Context,
-      info: GraphQLResolveInfo
-    ) => Product[] | Promise<Product[]>;
+    ) => Cart | null | Promise<Cart | null>;
   }
 }
 
@@ -3392,26 +3338,21 @@ export namespace MutationResolvers {
 }
 
 export namespace AuthPayloadResolvers {
-  export const defaultResolvers = {
-    token: (parent: AuthPayload) =>
-      parent.token === undefined ? null : parent.token,
-    user: (parent: AuthPayload) =>
-      parent.user === undefined ? null : parent.user
-  };
+  export const defaultResolvers = {};
 
   export type TokenResolver = (
     parent: AuthPayload,
     args: {},
     ctx: Context,
     info: GraphQLResolveInfo
-  ) => string | null | Promise<string | null>;
+  ) => string | Promise<string>;
 
   export type UserResolver = (
     parent: AuthPayload,
     args: {},
     ctx: Context,
     info: GraphQLResolveInfo
-  ) => User | null | Promise<User | null>;
+  ) => User | Promise<User>;
 
   export interface Type {
     token: (
@@ -3419,14 +3360,14 @@ export namespace AuthPayloadResolvers {
       args: {},
       ctx: Context,
       info: GraphQLResolveInfo
-    ) => string | null | Promise<string | null>;
+    ) => string | Promise<string>;
 
     user: (
       parent: AuthPayload,
       args: {},
       ctx: Context,
       info: GraphQLResolveInfo
-    ) => User | null | Promise<User | null>;
+    ) => User | Promise<User>;
   }
 }
 

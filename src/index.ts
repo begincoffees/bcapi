@@ -1,25 +1,27 @@
 import { GraphQLServer } from 'graphql-yoga'
-import { makeExecutableSchema } from '../node_modules/graphql-tools';
+import { makeExecutableSchema } from 'graphql-tools';
 import { Prisma } from './generated/prisma-client/'
-import { typeDefs} from './generated/prisma-client/prisma-schema';
+import { typeDefs } from './generated/prisma-client/prisma-schema';
 import { resolvers } from './resolvers';
 import * as Stripe from 'stripe';
-
 
 const schema = makeExecutableSchema({typeDefs})
 
 const withDB = (req) => ({
   ...req,
+  
   headers: {
     ...req.headers,
     Authorization: `Bearer ${process.env.PRISMA_TOKEN}`
   },
+  
   db: new Prisma({
     schema,
     resolvers,
     endpoint: process.env.PRISMA_ENDPOINT,
     secret: process.env.PRISMA_SECRET || 'bigboi',
   } as any),
+
   stripe: new Stripe(process.env.STRIPE_SECRET)
 })
 

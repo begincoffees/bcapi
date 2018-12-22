@@ -21,7 +21,7 @@ export const Viewer: ViewerResolvers.Type = {
     const id = getUserId(context)
     if(id){
       const me = await context.db.user({id})
-      return me as any
+      return me
     }
   },
   cart: async (parent, args, context: Context)=> {
@@ -34,7 +34,4 @@ export const Viewer: ViewerResolvers.Type = {
       console.log('Viewer.cart error')
     }
   },
-  purchases: (parent, args, context) => [],
-  sales: (parent, args, context) => [],
-  products: (parent, args, context) => [],
 };

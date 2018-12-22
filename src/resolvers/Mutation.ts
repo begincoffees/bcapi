@@ -95,7 +95,11 @@ export const Mutation: MutationResolvers.Type = {
           
         })
         
-        const token = jwt.sign({ userId: vendor.id }, process.env.APP_SECRET, {expiresIn: '1y'})
+        const token = jwt.sign(
+          { userId: vendor.id }, 
+          process.env.APP_SECRET, 
+          {expiresIn: '1y'}
+        )
 
         return {
           token,
@@ -116,18 +120,15 @@ export const Mutation: MutationResolvers.Type = {
       if(!user){
         throw new Error('check your email')
       }
-
-      /** 
-       * TODO:
-       * compare the password hash against the provided 
-       */
-
-      if(user){
+      
+      /** compare the password against the saved hash */
+      const isValid = await bcrypt.compare(password, user.password);
+      if(isValid){
         const session = { 
           userId: user.id, 
-          role: user.role, 
-          permissions: user.permissions, 
         }
+
+        /** return the token and user data */
         const token = jwt.sign({...session},process.env.APP_SECRET)
   
         const res = {
@@ -145,6 +146,7 @@ export const Mutation: MutationResolvers.Type = {
   },
   checkout: async (_parent, _args: any, context: Context, _info) => {
     let stripePayment
+    
     try {
       const id = getUserId(context)
       const stripeId = _args.stripeId
