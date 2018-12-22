@@ -12,7 +12,6 @@ export const Mutation: MutationResolvers.Type = {
   ...MutationResolvers.defaultResolvers,
   customerSignup: async (_parent, {..._args}, context: any, _info) => {
     try {
-
       const stripeId = await context.stripe.customers.create({
         email: _args.email,
       }).then((customer) => {
@@ -44,7 +43,12 @@ export const Mutation: MutationResolvers.Type = {
           }
         })
       
-        const token = jwt.sign({ userId: customer.id }, process.env.APP_SECRET, {expiresIn: '1y'})
+        const token = jwt.sign(
+          { userId: customer.id }, 
+          process.env.APP_SECRET, 
+          {expiresIn: '1y'}
+        )
+
         return {
           token: token,
           user: customer as UserParent
@@ -106,21 +110,34 @@ export const Mutation: MutationResolvers.Type = {
   },
   login: async (_parent, {email, password}, context: Context, _info) => {
     try {
+
+      /** check the db for the email */
       const user = await context.db.user({email}).then(res => res)
-      
-
-      const session = { 
-        userId: user.id, 
-        role: user.role, 
-        permissions: user.permissions, 
+      if(!user){
+        throw new Error('check your email')
       }
-      const token = jwt.sign({...session},process.env.APP_SECRET)
 
-      const res = {
-        token,
-        user
+      /** 
+       * TODO:
+       * compare the password hash against the provided 
+       */
+
+      if(user){
+        const session = { 
+          userId: user.id, 
+          role: user.role, 
+          permissions: user.permissions, 
+        }
+        const token = jwt.sign({...session},process.env.APP_SECRET)
+  
+        const res = {
+          token,
+          user
+        }
+        return {...res}
       }
-      return {...res}
+  
+
     } catch(err) {
       console.log(err.message)
       throw new Error("I'm having completing your log in. Would you mind trying again?")
@@ -130,24 +147,25 @@ export const Mutation: MutationResolvers.Type = {
     let stripePayment
     try {
       const id = getUserId(context)
+      const stripeId = _args.stripeId
+
+      /** user checkout */
+      if(id && stripeId){
+        stripePayment = await createUserInvoice(
+          context.stripe,
+          _args.stripeId, 
+          _args.amount
+        )
+      } 
 
       /**  guest checkout */
-      if(!id){
+      else {
         stripePayment = await createGuestInvoice(
           context.stripe,
           _args.email, 
           _args.amount
         )
       }
-      
-      /** user checkout */
-      if(id && _args.stripeId){
-        stripePayment = await createUserInvoice(
-          context.stripe,
-          _args.stripeId, 
-          _args.amount
-        )
-  } 
 
       /**
        * save the payment data to db
@@ -157,7 +175,7 @@ export const Mutation: MutationResolvers.Type = {
         email: _args.email,
         created: stripePayment.created,
         stripePaymentId: stripePayment.id,
-        stripeCustomerId: stripePayment.customer,
+        stripeCustomerId: stripeId || stripePayment.customer,
         vendors:{connect: [..._args.vendors]},
         customer: id ? {connect: {id}} : null,
         items: {connect: [..._args.items]}
