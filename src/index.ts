@@ -19,7 +19,7 @@ const withDB = (req) => ({
     schema,
     resolvers,
     endpoint: process.env.PRISMA_ENDPOINT,
-    secret: process.env.PRISMA_SECRET || 'bigboi',
+    secret: process.env.PRISMA_SECRET
   } as any),
 
   stripe: new Stripe(process.env.STRIPE_SECRET)

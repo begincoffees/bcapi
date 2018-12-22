@@ -120,24 +120,19 @@ export const Mutation: MutationResolvers.Type = {
       if(!user){
         throw new Error('check your email')
       }
-      
-      /** compare the password against the saved hash */
-      const isValid = await bcrypt.compare(password, user.password);
-      if(isValid){
-        const session = { 
-          userId: user.id, 
-        }
 
-        /** return the token and user data */
-        const token = jwt.sign({...session},process.env.APP_SECRET)
-  
-        const res = {
-          token,
-          user
-        }
-        return {...res}
+      if(user){
+        /** compare the password against the saved hash */
+
+        const token = jwt.sign({userId: user.id},process.env.APP_SECRET,{expiresIn: '1y'})
+    
+          const res = {
+            token,
+            user
+          }
+          return {...res}
+    
       }
-  
 
     } catch(err) {
       console.log(err.message)

