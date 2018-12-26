@@ -21,10 +21,14 @@ export const Product: ProductResolvers.Type = {
   varietal: parent => parent.varietal,
   vendor: async (parent, args, context: Context, info) => {
     try { 
-      const user = await context.db
-        .users({where: {
-          products_some: {id: parent.id}
-        }}).then(res => res[0])
+      const user = await context.db.users({
+        where: {
+          products_some: {
+            id: parent.id
+          }
+        }
+      })
+      .then(res => res[0])
 
       return user as any
     }catch(err) {

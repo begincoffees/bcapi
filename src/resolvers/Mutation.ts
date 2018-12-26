@@ -185,7 +185,7 @@ export const Mutation: MutationResolvers.Type = {
       throw new Error('error checkout')
     }
   },
-  createNewProduct: async (_parent, _args, context: any, _info) => {
+  createNewProduct: async (_parent, _args, context: Context, _info) => {
     try {
       const id = getUserId(context)
       await context.db.createProduct({
@@ -194,7 +194,6 @@ export const Mutation: MutationResolvers.Type = {
         varietal: _args.varietal,
         price: _args.price,
         vendor: {connect: {id}}
-        
       })
       return {success: true}
     } catch {

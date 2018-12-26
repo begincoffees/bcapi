@@ -26,7 +26,7 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload!
   checkout(items: [ProductWhereInput], amount: String, email: String, vendors: [UserWhereInput], token: String!, stripeId: String): MutationResult!
   createNewInvoice(items: [ProductWhereInput], amount: String, email: String, vendors: [UserWhereInput]): MutationResult!
-  createNewProduct(name: String!, price: String!, description: String!, imageUrl: String, varietal: String!, vendor: String!): MutationResult!
+  createNewProduct(name: String!, price: String!, description: String!, imageUrl: String, varietal: String!): MutationResult!
 }
 
 

@@ -10,9 +10,10 @@ type User {
   password: String
   cart: Cart @unique
   stripeId: String @unique
-  purchases: [Invoice!]! @relation(name: "CUSTOMER")
   products: [Product!]!
+  purchases: [Invoice!]! @relation(name: "CUSTOMER")
   sales: [Invoice!]! @relation(name: "VENDOR")
+  shippingAddresses: [ShippingAddress!]!
 }
 
 type Cart {
@@ -62,4 +63,15 @@ type Product {
   vendor: User @unique
   carts: [Cart!]! @relation(name: "CART_ITEMS")
   purchases: [Invoice!]! @relation(name: "INVOICE_ITEMS")
+}
+
+type ShippingAddress {
+  id: ID! @unique
+  dateCreated: DateTime!
+  recipient: String!
+  street: String!
+  city: String!
+  state: String!
+  zip: String!
+  user: User! @unique
 }
