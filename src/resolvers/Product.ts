@@ -19,6 +19,7 @@ export const Product: ProductResolvers.Type = {
   price: parent => parent.price,
   description: parent => parent.description,
   varietal: parent => parent.varietal,
+  dateCreated: parent => parent.dateCreated,
   vendor: async (parent, args, context: Context, info) => {
     try { 
       const user = await context.db.users({

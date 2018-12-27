@@ -13,6 +13,7 @@ import { PaymentRecord } from "./PaymentRecord";
 import { Mutation } from "./Mutation";
 import { AuthPayload } from "./AuthPayload";
 import { MutationResult } from "./MutationResult";
+import { ShippingAddress } from "./ShippingAddress";
 
 export const resolvers: Resolvers = {
   Query,
@@ -24,5 +25,6 @@ export const resolvers: Resolvers = {
   PaymentRecord,
   Mutation,
   AuthPayload,
-  MutationResult
+  MutationResult,
+  ShippingAddress
 };

@@ -87,4 +87,5 @@ export const User: UserResolvers.Type = {
       return []
     }
   },
+  shippingAddresses: () => null
 };

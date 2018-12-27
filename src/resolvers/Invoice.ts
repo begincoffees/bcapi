@@ -41,5 +41,6 @@ export const Invoice: InvoiceResolvers.Type = {
   stripePaymentId: parent => parent.stripePaymentId,
   stripeCustomerId: parent => parent.stripeCustomerId,
   customer: (parent, args) => null,
-  vendors: (parent, args) => null
+  vendors: (parent, args) => null,
+  shippingAddress: () => null
 };

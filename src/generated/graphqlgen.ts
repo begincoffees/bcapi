@@ -5150,7 +5150,8 @@ export namespace MutationResolvers {
 
 export namespace AuthPayloadResolvers {
   export const defaultResolvers = {
-    token: (parent: AuthPayload) => parent.token
+    token: (parent: AuthPayload) => parent.token,
+    user: (parent: AuthPayload) => parent.user
   };
 
   export type TokenResolver = (

@@ -1,68 +1,13 @@
 version: '3'
 services:
-  web:
-    container_name: nginx
-    image: nginx:1.13.12-alpine
-    restart: always
-    networks: 
-      - bcapp
-    build:
-      context: ./bcclient
-      dockerfile: ./Dockerfile
-    ports:
-      - "80:80"
-    volumes:
-      - .:/usr/app/bcclient
-      - /usr/share/nginx/html/
   server:
     container_name: bcapi
-    build: .
     command: npm start
     restart: always
-    networks: 
-      - bcapp
-    build:
-      context: ./bcapi
-      dockerfile: ./Dockerfile
+    build: .
     ports:
       - "6006:6006"
     volumes:
-      - .:/usr/app/bcapi
-      - /usr/app/server
-  prisma:
-    image: prismagraphql/prisma:1.17.1
-    restart: always
-    networks: 
-      - bcapp
-    ports:
-    - "4466:4466"
-    environment:
-      PRISMA_CONFIG: |
-        port: 4466
-          managementApiSecret: 'bigboi'
-          databases:
-            default:
-              connector: postgres
-              host: postgres
-              port: 5432
-              user: prisma
-              password: prisma
-              migrations: true
-  postgres:
-    image: postgres
-    restart: always
-    networks: 
-      - bcapp
-    environment:
-      POSTGRES_USER: prisma
-      POSTGRES_PASSWORD: prisma
-    volumes:
-      - postgres:/var/lib/postgresql/data      
+      - .:/usr/app/    
 volumes:
-  web:
-  postgres:
-  prisma:
   server:
-networks:
-  bcapp:
-    external: true

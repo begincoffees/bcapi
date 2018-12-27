@@ -33,7 +33,7 @@ export const Query: QueryResolvers.Type = {
   feed: async (parent, args, context: Context, info) => {
     try {
       const products = await context.db.products({first: 50}).then(res => res)
-      return products as any
+      return products || []
 
     }catch(err) {
       console.debug('trouble getting feed', err.message)
