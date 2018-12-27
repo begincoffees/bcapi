@@ -36,6 +36,8 @@ type Invoice {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
+  shippingAddress: ShippingAddress
+  status: String
   customer: User @relation(name: "CUSTOMER")
   vendors: [User!]! @relation(name: "VENDOR")
 }

@@ -8,6 +8,7 @@ import {
   Product,
   Invoice,
   PaymentRecord,
+  ShippingAddress,
   AuthPayload,
   MutationResult
 } from "./prisma-client";
@@ -16,6 +17,8 @@ type Context = any;
 type ProductOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "dateCreated_ASC"
+  | "dateCreated_DESC"
   | "name_ASC"
   | "name_DESC"
   | "price_ASC"
@@ -31,6 +34,8 @@ type ProductOrderByInput =
 type CartOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "dateCreated_ASC"
+  | "dateCreated_DESC"
   | "itemCount_ASC"
   | "itemCount_DESC"
   | "totalPrice_ASC"
@@ -42,6 +47,8 @@ type CartOrderByInput =
 type InvoiceOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "dateCreated_ASC"
+  | "dateCreated_DESC"
   | "amount_ASC"
   | "amount_DESC"
   | "email_ASC"
@@ -54,11 +61,17 @@ type InvoiceOrderByInput =
   | "stripePaymentId_DESC"
   | "stripeCustomerId_ASC"
   | "stripeCustomerId_DESC"
+  | "status_ASC"
+  | "status_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC";
 type PaymentRecordOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "dateCreated_ASC"
+  | "dateCreated_DESC"
   | "amount_ASC"
   | "amount_DESC"
   | "balanceTransaction_ASC"
@@ -73,8 +86,8 @@ type PaymentRecordOrderByInput =
   | "stripePaymentId_DESC"
   | "status_ASC"
   | "status_DESC"
-  | "id_ASC"
-  | "id_DESC"
+  | "data_ASC"
+  | "data_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
   | "createdAt_ASC"
@@ -82,6 +95,8 @@ type PaymentRecordOrderByInput =
 type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "dateCreated_ASC"
+  | "dateCreated_DESC"
   | "role_ASC"
   | "role_DESC"
   | "email_ASC"
@@ -96,6 +111,25 @@ type UserOrderByInput =
   | "password_DESC"
   | "stripeId_ASC"
   | "stripeId_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
+type ShippingAddressOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "dateCreated_ASC"
+  | "dateCreated_DESC"
+  | "recipient_ASC"
+  | "recipient_DESC"
+  | "street_ASC"
+  | "street_DESC"
+  | "city_ASC"
+  | "city_DESC"
+  | "state_ASC"
+  | "state_DESC"
+  | "zip_ASC"
+  | "zip_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
   | "createdAt_ASC"
@@ -194,6 +228,8 @@ export namespace ViewerResolvers {
 export namespace UserResolvers {
   export const defaultResolvers = {
     id: (parent: User) => parent.id,
+    dateCreated: (parent: User) =>
+      parent.dateCreated === undefined ? null : parent.dateCreated,
     role: (parent: User) => (parent.role === undefined ? null : parent.role),
     permissions: (parent: User) => parent.permissions,
     email: (parent: User) => (parent.email === undefined ? null : parent.email),
@@ -227,6 +263,14 @@ export namespace UserResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     itemCount: number | null;
     itemCount_not: number | null;
     itemCount_in: number[];
@@ -249,92 +293,10 @@ export namespace UserResolvers {
     totalPrice_not_starts_with: string | null;
     totalPrice_ends_with: string | null;
     totalPrice_not_ends_with: string | null;
+    user: UserWhereInput | null;
     items_every: ProductWhereInput | null;
     items_some: ProductWhereInput | null;
     items_none: ProductWhereInput | null;
-    user: UserWhereInput | null;
-  }
-  export interface ProductWhereInput {
-    AND: ProductWhereInput[];
-    OR: ProductWhereInput[];
-    NOT: ProductWhereInput[];
-    id: string | null;
-    id_not: string | null;
-    id_in: string[];
-    id_not_in: string[];
-    id_lt: string | null;
-    id_lte: string | null;
-    id_gt: string | null;
-    id_gte: string | null;
-    id_contains: string | null;
-    id_not_contains: string | null;
-    id_starts_with: string | null;
-    id_not_starts_with: string | null;
-    id_ends_with: string | null;
-    id_not_ends_with: string | null;
-    name: string | null;
-    name_not: string | null;
-    name_in: string[];
-    name_not_in: string[];
-    name_lt: string | null;
-    name_lte: string | null;
-    name_gt: string | null;
-    name_gte: string | null;
-    name_contains: string | null;
-    name_not_contains: string | null;
-    name_starts_with: string | null;
-    name_not_starts_with: string | null;
-    name_ends_with: string | null;
-    name_not_ends_with: string | null;
-    price: string | null;
-    price_not: string | null;
-    price_in: string[];
-    price_not_in: string[];
-    price_lt: string | null;
-    price_lte: string | null;
-    price_gt: string | null;
-    price_gte: string | null;
-    price_contains: string | null;
-    price_not_contains: string | null;
-    price_starts_with: string | null;
-    price_not_starts_with: string | null;
-    price_ends_with: string | null;
-    price_not_ends_with: string | null;
-    description: string | null;
-    description_not: string | null;
-    description_in: string[];
-    description_not_in: string[];
-    description_lt: string | null;
-    description_lte: string | null;
-    description_gt: string | null;
-    description_gte: string | null;
-    description_contains: string | null;
-    description_not_contains: string | null;
-    description_starts_with: string | null;
-    description_not_starts_with: string | null;
-    description_ends_with: string | null;
-    description_not_ends_with: string | null;
-    varietal: string | null;
-    varietal_not: string | null;
-    varietal_in: string[];
-    varietal_not_in: string[];
-    varietal_lt: string | null;
-    varietal_lte: string | null;
-    varietal_gt: string | null;
-    varietal_gte: string | null;
-    varietal_contains: string | null;
-    varietal_not_contains: string | null;
-    varietal_starts_with: string | null;
-    varietal_not_starts_with: string | null;
-    varietal_ends_with: string | null;
-    varietal_not_ends_with: string | null;
-    vendor: UserWhereInput | null;
-    carts_every: CartWhereInput | null;
-    carts_some: CartWhereInput | null;
-    carts_none: CartWhereInput | null;
-    purchases_every: InvoiceWhereInput | null;
-    purchases_some: InvoiceWhereInput | null;
-    purchases_none: InvoiceWhereInput | null;
   }
   export interface UserWhereInput {
     AND: UserWhereInput[];
@@ -354,6 +316,14 @@ export namespace UserResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     role: string | null;
     role_not: string | null;
     role_in: string[];
@@ -453,15 +423,108 @@ export namespace UserResolvers {
     stripeId_ends_with: string | null;
     stripeId_not_ends_with: string | null;
     cart: CartWhereInput | null;
-    purchases_every: InvoiceWhereInput | null;
-    purchases_some: InvoiceWhereInput | null;
-    purchases_none: InvoiceWhereInput | null;
     products_every: ProductWhereInput | null;
     products_some: ProductWhereInput | null;
     products_none: ProductWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
     sales_every: InvoiceWhereInput | null;
     sales_some: InvoiceWhereInput | null;
     sales_none: InvoiceWhereInput | null;
+    shippingAddresses_every: ShippingAddressWhereInput | null;
+    shippingAddresses_some: ShippingAddressWhereInput | null;
+    shippingAddresses_none: ShippingAddressWhereInput | null;
+  }
+  export interface ProductWhereInput {
+    AND: ProductWhereInput[];
+    OR: ProductWhereInput[];
+    NOT: ProductWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    name: string | null;
+    name_not: string | null;
+    name_in: string[];
+    name_not_in: string[];
+    name_lt: string | null;
+    name_lte: string | null;
+    name_gt: string | null;
+    name_gte: string | null;
+    name_contains: string | null;
+    name_not_contains: string | null;
+    name_starts_with: string | null;
+    name_not_starts_with: string | null;
+    name_ends_with: string | null;
+    name_not_ends_with: string | null;
+    price: string | null;
+    price_not: string | null;
+    price_in: string[];
+    price_not_in: string[];
+    price_lt: string | null;
+    price_lte: string | null;
+    price_gt: string | null;
+    price_gte: string | null;
+    price_contains: string | null;
+    price_not_contains: string | null;
+    price_starts_with: string | null;
+    price_not_starts_with: string | null;
+    price_ends_with: string | null;
+    price_not_ends_with: string | null;
+    description: string | null;
+    description_not: string | null;
+    description_in: string[];
+    description_not_in: string[];
+    description_lt: string | null;
+    description_lte: string | null;
+    description_gt: string | null;
+    description_gte: string | null;
+    description_contains: string | null;
+    description_not_contains: string | null;
+    description_starts_with: string | null;
+    description_not_starts_with: string | null;
+    description_ends_with: string | null;
+    description_not_ends_with: string | null;
+    varietal: string | null;
+    varietal_not: string | null;
+    varietal_in: string[];
+    varietal_not_in: string[];
+    varietal_lt: string | null;
+    varietal_lte: string | null;
+    varietal_gt: string | null;
+    varietal_gte: string | null;
+    varietal_contains: string | null;
+    varietal_not_contains: string | null;
+    varietal_starts_with: string | null;
+    varietal_not_starts_with: string | null;
+    varietal_ends_with: string | null;
+    varietal_not_ends_with: string | null;
+    vendor: UserWhereInput | null;
+    carts_every: CartWhereInput | null;
+    carts_some: CartWhereInput | null;
+    carts_none: CartWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
   }
   export interface InvoiceWhereInput {
     AND: InvoiceWhereInput[];
@@ -481,6 +544,14 @@ export namespace UserResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     amount: string | null;
     amount_not: string | null;
     amount_in: string[];
@@ -545,12 +616,27 @@ export namespace UserResolvers {
     stripeCustomerId_not_starts_with: string | null;
     stripeCustomerId_ends_with: string | null;
     stripeCustomerId_not_ends_with: string | null;
+    status: string | null;
+    status_not: string | null;
+    status_in: string[];
+    status_not_in: string[];
+    status_lt: string | null;
+    status_lte: string | null;
+    status_gt: string | null;
+    status_gte: string | null;
+    status_contains: string | null;
+    status_not_contains: string | null;
+    status_starts_with: string | null;
+    status_not_starts_with: string | null;
+    status_ends_with: string | null;
+    status_not_ends_with: string | null;
     items_every: ProductWhereInput | null;
     items_some: ProductWhereInput | null;
     items_none: ProductWhereInput | null;
     stripeRecord_every: PaymentRecordWhereInput | null;
     stripeRecord_some: PaymentRecordWhereInput | null;
     stripeRecord_none: PaymentRecordWhereInput | null;
+    shippingAddress: ShippingAddressWhereInput | null;
     customer: UserWhereInput | null;
     vendors_every: UserWhereInput | null;
     vendors_some: UserWhereInput | null;
@@ -560,6 +646,28 @@ export namespace UserResolvers {
     AND: PaymentRecordWhereInput[];
     OR: PaymentRecordWhereInput[];
     NOT: PaymentRecordWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     amount: number | null;
     amount_not: number | null;
     amount_in: number[];
@@ -650,14 +758,115 @@ export namespace UserResolvers {
     _MagicalBackRelation_InvoiceToPaymentRecord_some: InvoiceWhereInput | null;
     _MagicalBackRelation_InvoiceToPaymentRecord_none: InvoiceWhereInput | null;
   }
+  export interface ShippingAddressWhereInput {
+    AND: ShippingAddressWhereInput[];
+    OR: ShippingAddressWhereInput[];
+    NOT: ShippingAddressWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    recipient: string | null;
+    recipient_not: string | null;
+    recipient_in: string[];
+    recipient_not_in: string[];
+    recipient_lt: string | null;
+    recipient_lte: string | null;
+    recipient_gt: string | null;
+    recipient_gte: string | null;
+    recipient_contains: string | null;
+    recipient_not_contains: string | null;
+    recipient_starts_with: string | null;
+    recipient_not_starts_with: string | null;
+    recipient_ends_with: string | null;
+    recipient_not_ends_with: string | null;
+    street: string | null;
+    street_not: string | null;
+    street_in: string[];
+    street_not_in: string[];
+    street_lt: string | null;
+    street_lte: string | null;
+    street_gt: string | null;
+    street_gte: string | null;
+    street_contains: string | null;
+    street_not_contains: string | null;
+    street_starts_with: string | null;
+    street_not_starts_with: string | null;
+    street_ends_with: string | null;
+    street_not_ends_with: string | null;
+    city: string | null;
+    city_not: string | null;
+    city_in: string[];
+    city_not_in: string[];
+    city_lt: string | null;
+    city_lte: string | null;
+    city_gt: string | null;
+    city_gte: string | null;
+    city_contains: string | null;
+    city_not_contains: string | null;
+    city_starts_with: string | null;
+    city_not_starts_with: string | null;
+    city_ends_with: string | null;
+    city_not_ends_with: string | null;
+    state: string | null;
+    state_not: string | null;
+    state_in: string[];
+    state_not_in: string[];
+    state_lt: string | null;
+    state_lte: string | null;
+    state_gt: string | null;
+    state_gte: string | null;
+    state_contains: string | null;
+    state_not_contains: string | null;
+    state_starts_with: string | null;
+    state_not_starts_with: string | null;
+    state_ends_with: string | null;
+    state_not_ends_with: string | null;
+    zip: string | null;
+    zip_not: string | null;
+    zip_in: string[];
+    zip_not_in: string[];
+    zip_lt: string | null;
+    zip_lte: string | null;
+    zip_gt: string | null;
+    zip_gte: string | null;
+    zip_contains: string | null;
+    zip_not_contains: string | null;
+    zip_starts_with: string | null;
+    zip_not_starts_with: string | null;
+    zip_ends_with: string | null;
+    zip_not_ends_with: string | null;
+    user: UserWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput | null;
+  }
 
   export interface ArgsCart {
     where: CartWhereInput | null;
   }
 
-  export interface ArgsPurchases {
-    where: InvoiceWhereInput | null;
-    orderBy: InvoiceOrderByInput | null;
+  export interface ArgsProducts {
+    where: ProductWhereInput | null;
+    orderBy: ProductOrderByInput | null;
     skip: number | null;
     after: string | null;
     before: string | null;
@@ -665,9 +874,9 @@ export namespace UserResolvers {
     last: number | null;
   }
 
-  export interface ArgsProducts {
-    where: ProductWhereInput | null;
-    orderBy: ProductOrderByInput | null;
+  export interface ArgsPurchases {
+    where: InvoiceWhereInput | null;
+    orderBy: InvoiceOrderByInput | null;
     skip: number | null;
     after: string | null;
     before: string | null;
@@ -685,12 +894,29 @@ export namespace UserResolvers {
     last: number | null;
   }
 
+  export interface ArgsShippingAddresses {
+    where: ShippingAddressWhereInput | null;
+    orderBy: ShippingAddressOrderByInput | null;
+    skip: number | null;
+    after: string | null;
+    before: string | null;
+    first: number | null;
+    last: number | null;
+  }
+
   export type IdResolver = (
     parent: User,
     args: {},
     ctx: Context,
     info: GraphQLResolveInfo
   ) => string | Promise<string>;
+
+  export type DateCreatedResolver = (
+    parent: User,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | null | Promise<string | null>;
 
   export type RoleResolver = (
     parent: User,
@@ -755,19 +981,19 @@ export namespace UserResolvers {
     info: GraphQLResolveInfo
   ) => string | null | Promise<string | null>;
 
-  export type PurchasesResolver = (
-    parent: User,
-    args: ArgsPurchases,
-    ctx: Context,
-    info: GraphQLResolveInfo
-  ) => Invoice[] | Promise<Invoice[]>;
-
   export type ProductsResolver = (
     parent: User,
     args: ArgsProducts,
     ctx: Context,
     info: GraphQLResolveInfo
   ) => Product[] | Promise<Product[]>;
+
+  export type PurchasesResolver = (
+    parent: User,
+    args: ArgsPurchases,
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => Invoice[] | Promise<Invoice[]>;
 
   export type SalesResolver = (
     parent: User,
@@ -776,6 +1002,13 @@ export namespace UserResolvers {
     info: GraphQLResolveInfo
   ) => Invoice[] | Promise<Invoice[]>;
 
+  export type ShippingAddressesResolver = (
+    parent: User,
+    args: ArgsShippingAddresses,
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => ShippingAddress[] | Promise<ShippingAddress[]>;
+
   export interface Type {
     id: (
       parent: User,
@@ -783,6 +1016,13 @@ export namespace UserResolvers {
       ctx: Context,
       info: GraphQLResolveInfo
     ) => string | Promise<string>;
+
+    dateCreated: (
+      parent: User,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | null | Promise<string | null>;
 
     role: (
       parent: User,
@@ -847,13 +1087,6 @@ export namespace UserResolvers {
       info: GraphQLResolveInfo
     ) => string | null | Promise<string | null>;
 
-    purchases: (
-      parent: User,
-      args: ArgsPurchases,
-      ctx: Context,
-      info: GraphQLResolveInfo
-    ) => Invoice[] | Promise<Invoice[]>;
-
     products: (
       parent: User,
       args: ArgsProducts,
@@ -861,106 +1094,40 @@ export namespace UserResolvers {
       info: GraphQLResolveInfo
     ) => Product[] | Promise<Product[]>;
 
+    purchases: (
+      parent: User,
+      args: ArgsPurchases,
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => Invoice[] | Promise<Invoice[]>;
+
     sales: (
       parent: User,
       args: ArgsSales,
       ctx: Context,
       info: GraphQLResolveInfo
     ) => Invoice[] | Promise<Invoice[]>;
+
+    shippingAddresses: (
+      parent: User,
+      args: ArgsShippingAddresses,
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => ShippingAddress[] | Promise<ShippingAddress[]>;
   }
 }
 
 export namespace CartResolvers {
   export const defaultResolvers = {
     id: (parent: Cart) => parent.id,
+    dateCreated: (parent: Cart) =>
+      parent.dateCreated === undefined ? null : parent.dateCreated,
     itemCount: (parent: Cart) =>
       parent.itemCount === undefined ? null : parent.itemCount,
     totalPrice: (parent: Cart) =>
       parent.totalPrice === undefined ? null : parent.totalPrice
   };
 
-  export interface ProductWhereInput {
-    AND: ProductWhereInput[];
-    OR: ProductWhereInput[];
-    NOT: ProductWhereInput[];
-    id: string | null;
-    id_not: string | null;
-    id_in: string[];
-    id_not_in: string[];
-    id_lt: string | null;
-    id_lte: string | null;
-    id_gt: string | null;
-    id_gte: string | null;
-    id_contains: string | null;
-    id_not_contains: string | null;
-    id_starts_with: string | null;
-    id_not_starts_with: string | null;
-    id_ends_with: string | null;
-    id_not_ends_with: string | null;
-    name: string | null;
-    name_not: string | null;
-    name_in: string[];
-    name_not_in: string[];
-    name_lt: string | null;
-    name_lte: string | null;
-    name_gt: string | null;
-    name_gte: string | null;
-    name_contains: string | null;
-    name_not_contains: string | null;
-    name_starts_with: string | null;
-    name_not_starts_with: string | null;
-    name_ends_with: string | null;
-    name_not_ends_with: string | null;
-    price: string | null;
-    price_not: string | null;
-    price_in: string[];
-    price_not_in: string[];
-    price_lt: string | null;
-    price_lte: string | null;
-    price_gt: string | null;
-    price_gte: string | null;
-    price_contains: string | null;
-    price_not_contains: string | null;
-    price_starts_with: string | null;
-    price_not_starts_with: string | null;
-    price_ends_with: string | null;
-    price_not_ends_with: string | null;
-    description: string | null;
-    description_not: string | null;
-    description_in: string[];
-    description_not_in: string[];
-    description_lt: string | null;
-    description_lte: string | null;
-    description_gt: string | null;
-    description_gte: string | null;
-    description_contains: string | null;
-    description_not_contains: string | null;
-    description_starts_with: string | null;
-    description_not_starts_with: string | null;
-    description_ends_with: string | null;
-    description_not_ends_with: string | null;
-    varietal: string | null;
-    varietal_not: string | null;
-    varietal_in: string[];
-    varietal_not_in: string[];
-    varietal_lt: string | null;
-    varietal_lte: string | null;
-    varietal_gt: string | null;
-    varietal_gte: string | null;
-    varietal_contains: string | null;
-    varietal_not_contains: string | null;
-    varietal_starts_with: string | null;
-    varietal_not_starts_with: string | null;
-    varietal_ends_with: string | null;
-    varietal_not_ends_with: string | null;
-    vendor: UserWhereInput | null;
-    carts_every: CartWhereInput | null;
-    carts_some: CartWhereInput | null;
-    carts_none: CartWhereInput | null;
-    purchases_every: InvoiceWhereInput | null;
-    purchases_some: InvoiceWhereInput | null;
-    purchases_none: InvoiceWhereInput | null;
-  }
   export interface UserWhereInput {
     AND: UserWhereInput[];
     OR: UserWhereInput[];
@@ -979,6 +1146,14 @@ export namespace CartResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     role: string | null;
     role_not: string | null;
     role_in: string[];
@@ -1078,15 +1253,18 @@ export namespace CartResolvers {
     stripeId_ends_with: string | null;
     stripeId_not_ends_with: string | null;
     cart: CartWhereInput | null;
-    purchases_every: InvoiceWhereInput | null;
-    purchases_some: InvoiceWhereInput | null;
-    purchases_none: InvoiceWhereInput | null;
     products_every: ProductWhereInput | null;
     products_some: ProductWhereInput | null;
     products_none: ProductWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
     sales_every: InvoiceWhereInput | null;
     sales_some: InvoiceWhereInput | null;
     sales_none: InvoiceWhereInput | null;
+    shippingAddresses_every: ShippingAddressWhereInput | null;
+    shippingAddresses_some: ShippingAddressWhereInput | null;
+    shippingAddresses_none: ShippingAddressWhereInput | null;
   }
   export interface CartWhereInput {
     AND: CartWhereInput[];
@@ -1106,6 +1284,14 @@ export namespace CartResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     itemCount: number | null;
     itemCount_not: number | null;
     itemCount_in: number[];
@@ -1128,10 +1314,100 @@ export namespace CartResolvers {
     totalPrice_not_starts_with: string | null;
     totalPrice_ends_with: string | null;
     totalPrice_not_ends_with: string | null;
+    user: UserWhereInput | null;
     items_every: ProductWhereInput | null;
     items_some: ProductWhereInput | null;
     items_none: ProductWhereInput | null;
-    user: UserWhereInput | null;
+  }
+  export interface ProductWhereInput {
+    AND: ProductWhereInput[];
+    OR: ProductWhereInput[];
+    NOT: ProductWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    name: string | null;
+    name_not: string | null;
+    name_in: string[];
+    name_not_in: string[];
+    name_lt: string | null;
+    name_lte: string | null;
+    name_gt: string | null;
+    name_gte: string | null;
+    name_contains: string | null;
+    name_not_contains: string | null;
+    name_starts_with: string | null;
+    name_not_starts_with: string | null;
+    name_ends_with: string | null;
+    name_not_ends_with: string | null;
+    price: string | null;
+    price_not: string | null;
+    price_in: string[];
+    price_not_in: string[];
+    price_lt: string | null;
+    price_lte: string | null;
+    price_gt: string | null;
+    price_gte: string | null;
+    price_contains: string | null;
+    price_not_contains: string | null;
+    price_starts_with: string | null;
+    price_not_starts_with: string | null;
+    price_ends_with: string | null;
+    price_not_ends_with: string | null;
+    description: string | null;
+    description_not: string | null;
+    description_in: string[];
+    description_not_in: string[];
+    description_lt: string | null;
+    description_lte: string | null;
+    description_gt: string | null;
+    description_gte: string | null;
+    description_contains: string | null;
+    description_not_contains: string | null;
+    description_starts_with: string | null;
+    description_not_starts_with: string | null;
+    description_ends_with: string | null;
+    description_not_ends_with: string | null;
+    varietal: string | null;
+    varietal_not: string | null;
+    varietal_in: string[];
+    varietal_not_in: string[];
+    varietal_lt: string | null;
+    varietal_lte: string | null;
+    varietal_gt: string | null;
+    varietal_gte: string | null;
+    varietal_contains: string | null;
+    varietal_not_contains: string | null;
+    varietal_starts_with: string | null;
+    varietal_not_starts_with: string | null;
+    varietal_ends_with: string | null;
+    varietal_not_ends_with: string | null;
+    vendor: UserWhereInput | null;
+    carts_every: CartWhereInput | null;
+    carts_some: CartWhereInput | null;
+    carts_none: CartWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
   }
   export interface InvoiceWhereInput {
     AND: InvoiceWhereInput[];
@@ -1151,6 +1427,14 @@ export namespace CartResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     amount: string | null;
     amount_not: string | null;
     amount_in: string[];
@@ -1215,12 +1499,27 @@ export namespace CartResolvers {
     stripeCustomerId_not_starts_with: string | null;
     stripeCustomerId_ends_with: string | null;
     stripeCustomerId_not_ends_with: string | null;
+    status: string | null;
+    status_not: string | null;
+    status_in: string[];
+    status_not_in: string[];
+    status_lt: string | null;
+    status_lte: string | null;
+    status_gt: string | null;
+    status_gte: string | null;
+    status_contains: string | null;
+    status_not_contains: string | null;
+    status_starts_with: string | null;
+    status_not_starts_with: string | null;
+    status_ends_with: string | null;
+    status_not_ends_with: string | null;
     items_every: ProductWhereInput | null;
     items_some: ProductWhereInput | null;
     items_none: ProductWhereInput | null;
     stripeRecord_every: PaymentRecordWhereInput | null;
     stripeRecord_some: PaymentRecordWhereInput | null;
     stripeRecord_none: PaymentRecordWhereInput | null;
+    shippingAddress: ShippingAddressWhereInput | null;
     customer: UserWhereInput | null;
     vendors_every: UserWhereInput | null;
     vendors_some: UserWhereInput | null;
@@ -1230,6 +1529,28 @@ export namespace CartResolvers {
     AND: PaymentRecordWhereInput[];
     OR: PaymentRecordWhereInput[];
     NOT: PaymentRecordWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     amount: number | null;
     amount_not: number | null;
     amount_in: number[];
@@ -1320,6 +1641,111 @@ export namespace CartResolvers {
     _MagicalBackRelation_InvoiceToPaymentRecord_some: InvoiceWhereInput | null;
     _MagicalBackRelation_InvoiceToPaymentRecord_none: InvoiceWhereInput | null;
   }
+  export interface ShippingAddressWhereInput {
+    AND: ShippingAddressWhereInput[];
+    OR: ShippingAddressWhereInput[];
+    NOT: ShippingAddressWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    recipient: string | null;
+    recipient_not: string | null;
+    recipient_in: string[];
+    recipient_not_in: string[];
+    recipient_lt: string | null;
+    recipient_lte: string | null;
+    recipient_gt: string | null;
+    recipient_gte: string | null;
+    recipient_contains: string | null;
+    recipient_not_contains: string | null;
+    recipient_starts_with: string | null;
+    recipient_not_starts_with: string | null;
+    recipient_ends_with: string | null;
+    recipient_not_ends_with: string | null;
+    street: string | null;
+    street_not: string | null;
+    street_in: string[];
+    street_not_in: string[];
+    street_lt: string | null;
+    street_lte: string | null;
+    street_gt: string | null;
+    street_gte: string | null;
+    street_contains: string | null;
+    street_not_contains: string | null;
+    street_starts_with: string | null;
+    street_not_starts_with: string | null;
+    street_ends_with: string | null;
+    street_not_ends_with: string | null;
+    city: string | null;
+    city_not: string | null;
+    city_in: string[];
+    city_not_in: string[];
+    city_lt: string | null;
+    city_lte: string | null;
+    city_gt: string | null;
+    city_gte: string | null;
+    city_contains: string | null;
+    city_not_contains: string | null;
+    city_starts_with: string | null;
+    city_not_starts_with: string | null;
+    city_ends_with: string | null;
+    city_not_ends_with: string | null;
+    state: string | null;
+    state_not: string | null;
+    state_in: string[];
+    state_not_in: string[];
+    state_lt: string | null;
+    state_lte: string | null;
+    state_gt: string | null;
+    state_gte: string | null;
+    state_contains: string | null;
+    state_not_contains: string | null;
+    state_starts_with: string | null;
+    state_not_starts_with: string | null;
+    state_ends_with: string | null;
+    state_not_ends_with: string | null;
+    zip: string | null;
+    zip_not: string | null;
+    zip_in: string[];
+    zip_not_in: string[];
+    zip_lt: string | null;
+    zip_lte: string | null;
+    zip_gt: string | null;
+    zip_gte: string | null;
+    zip_contains: string | null;
+    zip_not_contains: string | null;
+    zip_starts_with: string | null;
+    zip_not_starts_with: string | null;
+    zip_ends_with: string | null;
+    zip_not_ends_with: string | null;
+    user: UserWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput | null;
+  }
+
+  export interface ArgsUser {
+    where: UserWhereInput | null;
+  }
 
   export interface ArgsItems {
     where: ProductWhereInput | null;
@@ -1331,16 +1757,19 @@ export namespace CartResolvers {
     last: number | null;
   }
 
-  export interface ArgsUser {
-    where: UserWhereInput | null;
-  }
-
   export type IdResolver = (
     parent: Cart,
     args: {},
     ctx: Context,
     info: GraphQLResolveInfo
   ) => string | Promise<string>;
+
+  export type DateCreatedResolver = (
+    parent: Cart,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | null | Promise<string | null>;
 
   export type ItemCountResolver = (
     parent: Cart,
@@ -1356,19 +1785,19 @@ export namespace CartResolvers {
     info: GraphQLResolveInfo
   ) => string | null | Promise<string | null>;
 
-  export type ItemsResolver = (
-    parent: Cart,
-    args: ArgsItems,
-    ctx: Context,
-    info: GraphQLResolveInfo
-  ) => Product[] | Promise<Product[]>;
-
   export type UserResolver = (
     parent: Cart,
     args: ArgsUser,
     ctx: Context,
     info: GraphQLResolveInfo
   ) => User | Promise<User>;
+
+  export type ItemsResolver = (
+    parent: Cart,
+    args: ArgsItems,
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => Product[] | Promise<Product[]>;
 
   export interface Type {
     id: (
@@ -1377,6 +1806,13 @@ export namespace CartResolvers {
       ctx: Context,
       info: GraphQLResolveInfo
     ) => string | Promise<string>;
+
+    dateCreated: (
+      parent: Cart,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | null | Promise<string | null>;
 
     itemCount: (
       parent: Cart,
@@ -1392,25 +1828,27 @@ export namespace CartResolvers {
       info: GraphQLResolveInfo
     ) => string | null | Promise<string | null>;
 
-    items: (
-      parent: Cart,
-      args: ArgsItems,
-      ctx: Context,
-      info: GraphQLResolveInfo
-    ) => Product[] | Promise<Product[]>;
-
     user: (
       parent: Cart,
       args: ArgsUser,
       ctx: Context,
       info: GraphQLResolveInfo
     ) => User | Promise<User>;
+
+    items: (
+      parent: Cart,
+      args: ArgsItems,
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => Product[] | Promise<Product[]>;
   }
 }
 
 export namespace ProductResolvers {
   export const defaultResolvers = {
     id: (parent: Product) => parent.id,
+    dateCreated: (parent: Product) =>
+      parent.dateCreated === undefined ? null : parent.dateCreated,
     name: (parent: Product) => (parent.name === undefined ? null : parent.name),
     price: (parent: Product) =>
       parent.price === undefined ? null : parent.price,
@@ -1438,6 +1876,14 @@ export namespace ProductResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     role: string | null;
     role_not: string | null;
     role_in: string[];
@@ -1537,15 +1983,18 @@ export namespace ProductResolvers {
     stripeId_ends_with: string | null;
     stripeId_not_ends_with: string | null;
     cart: CartWhereInput | null;
-    purchases_every: InvoiceWhereInput | null;
-    purchases_some: InvoiceWhereInput | null;
-    purchases_none: InvoiceWhereInput | null;
     products_every: ProductWhereInput | null;
     products_some: ProductWhereInput | null;
     products_none: ProductWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
     sales_every: InvoiceWhereInput | null;
     sales_some: InvoiceWhereInput | null;
     sales_none: InvoiceWhereInput | null;
+    shippingAddresses_every: ShippingAddressWhereInput | null;
+    shippingAddresses_some: ShippingAddressWhereInput | null;
+    shippingAddresses_none: ShippingAddressWhereInput | null;
   }
   export interface CartWhereInput {
     AND: CartWhereInput[];
@@ -1565,6 +2014,14 @@ export namespace ProductResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     itemCount: number | null;
     itemCount_not: number | null;
     itemCount_in: number[];
@@ -1587,10 +2044,10 @@ export namespace ProductResolvers {
     totalPrice_not_starts_with: string | null;
     totalPrice_ends_with: string | null;
     totalPrice_not_ends_with: string | null;
+    user: UserWhereInput | null;
     items_every: ProductWhereInput | null;
     items_some: ProductWhereInput | null;
     items_none: ProductWhereInput | null;
-    user: UserWhereInput | null;
   }
   export interface ProductWhereInput {
     AND: ProductWhereInput[];
@@ -1610,6 +2067,14 @@ export namespace ProductResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     name: string | null;
     name_not: string | null;
     name_in: string[];
@@ -1692,6 +2157,14 @@ export namespace ProductResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     amount: string | null;
     amount_not: string | null;
     amount_in: string[];
@@ -1756,12 +2229,27 @@ export namespace ProductResolvers {
     stripeCustomerId_not_starts_with: string | null;
     stripeCustomerId_ends_with: string | null;
     stripeCustomerId_not_ends_with: string | null;
+    status: string | null;
+    status_not: string | null;
+    status_in: string[];
+    status_not_in: string[];
+    status_lt: string | null;
+    status_lte: string | null;
+    status_gt: string | null;
+    status_gte: string | null;
+    status_contains: string | null;
+    status_not_contains: string | null;
+    status_starts_with: string | null;
+    status_not_starts_with: string | null;
+    status_ends_with: string | null;
+    status_not_ends_with: string | null;
     items_every: ProductWhereInput | null;
     items_some: ProductWhereInput | null;
     items_none: ProductWhereInput | null;
     stripeRecord_every: PaymentRecordWhereInput | null;
     stripeRecord_some: PaymentRecordWhereInput | null;
     stripeRecord_none: PaymentRecordWhereInput | null;
+    shippingAddress: ShippingAddressWhereInput | null;
     customer: UserWhereInput | null;
     vendors_every: UserWhereInput | null;
     vendors_some: UserWhereInput | null;
@@ -1771,6 +2259,28 @@ export namespace ProductResolvers {
     AND: PaymentRecordWhereInput[];
     OR: PaymentRecordWhereInput[];
     NOT: PaymentRecordWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     amount: number | null;
     amount_not: number | null;
     amount_in: number[];
@@ -1860,6 +2370,107 @@ export namespace ProductResolvers {
     _MagicalBackRelation_InvoiceToPaymentRecord_every: InvoiceWhereInput | null;
     _MagicalBackRelation_InvoiceToPaymentRecord_some: InvoiceWhereInput | null;
     _MagicalBackRelation_InvoiceToPaymentRecord_none: InvoiceWhereInput | null;
+  }
+  export interface ShippingAddressWhereInput {
+    AND: ShippingAddressWhereInput[];
+    OR: ShippingAddressWhereInput[];
+    NOT: ShippingAddressWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    recipient: string | null;
+    recipient_not: string | null;
+    recipient_in: string[];
+    recipient_not_in: string[];
+    recipient_lt: string | null;
+    recipient_lte: string | null;
+    recipient_gt: string | null;
+    recipient_gte: string | null;
+    recipient_contains: string | null;
+    recipient_not_contains: string | null;
+    recipient_starts_with: string | null;
+    recipient_not_starts_with: string | null;
+    recipient_ends_with: string | null;
+    recipient_not_ends_with: string | null;
+    street: string | null;
+    street_not: string | null;
+    street_in: string[];
+    street_not_in: string[];
+    street_lt: string | null;
+    street_lte: string | null;
+    street_gt: string | null;
+    street_gte: string | null;
+    street_contains: string | null;
+    street_not_contains: string | null;
+    street_starts_with: string | null;
+    street_not_starts_with: string | null;
+    street_ends_with: string | null;
+    street_not_ends_with: string | null;
+    city: string | null;
+    city_not: string | null;
+    city_in: string[];
+    city_not_in: string[];
+    city_lt: string | null;
+    city_lte: string | null;
+    city_gt: string | null;
+    city_gte: string | null;
+    city_contains: string | null;
+    city_not_contains: string | null;
+    city_starts_with: string | null;
+    city_not_starts_with: string | null;
+    city_ends_with: string | null;
+    city_not_ends_with: string | null;
+    state: string | null;
+    state_not: string | null;
+    state_in: string[];
+    state_not_in: string[];
+    state_lt: string | null;
+    state_lte: string | null;
+    state_gt: string | null;
+    state_gte: string | null;
+    state_contains: string | null;
+    state_not_contains: string | null;
+    state_starts_with: string | null;
+    state_not_starts_with: string | null;
+    state_ends_with: string | null;
+    state_not_ends_with: string | null;
+    zip: string | null;
+    zip_not: string | null;
+    zip_in: string[];
+    zip_not_in: string[];
+    zip_lt: string | null;
+    zip_lte: string | null;
+    zip_gt: string | null;
+    zip_gte: string | null;
+    zip_contains: string | null;
+    zip_not_contains: string | null;
+    zip_starts_with: string | null;
+    zip_not_starts_with: string | null;
+    zip_ends_with: string | null;
+    zip_not_ends_with: string | null;
+    user: UserWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput | null;
   }
 
   export interface ArgsVendor {
@@ -1892,6 +2503,13 @@ export namespace ProductResolvers {
     ctx: Context,
     info: GraphQLResolveInfo
   ) => string | Promise<string>;
+
+  export type DateCreatedResolver = (
+    parent: Product,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | null | Promise<string | null>;
 
   export type NameResolver = (
     parent: Product,
@@ -1950,6 +2568,13 @@ export namespace ProductResolvers {
       info: GraphQLResolveInfo
     ) => string | Promise<string>;
 
+    dateCreated: (
+      parent: Product,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | null | Promise<string | null>;
+
     name: (
       parent: Product,
       args: {},
@@ -2004,6 +2629,8 @@ export namespace ProductResolvers {
 export namespace InvoiceResolvers {
   export const defaultResolvers = {
     id: (parent: Invoice) => parent.id,
+    dateCreated: (parent: Invoice) =>
+      parent.dateCreated === undefined ? null : parent.dateCreated,
     amount: (parent: Invoice) =>
       parent.amount === undefined ? null : parent.amount,
     email: (parent: Invoice) => parent.email,
@@ -2014,7 +2641,9 @@ export namespace InvoiceResolvers {
     stripePaymentId: (parent: Invoice) =>
       parent.stripePaymentId === undefined ? null : parent.stripePaymentId,
     stripeCustomerId: (parent: Invoice) =>
-      parent.stripeCustomerId === undefined ? null : parent.stripeCustomerId
+      parent.stripeCustomerId === undefined ? null : parent.stripeCustomerId,
+    status: (parent: Invoice) =>
+      parent.status === undefined ? null : parent.status
   };
 
   export interface ProductWhereInput {
@@ -2035,6 +2664,14 @@ export namespace InvoiceResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     name: string | null;
     name_not: string | null;
     name_in: string[];
@@ -2117,6 +2754,14 @@ export namespace InvoiceResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     role: string | null;
     role_not: string | null;
     role_in: string[];
@@ -2216,15 +2861,18 @@ export namespace InvoiceResolvers {
     stripeId_ends_with: string | null;
     stripeId_not_ends_with: string | null;
     cart: CartWhereInput | null;
-    purchases_every: InvoiceWhereInput | null;
-    purchases_some: InvoiceWhereInput | null;
-    purchases_none: InvoiceWhereInput | null;
     products_every: ProductWhereInput | null;
     products_some: ProductWhereInput | null;
     products_none: ProductWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
     sales_every: InvoiceWhereInput | null;
     sales_some: InvoiceWhereInput | null;
     sales_none: InvoiceWhereInput | null;
+    shippingAddresses_every: ShippingAddressWhereInput | null;
+    shippingAddresses_some: ShippingAddressWhereInput | null;
+    shippingAddresses_none: ShippingAddressWhereInput | null;
   }
   export interface CartWhereInput {
     AND: CartWhereInput[];
@@ -2244,6 +2892,14 @@ export namespace InvoiceResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     itemCount: number | null;
     itemCount_not: number | null;
     itemCount_in: number[];
@@ -2266,10 +2922,10 @@ export namespace InvoiceResolvers {
     totalPrice_not_starts_with: string | null;
     totalPrice_ends_with: string | null;
     totalPrice_not_ends_with: string | null;
+    user: UserWhereInput | null;
     items_every: ProductWhereInput | null;
     items_some: ProductWhereInput | null;
     items_none: ProductWhereInput | null;
-    user: UserWhereInput | null;
   }
   export interface InvoiceWhereInput {
     AND: InvoiceWhereInput[];
@@ -2289,6 +2945,14 @@ export namespace InvoiceResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     amount: string | null;
     amount_not: string | null;
     amount_in: string[];
@@ -2353,12 +3017,27 @@ export namespace InvoiceResolvers {
     stripeCustomerId_not_starts_with: string | null;
     stripeCustomerId_ends_with: string | null;
     stripeCustomerId_not_ends_with: string | null;
+    status: string | null;
+    status_not: string | null;
+    status_in: string[];
+    status_not_in: string[];
+    status_lt: string | null;
+    status_lte: string | null;
+    status_gt: string | null;
+    status_gte: string | null;
+    status_contains: string | null;
+    status_not_contains: string | null;
+    status_starts_with: string | null;
+    status_not_starts_with: string | null;
+    status_ends_with: string | null;
+    status_not_ends_with: string | null;
     items_every: ProductWhereInput | null;
     items_some: ProductWhereInput | null;
     items_none: ProductWhereInput | null;
     stripeRecord_every: PaymentRecordWhereInput | null;
     stripeRecord_some: PaymentRecordWhereInput | null;
     stripeRecord_none: PaymentRecordWhereInput | null;
+    shippingAddress: ShippingAddressWhereInput | null;
     customer: UserWhereInput | null;
     vendors_every: UserWhereInput | null;
     vendors_some: UserWhereInput | null;
@@ -2368,6 +3047,28 @@ export namespace InvoiceResolvers {
     AND: PaymentRecordWhereInput[];
     OR: PaymentRecordWhereInput[];
     NOT: PaymentRecordWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     amount: number | null;
     amount_not: number | null;
     amount_in: number[];
@@ -2458,6 +3159,107 @@ export namespace InvoiceResolvers {
     _MagicalBackRelation_InvoiceToPaymentRecord_some: InvoiceWhereInput | null;
     _MagicalBackRelation_InvoiceToPaymentRecord_none: InvoiceWhereInput | null;
   }
+  export interface ShippingAddressWhereInput {
+    AND: ShippingAddressWhereInput[];
+    OR: ShippingAddressWhereInput[];
+    NOT: ShippingAddressWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    recipient: string | null;
+    recipient_not: string | null;
+    recipient_in: string[];
+    recipient_not_in: string[];
+    recipient_lt: string | null;
+    recipient_lte: string | null;
+    recipient_gt: string | null;
+    recipient_gte: string | null;
+    recipient_contains: string | null;
+    recipient_not_contains: string | null;
+    recipient_starts_with: string | null;
+    recipient_not_starts_with: string | null;
+    recipient_ends_with: string | null;
+    recipient_not_ends_with: string | null;
+    street: string | null;
+    street_not: string | null;
+    street_in: string[];
+    street_not_in: string[];
+    street_lt: string | null;
+    street_lte: string | null;
+    street_gt: string | null;
+    street_gte: string | null;
+    street_contains: string | null;
+    street_not_contains: string | null;
+    street_starts_with: string | null;
+    street_not_starts_with: string | null;
+    street_ends_with: string | null;
+    street_not_ends_with: string | null;
+    city: string | null;
+    city_not: string | null;
+    city_in: string[];
+    city_not_in: string[];
+    city_lt: string | null;
+    city_lte: string | null;
+    city_gt: string | null;
+    city_gte: string | null;
+    city_contains: string | null;
+    city_not_contains: string | null;
+    city_starts_with: string | null;
+    city_not_starts_with: string | null;
+    city_ends_with: string | null;
+    city_not_ends_with: string | null;
+    state: string | null;
+    state_not: string | null;
+    state_in: string[];
+    state_not_in: string[];
+    state_lt: string | null;
+    state_lte: string | null;
+    state_gt: string | null;
+    state_gte: string | null;
+    state_contains: string | null;
+    state_not_contains: string | null;
+    state_starts_with: string | null;
+    state_not_starts_with: string | null;
+    state_ends_with: string | null;
+    state_not_ends_with: string | null;
+    zip: string | null;
+    zip_not: string | null;
+    zip_in: string[];
+    zip_not_in: string[];
+    zip_lt: string | null;
+    zip_lte: string | null;
+    zip_gt: string | null;
+    zip_gte: string | null;
+    zip_contains: string | null;
+    zip_not_contains: string | null;
+    zip_starts_with: string | null;
+    zip_not_starts_with: string | null;
+    zip_ends_with: string | null;
+    zip_not_ends_with: string | null;
+    user: UserWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput | null;
+  }
 
   export interface ArgsItems {
     where: ProductWhereInput | null;
@@ -2477,6 +3279,10 @@ export namespace InvoiceResolvers {
     before: string | null;
     first: number | null;
     last: number | null;
+  }
+
+  export interface ArgsShippingAddress {
+    where: ShippingAddressWhereInput | null;
   }
 
   export interface ArgsCustomer {
@@ -2499,6 +3305,13 @@ export namespace InvoiceResolvers {
     ctx: Context,
     info: GraphQLResolveInfo
   ) => string | Promise<string>;
+
+  export type DateCreatedResolver = (
+    parent: Invoice,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | null | Promise<string | null>;
 
   export type ItemsResolver = (
     parent: Invoice,
@@ -2556,6 +3369,20 @@ export namespace InvoiceResolvers {
     info: GraphQLResolveInfo
   ) => string | null | Promise<string | null>;
 
+  export type ShippingAddressResolver = (
+    parent: Invoice,
+    args: ArgsShippingAddress,
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => ShippingAddress | null | Promise<ShippingAddress | null>;
+
+  export type StatusResolver = (
+    parent: Invoice,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | null | Promise<string | null>;
+
   export type CustomerResolver = (
     parent: Invoice,
     args: ArgsCustomer,
@@ -2577,6 +3404,13 @@ export namespace InvoiceResolvers {
       ctx: Context,
       info: GraphQLResolveInfo
     ) => string | Promise<string>;
+
+    dateCreated: (
+      parent: Invoice,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | null | Promise<string | null>;
 
     items: (
       parent: Invoice,
@@ -2634,6 +3468,20 @@ export namespace InvoiceResolvers {
       info: GraphQLResolveInfo
     ) => string | null | Promise<string | null>;
 
+    shippingAddress: (
+      parent: Invoice,
+      args: ArgsShippingAddress,
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => ShippingAddress | null | Promise<ShippingAddress | null>;
+
+    status: (
+      parent: Invoice,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | null | Promise<string | null>;
+
     customer: (
       parent: Invoice,
       args: ArgsCustomer,
@@ -2652,14 +3500,32 @@ export namespace InvoiceResolvers {
 
 export namespace PaymentRecordResolvers {
   export const defaultResolvers = {
+    id: (parent: PaymentRecord) => parent.id,
+    dateCreated: (parent: PaymentRecord) => parent.dateCreated,
     amount: (parent: PaymentRecord) => parent.amount,
     balanceTransaction: (parent: PaymentRecord) => parent.balanceTransaction,
     created: (parent: PaymentRecord) => parent.created,
     currency: (parent: PaymentRecord) => parent.currency,
     stripeCustomerId: (parent: PaymentRecord) => parent.stripeCustomerId,
     stripePaymentId: (parent: PaymentRecord) => parent.stripePaymentId,
-    status: (parent: PaymentRecord) => parent.status
+    status: (parent: PaymentRecord) => parent.status,
+    data: (parent: PaymentRecord) =>
+      parent.data === undefined ? null : parent.data
   };
+
+  export type IdResolver = (
+    parent: PaymentRecord,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | Promise<string>;
+
+  export type DateCreatedResolver = (
+    parent: PaymentRecord,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | Promise<string>;
 
   export type AmountResolver = (
     parent: PaymentRecord,
@@ -2710,7 +3576,28 @@ export namespace PaymentRecordResolvers {
     info: GraphQLResolveInfo
   ) => string | Promise<string>;
 
+  export type DataResolver = (
+    parent: PaymentRecord,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | null | Promise<string | null>;
+
   export interface Type {
+    id: (
+      parent: PaymentRecord,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | Promise<string>;
+
+    dateCreated: (
+      parent: PaymentRecord,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | Promise<string>;
+
     amount: (
       parent: PaymentRecord,
       args: {},
@@ -2759,94 +3646,27 @@ export namespace PaymentRecordResolvers {
       ctx: Context,
       info: GraphQLResolveInfo
     ) => string | Promise<string>;
+
+    data: (
+      parent: PaymentRecord,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | null | Promise<string | null>;
   }
 }
 
-export namespace MutationResolvers {
-  export const defaultResolvers = {};
+export namespace ShippingAddressResolvers {
+  export const defaultResolvers = {
+    id: (parent: ShippingAddress) => parent.id,
+    dateCreated: (parent: ShippingAddress) => parent.dateCreated,
+    recipient: (parent: ShippingAddress) => parent.recipient,
+    street: (parent: ShippingAddress) => parent.street,
+    city: (parent: ShippingAddress) => parent.city,
+    state: (parent: ShippingAddress) => parent.state,
+    zip: (parent: ShippingAddress) => parent.zip
+  };
 
-  export interface ProductWhereInput {
-    AND: ProductWhereInput[];
-    OR: ProductWhereInput[];
-    NOT: ProductWhereInput[];
-    id: string | null;
-    id_not: string | null;
-    id_in: string[];
-    id_not_in: string[];
-    id_lt: string | null;
-    id_lte: string | null;
-    id_gt: string | null;
-    id_gte: string | null;
-    id_contains: string | null;
-    id_not_contains: string | null;
-    id_starts_with: string | null;
-    id_not_starts_with: string | null;
-    id_ends_with: string | null;
-    id_not_ends_with: string | null;
-    name: string | null;
-    name_not: string | null;
-    name_in: string[];
-    name_not_in: string[];
-    name_lt: string | null;
-    name_lte: string | null;
-    name_gt: string | null;
-    name_gte: string | null;
-    name_contains: string | null;
-    name_not_contains: string | null;
-    name_starts_with: string | null;
-    name_not_starts_with: string | null;
-    name_ends_with: string | null;
-    name_not_ends_with: string | null;
-    price: string | null;
-    price_not: string | null;
-    price_in: string[];
-    price_not_in: string[];
-    price_lt: string | null;
-    price_lte: string | null;
-    price_gt: string | null;
-    price_gte: string | null;
-    price_contains: string | null;
-    price_not_contains: string | null;
-    price_starts_with: string | null;
-    price_not_starts_with: string | null;
-    price_ends_with: string | null;
-    price_not_ends_with: string | null;
-    description: string | null;
-    description_not: string | null;
-    description_in: string[];
-    description_not_in: string[];
-    description_lt: string | null;
-    description_lte: string | null;
-    description_gt: string | null;
-    description_gte: string | null;
-    description_contains: string | null;
-    description_not_contains: string | null;
-    description_starts_with: string | null;
-    description_not_starts_with: string | null;
-    description_ends_with: string | null;
-    description_not_ends_with: string | null;
-    varietal: string | null;
-    varietal_not: string | null;
-    varietal_in: string[];
-    varietal_not_in: string[];
-    varietal_lt: string | null;
-    varietal_lte: string | null;
-    varietal_gt: string | null;
-    varietal_gte: string | null;
-    varietal_contains: string | null;
-    varietal_not_contains: string | null;
-    varietal_starts_with: string | null;
-    varietal_not_starts_with: string | null;
-    varietal_ends_with: string | null;
-    varietal_not_ends_with: string | null;
-    vendor: UserWhereInput | null;
-    carts_every: CartWhereInput | null;
-    carts_some: CartWhereInput | null;
-    carts_none: CartWhereInput | null;
-    purchases_every: InvoiceWhereInput | null;
-    purchases_some: InvoiceWhereInput | null;
-    purchases_none: InvoiceWhereInput | null;
-  }
   export interface UserWhereInput {
     AND: UserWhereInput[];
     OR: UserWhereInput[];
@@ -2865,6 +3685,14 @@ export namespace MutationResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     role: string | null;
     role_not: string | null;
     role_in: string[];
@@ -2964,15 +3792,18 @@ export namespace MutationResolvers {
     stripeId_ends_with: string | null;
     stripeId_not_ends_with: string | null;
     cart: CartWhereInput | null;
-    purchases_every: InvoiceWhereInput | null;
-    purchases_some: InvoiceWhereInput | null;
-    purchases_none: InvoiceWhereInput | null;
     products_every: ProductWhereInput | null;
     products_some: ProductWhereInput | null;
     products_none: ProductWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
     sales_every: InvoiceWhereInput | null;
     sales_some: InvoiceWhereInput | null;
     sales_none: InvoiceWhereInput | null;
+    shippingAddresses_every: ShippingAddressWhereInput | null;
+    shippingAddresses_some: ShippingAddressWhereInput | null;
+    shippingAddresses_none: ShippingAddressWhereInput | null;
   }
   export interface CartWhereInput {
     AND: CartWhereInput[];
@@ -2992,6 +3823,14 @@ export namespace MutationResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     itemCount: number | null;
     itemCount_not: number | null;
     itemCount_in: number[];
@@ -3014,10 +3853,100 @@ export namespace MutationResolvers {
     totalPrice_not_starts_with: string | null;
     totalPrice_ends_with: string | null;
     totalPrice_not_ends_with: string | null;
+    user: UserWhereInput | null;
     items_every: ProductWhereInput | null;
     items_some: ProductWhereInput | null;
     items_none: ProductWhereInput | null;
-    user: UserWhereInput | null;
+  }
+  export interface ProductWhereInput {
+    AND: ProductWhereInput[];
+    OR: ProductWhereInput[];
+    NOT: ProductWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    name: string | null;
+    name_not: string | null;
+    name_in: string[];
+    name_not_in: string[];
+    name_lt: string | null;
+    name_lte: string | null;
+    name_gt: string | null;
+    name_gte: string | null;
+    name_contains: string | null;
+    name_not_contains: string | null;
+    name_starts_with: string | null;
+    name_not_starts_with: string | null;
+    name_ends_with: string | null;
+    name_not_ends_with: string | null;
+    price: string | null;
+    price_not: string | null;
+    price_in: string[];
+    price_not_in: string[];
+    price_lt: string | null;
+    price_lte: string | null;
+    price_gt: string | null;
+    price_gte: string | null;
+    price_contains: string | null;
+    price_not_contains: string | null;
+    price_starts_with: string | null;
+    price_not_starts_with: string | null;
+    price_ends_with: string | null;
+    price_not_ends_with: string | null;
+    description: string | null;
+    description_not: string | null;
+    description_in: string[];
+    description_not_in: string[];
+    description_lt: string | null;
+    description_lte: string | null;
+    description_gt: string | null;
+    description_gte: string | null;
+    description_contains: string | null;
+    description_not_contains: string | null;
+    description_starts_with: string | null;
+    description_not_starts_with: string | null;
+    description_ends_with: string | null;
+    description_not_ends_with: string | null;
+    varietal: string | null;
+    varietal_not: string | null;
+    varietal_in: string[];
+    varietal_not_in: string[];
+    varietal_lt: string | null;
+    varietal_lte: string | null;
+    varietal_gt: string | null;
+    varietal_gte: string | null;
+    varietal_contains: string | null;
+    varietal_not_contains: string | null;
+    varietal_starts_with: string | null;
+    varietal_not_starts_with: string | null;
+    varietal_ends_with: string | null;
+    varietal_not_ends_with: string | null;
+    vendor: UserWhereInput | null;
+    carts_every: CartWhereInput | null;
+    carts_some: CartWhereInput | null;
+    carts_none: CartWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
   }
   export interface InvoiceWhereInput {
     AND: InvoiceWhereInput[];
@@ -3037,6 +3966,14 @@ export namespace MutationResolvers {
     id_not_starts_with: string | null;
     id_ends_with: string | null;
     id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     amount: string | null;
     amount_not: string | null;
     amount_in: string[];
@@ -3101,12 +4038,27 @@ export namespace MutationResolvers {
     stripeCustomerId_not_starts_with: string | null;
     stripeCustomerId_ends_with: string | null;
     stripeCustomerId_not_ends_with: string | null;
+    status: string | null;
+    status_not: string | null;
+    status_in: string[];
+    status_not_in: string[];
+    status_lt: string | null;
+    status_lte: string | null;
+    status_gt: string | null;
+    status_gte: string | null;
+    status_contains: string | null;
+    status_not_contains: string | null;
+    status_starts_with: string | null;
+    status_not_starts_with: string | null;
+    status_ends_with: string | null;
+    status_not_ends_with: string | null;
     items_every: ProductWhereInput | null;
     items_some: ProductWhereInput | null;
     items_none: ProductWhereInput | null;
     stripeRecord_every: PaymentRecordWhereInput | null;
     stripeRecord_some: PaymentRecordWhereInput | null;
     stripeRecord_none: PaymentRecordWhereInput | null;
+    shippingAddress: ShippingAddressWhereInput | null;
     customer: UserWhereInput | null;
     vendors_every: UserWhereInput | null;
     vendors_some: UserWhereInput | null;
@@ -3116,6 +4068,28 @@ export namespace MutationResolvers {
     AND: PaymentRecordWhereInput[];
     OR: PaymentRecordWhereInput[];
     NOT: PaymentRecordWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
     amount: number | null;
     amount_not: number | null;
     amount_in: number[];
@@ -3206,6 +4180,844 @@ export namespace MutationResolvers {
     _MagicalBackRelation_InvoiceToPaymentRecord_some: InvoiceWhereInput | null;
     _MagicalBackRelation_InvoiceToPaymentRecord_none: InvoiceWhereInput | null;
   }
+  export interface ShippingAddressWhereInput {
+    AND: ShippingAddressWhereInput[];
+    OR: ShippingAddressWhereInput[];
+    NOT: ShippingAddressWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    recipient: string | null;
+    recipient_not: string | null;
+    recipient_in: string[];
+    recipient_not_in: string[];
+    recipient_lt: string | null;
+    recipient_lte: string | null;
+    recipient_gt: string | null;
+    recipient_gte: string | null;
+    recipient_contains: string | null;
+    recipient_not_contains: string | null;
+    recipient_starts_with: string | null;
+    recipient_not_starts_with: string | null;
+    recipient_ends_with: string | null;
+    recipient_not_ends_with: string | null;
+    street: string | null;
+    street_not: string | null;
+    street_in: string[];
+    street_not_in: string[];
+    street_lt: string | null;
+    street_lte: string | null;
+    street_gt: string | null;
+    street_gte: string | null;
+    street_contains: string | null;
+    street_not_contains: string | null;
+    street_starts_with: string | null;
+    street_not_starts_with: string | null;
+    street_ends_with: string | null;
+    street_not_ends_with: string | null;
+    city: string | null;
+    city_not: string | null;
+    city_in: string[];
+    city_not_in: string[];
+    city_lt: string | null;
+    city_lte: string | null;
+    city_gt: string | null;
+    city_gte: string | null;
+    city_contains: string | null;
+    city_not_contains: string | null;
+    city_starts_with: string | null;
+    city_not_starts_with: string | null;
+    city_ends_with: string | null;
+    city_not_ends_with: string | null;
+    state: string | null;
+    state_not: string | null;
+    state_in: string[];
+    state_not_in: string[];
+    state_lt: string | null;
+    state_lte: string | null;
+    state_gt: string | null;
+    state_gte: string | null;
+    state_contains: string | null;
+    state_not_contains: string | null;
+    state_starts_with: string | null;
+    state_not_starts_with: string | null;
+    state_ends_with: string | null;
+    state_not_ends_with: string | null;
+    zip: string | null;
+    zip_not: string | null;
+    zip_in: string[];
+    zip_not_in: string[];
+    zip_lt: string | null;
+    zip_lte: string | null;
+    zip_gt: string | null;
+    zip_gte: string | null;
+    zip_contains: string | null;
+    zip_not_contains: string | null;
+    zip_starts_with: string | null;
+    zip_not_starts_with: string | null;
+    zip_ends_with: string | null;
+    zip_not_ends_with: string | null;
+    user: UserWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput | null;
+  }
+
+  export interface ArgsUser {
+    where: UserWhereInput | null;
+  }
+
+  export type IdResolver = (
+    parent: ShippingAddress,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | Promise<string>;
+
+  export type DateCreatedResolver = (
+    parent: ShippingAddress,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | Promise<string>;
+
+  export type RecipientResolver = (
+    parent: ShippingAddress,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | Promise<string>;
+
+  export type StreetResolver = (
+    parent: ShippingAddress,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | Promise<string>;
+
+  export type CityResolver = (
+    parent: ShippingAddress,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | Promise<string>;
+
+  export type StateResolver = (
+    parent: ShippingAddress,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | Promise<string>;
+
+  export type ZipResolver = (
+    parent: ShippingAddress,
+    args: {},
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => string | Promise<string>;
+
+  export type UserResolver = (
+    parent: ShippingAddress,
+    args: ArgsUser,
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => User | Promise<User>;
+
+  export interface Type {
+    id: (
+      parent: ShippingAddress,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | Promise<string>;
+
+    dateCreated: (
+      parent: ShippingAddress,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | Promise<string>;
+
+    recipient: (
+      parent: ShippingAddress,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | Promise<string>;
+
+    street: (
+      parent: ShippingAddress,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | Promise<string>;
+
+    city: (
+      parent: ShippingAddress,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | Promise<string>;
+
+    state: (
+      parent: ShippingAddress,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | Promise<string>;
+
+    zip: (
+      parent: ShippingAddress,
+      args: {},
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => string | Promise<string>;
+
+    user: (
+      parent: ShippingAddress,
+      args: ArgsUser,
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => User | Promise<User>;
+  }
+}
+
+export namespace MutationResolvers {
+  export const defaultResolvers = {};
+
+  export interface ProductWhereInput {
+    AND: ProductWhereInput[];
+    OR: ProductWhereInput[];
+    NOT: ProductWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    name: string | null;
+    name_not: string | null;
+    name_in: string[];
+    name_not_in: string[];
+    name_lt: string | null;
+    name_lte: string | null;
+    name_gt: string | null;
+    name_gte: string | null;
+    name_contains: string | null;
+    name_not_contains: string | null;
+    name_starts_with: string | null;
+    name_not_starts_with: string | null;
+    name_ends_with: string | null;
+    name_not_ends_with: string | null;
+    price: string | null;
+    price_not: string | null;
+    price_in: string[];
+    price_not_in: string[];
+    price_lt: string | null;
+    price_lte: string | null;
+    price_gt: string | null;
+    price_gte: string | null;
+    price_contains: string | null;
+    price_not_contains: string | null;
+    price_starts_with: string | null;
+    price_not_starts_with: string | null;
+    price_ends_with: string | null;
+    price_not_ends_with: string | null;
+    description: string | null;
+    description_not: string | null;
+    description_in: string[];
+    description_not_in: string[];
+    description_lt: string | null;
+    description_lte: string | null;
+    description_gt: string | null;
+    description_gte: string | null;
+    description_contains: string | null;
+    description_not_contains: string | null;
+    description_starts_with: string | null;
+    description_not_starts_with: string | null;
+    description_ends_with: string | null;
+    description_not_ends_with: string | null;
+    varietal: string | null;
+    varietal_not: string | null;
+    varietal_in: string[];
+    varietal_not_in: string[];
+    varietal_lt: string | null;
+    varietal_lte: string | null;
+    varietal_gt: string | null;
+    varietal_gte: string | null;
+    varietal_contains: string | null;
+    varietal_not_contains: string | null;
+    varietal_starts_with: string | null;
+    varietal_not_starts_with: string | null;
+    varietal_ends_with: string | null;
+    varietal_not_ends_with: string | null;
+    vendor: UserWhereInput | null;
+    carts_every: CartWhereInput | null;
+    carts_some: CartWhereInput | null;
+    carts_none: CartWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
+  }
+  export interface UserWhereInput {
+    AND: UserWhereInput[];
+    OR: UserWhereInput[];
+    NOT: UserWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    role: string | null;
+    role_not: string | null;
+    role_in: string[];
+    role_not_in: string[];
+    role_lt: string | null;
+    role_lte: string | null;
+    role_gt: string | null;
+    role_gte: string | null;
+    role_contains: string | null;
+    role_not_contains: string | null;
+    role_starts_with: string | null;
+    role_not_starts_with: string | null;
+    role_ends_with: string | null;
+    role_not_ends_with: string | null;
+    email: string | null;
+    email_not: string | null;
+    email_in: string[];
+    email_not_in: string[];
+    email_lt: string | null;
+    email_lte: string | null;
+    email_gt: string | null;
+    email_gte: string | null;
+    email_contains: string | null;
+    email_not_contains: string | null;
+    email_starts_with: string | null;
+    email_not_starts_with: string | null;
+    email_ends_with: string | null;
+    email_not_ends_with: string | null;
+    firstName: string | null;
+    firstName_not: string | null;
+    firstName_in: string[];
+    firstName_not_in: string[];
+    firstName_lt: string | null;
+    firstName_lte: string | null;
+    firstName_gt: string | null;
+    firstName_gte: string | null;
+    firstName_contains: string | null;
+    firstName_not_contains: string | null;
+    firstName_starts_with: string | null;
+    firstName_not_starts_with: string | null;
+    firstName_ends_with: string | null;
+    firstName_not_ends_with: string | null;
+    lastName: string | null;
+    lastName_not: string | null;
+    lastName_in: string[];
+    lastName_not_in: string[];
+    lastName_lt: string | null;
+    lastName_lte: string | null;
+    lastName_gt: string | null;
+    lastName_gte: string | null;
+    lastName_contains: string | null;
+    lastName_not_contains: string | null;
+    lastName_starts_with: string | null;
+    lastName_not_starts_with: string | null;
+    lastName_ends_with: string | null;
+    lastName_not_ends_with: string | null;
+    bizName: string | null;
+    bizName_not: string | null;
+    bizName_in: string[];
+    bizName_not_in: string[];
+    bizName_lt: string | null;
+    bizName_lte: string | null;
+    bizName_gt: string | null;
+    bizName_gte: string | null;
+    bizName_contains: string | null;
+    bizName_not_contains: string | null;
+    bizName_starts_with: string | null;
+    bizName_not_starts_with: string | null;
+    bizName_ends_with: string | null;
+    bizName_not_ends_with: string | null;
+    password: string | null;
+    password_not: string | null;
+    password_in: string[];
+    password_not_in: string[];
+    password_lt: string | null;
+    password_lte: string | null;
+    password_gt: string | null;
+    password_gte: string | null;
+    password_contains: string | null;
+    password_not_contains: string | null;
+    password_starts_with: string | null;
+    password_not_starts_with: string | null;
+    password_ends_with: string | null;
+    password_not_ends_with: string | null;
+    stripeId: string | null;
+    stripeId_not: string | null;
+    stripeId_in: string[];
+    stripeId_not_in: string[];
+    stripeId_lt: string | null;
+    stripeId_lte: string | null;
+    stripeId_gt: string | null;
+    stripeId_gte: string | null;
+    stripeId_contains: string | null;
+    stripeId_not_contains: string | null;
+    stripeId_starts_with: string | null;
+    stripeId_not_starts_with: string | null;
+    stripeId_ends_with: string | null;
+    stripeId_not_ends_with: string | null;
+    cart: CartWhereInput | null;
+    products_every: ProductWhereInput | null;
+    products_some: ProductWhereInput | null;
+    products_none: ProductWhereInput | null;
+    purchases_every: InvoiceWhereInput | null;
+    purchases_some: InvoiceWhereInput | null;
+    purchases_none: InvoiceWhereInput | null;
+    sales_every: InvoiceWhereInput | null;
+    sales_some: InvoiceWhereInput | null;
+    sales_none: InvoiceWhereInput | null;
+    shippingAddresses_every: ShippingAddressWhereInput | null;
+    shippingAddresses_some: ShippingAddressWhereInput | null;
+    shippingAddresses_none: ShippingAddressWhereInput | null;
+  }
+  export interface CartWhereInput {
+    AND: CartWhereInput[];
+    OR: CartWhereInput[];
+    NOT: CartWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    itemCount: number | null;
+    itemCount_not: number | null;
+    itemCount_in: number[];
+    itemCount_not_in: number[];
+    itemCount_lt: number | null;
+    itemCount_lte: number | null;
+    itemCount_gt: number | null;
+    itemCount_gte: number | null;
+    totalPrice: string | null;
+    totalPrice_not: string | null;
+    totalPrice_in: string[];
+    totalPrice_not_in: string[];
+    totalPrice_lt: string | null;
+    totalPrice_lte: string | null;
+    totalPrice_gt: string | null;
+    totalPrice_gte: string | null;
+    totalPrice_contains: string | null;
+    totalPrice_not_contains: string | null;
+    totalPrice_starts_with: string | null;
+    totalPrice_not_starts_with: string | null;
+    totalPrice_ends_with: string | null;
+    totalPrice_not_ends_with: string | null;
+    user: UserWhereInput | null;
+    items_every: ProductWhereInput | null;
+    items_some: ProductWhereInput | null;
+    items_none: ProductWhereInput | null;
+  }
+  export interface InvoiceWhereInput {
+    AND: InvoiceWhereInput[];
+    OR: InvoiceWhereInput[];
+    NOT: InvoiceWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    amount: string | null;
+    amount_not: string | null;
+    amount_in: string[];
+    amount_not_in: string[];
+    amount_lt: string | null;
+    amount_lte: string | null;
+    amount_gt: string | null;
+    amount_gte: string | null;
+    amount_contains: string | null;
+    amount_not_contains: string | null;
+    amount_starts_with: string | null;
+    amount_not_starts_with: string | null;
+    amount_ends_with: string | null;
+    amount_not_ends_with: string | null;
+    email: string | null;
+    email_not: string | null;
+    email_in: string[];
+    email_not_in: string[];
+    email_lt: string | null;
+    email_lte: string | null;
+    email_gt: string | null;
+    email_gte: string | null;
+    email_contains: string | null;
+    email_not_contains: string | null;
+    email_starts_with: string | null;
+    email_not_starts_with: string | null;
+    email_ends_with: string | null;
+    email_not_ends_with: string | null;
+    created: number | null;
+    created_not: number | null;
+    created_in: number[];
+    created_not_in: number[];
+    created_lt: number | null;
+    created_lte: number | null;
+    created_gt: number | null;
+    created_gte: number | null;
+    stripePaymentId: string | null;
+    stripePaymentId_not: string | null;
+    stripePaymentId_in: string[];
+    stripePaymentId_not_in: string[];
+    stripePaymentId_lt: string | null;
+    stripePaymentId_lte: string | null;
+    stripePaymentId_gt: string | null;
+    stripePaymentId_gte: string | null;
+    stripePaymentId_contains: string | null;
+    stripePaymentId_not_contains: string | null;
+    stripePaymentId_starts_with: string | null;
+    stripePaymentId_not_starts_with: string | null;
+    stripePaymentId_ends_with: string | null;
+    stripePaymentId_not_ends_with: string | null;
+    stripeCustomerId: string | null;
+    stripeCustomerId_not: string | null;
+    stripeCustomerId_in: string[];
+    stripeCustomerId_not_in: string[];
+    stripeCustomerId_lt: string | null;
+    stripeCustomerId_lte: string | null;
+    stripeCustomerId_gt: string | null;
+    stripeCustomerId_gte: string | null;
+    stripeCustomerId_contains: string | null;
+    stripeCustomerId_not_contains: string | null;
+    stripeCustomerId_starts_with: string | null;
+    stripeCustomerId_not_starts_with: string | null;
+    stripeCustomerId_ends_with: string | null;
+    stripeCustomerId_not_ends_with: string | null;
+    status: string | null;
+    status_not: string | null;
+    status_in: string[];
+    status_not_in: string[];
+    status_lt: string | null;
+    status_lte: string | null;
+    status_gt: string | null;
+    status_gte: string | null;
+    status_contains: string | null;
+    status_not_contains: string | null;
+    status_starts_with: string | null;
+    status_not_starts_with: string | null;
+    status_ends_with: string | null;
+    status_not_ends_with: string | null;
+    items_every: ProductWhereInput | null;
+    items_some: ProductWhereInput | null;
+    items_none: ProductWhereInput | null;
+    stripeRecord_every: PaymentRecordWhereInput | null;
+    stripeRecord_some: PaymentRecordWhereInput | null;
+    stripeRecord_none: PaymentRecordWhereInput | null;
+    shippingAddress: ShippingAddressWhereInput | null;
+    customer: UserWhereInput | null;
+    vendors_every: UserWhereInput | null;
+    vendors_some: UserWhereInput | null;
+    vendors_none: UserWhereInput | null;
+  }
+  export interface PaymentRecordWhereInput {
+    AND: PaymentRecordWhereInput[];
+    OR: PaymentRecordWhereInput[];
+    NOT: PaymentRecordWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    amount: number | null;
+    amount_not: number | null;
+    amount_in: number[];
+    amount_not_in: number[];
+    amount_lt: number | null;
+    amount_lte: number | null;
+    amount_gt: number | null;
+    amount_gte: number | null;
+    balanceTransaction: string | null;
+    balanceTransaction_not: string | null;
+    balanceTransaction_in: string[];
+    balanceTransaction_not_in: string[];
+    balanceTransaction_lt: string | null;
+    balanceTransaction_lte: string | null;
+    balanceTransaction_gt: string | null;
+    balanceTransaction_gte: string | null;
+    balanceTransaction_contains: string | null;
+    balanceTransaction_not_contains: string | null;
+    balanceTransaction_starts_with: string | null;
+    balanceTransaction_not_starts_with: string | null;
+    balanceTransaction_ends_with: string | null;
+    balanceTransaction_not_ends_with: string | null;
+    created: number | null;
+    created_not: number | null;
+    created_in: number[];
+    created_not_in: number[];
+    created_lt: number | null;
+    created_lte: number | null;
+    created_gt: number | null;
+    created_gte: number | null;
+    currency: string | null;
+    currency_not: string | null;
+    currency_in: string[];
+    currency_not_in: string[];
+    currency_lt: string | null;
+    currency_lte: string | null;
+    currency_gt: string | null;
+    currency_gte: string | null;
+    currency_contains: string | null;
+    currency_not_contains: string | null;
+    currency_starts_with: string | null;
+    currency_not_starts_with: string | null;
+    currency_ends_with: string | null;
+    currency_not_ends_with: string | null;
+    stripeCustomerId: string | null;
+    stripeCustomerId_not: string | null;
+    stripeCustomerId_in: string[];
+    stripeCustomerId_not_in: string[];
+    stripeCustomerId_lt: string | null;
+    stripeCustomerId_lte: string | null;
+    stripeCustomerId_gt: string | null;
+    stripeCustomerId_gte: string | null;
+    stripeCustomerId_contains: string | null;
+    stripeCustomerId_not_contains: string | null;
+    stripeCustomerId_starts_with: string | null;
+    stripeCustomerId_not_starts_with: string | null;
+    stripeCustomerId_ends_with: string | null;
+    stripeCustomerId_not_ends_with: string | null;
+    stripePaymentId: string | null;
+    stripePaymentId_not: string | null;
+    stripePaymentId_in: string[];
+    stripePaymentId_not_in: string[];
+    stripePaymentId_lt: string | null;
+    stripePaymentId_lte: string | null;
+    stripePaymentId_gt: string | null;
+    stripePaymentId_gte: string | null;
+    stripePaymentId_contains: string | null;
+    stripePaymentId_not_contains: string | null;
+    stripePaymentId_starts_with: string | null;
+    stripePaymentId_not_starts_with: string | null;
+    stripePaymentId_ends_with: string | null;
+    stripePaymentId_not_ends_with: string | null;
+    status: string | null;
+    status_not: string | null;
+    status_in: string[];
+    status_not_in: string[];
+    status_lt: string | null;
+    status_lte: string | null;
+    status_gt: string | null;
+    status_gte: string | null;
+    status_contains: string | null;
+    status_not_contains: string | null;
+    status_starts_with: string | null;
+    status_not_starts_with: string | null;
+    status_ends_with: string | null;
+    status_not_ends_with: string | null;
+    _MagicalBackRelation_InvoiceToPaymentRecord_every: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToPaymentRecord_some: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToPaymentRecord_none: InvoiceWhereInput | null;
+  }
+  export interface ShippingAddressWhereInput {
+    AND: ShippingAddressWhereInput[];
+    OR: ShippingAddressWhereInput[];
+    NOT: ShippingAddressWhereInput[];
+    id: string | null;
+    id_not: string | null;
+    id_in: string[];
+    id_not_in: string[];
+    id_lt: string | null;
+    id_lte: string | null;
+    id_gt: string | null;
+    id_gte: string | null;
+    id_contains: string | null;
+    id_not_contains: string | null;
+    id_starts_with: string | null;
+    id_not_starts_with: string | null;
+    id_ends_with: string | null;
+    id_not_ends_with: string | null;
+    dateCreated: string | null;
+    dateCreated_not: string | null;
+    dateCreated_in: string[];
+    dateCreated_not_in: string[];
+    dateCreated_lt: string | null;
+    dateCreated_lte: string | null;
+    dateCreated_gt: string | null;
+    dateCreated_gte: string | null;
+    recipient: string | null;
+    recipient_not: string | null;
+    recipient_in: string[];
+    recipient_not_in: string[];
+    recipient_lt: string | null;
+    recipient_lte: string | null;
+    recipient_gt: string | null;
+    recipient_gte: string | null;
+    recipient_contains: string | null;
+    recipient_not_contains: string | null;
+    recipient_starts_with: string | null;
+    recipient_not_starts_with: string | null;
+    recipient_ends_with: string | null;
+    recipient_not_ends_with: string | null;
+    street: string | null;
+    street_not: string | null;
+    street_in: string[];
+    street_not_in: string[];
+    street_lt: string | null;
+    street_lte: string | null;
+    street_gt: string | null;
+    street_gte: string | null;
+    street_contains: string | null;
+    street_not_contains: string | null;
+    street_starts_with: string | null;
+    street_not_starts_with: string | null;
+    street_ends_with: string | null;
+    street_not_ends_with: string | null;
+    city: string | null;
+    city_not: string | null;
+    city_in: string[];
+    city_not_in: string[];
+    city_lt: string | null;
+    city_lte: string | null;
+    city_gt: string | null;
+    city_gte: string | null;
+    city_contains: string | null;
+    city_not_contains: string | null;
+    city_starts_with: string | null;
+    city_not_starts_with: string | null;
+    city_ends_with: string | null;
+    city_not_ends_with: string | null;
+    state: string | null;
+    state_not: string | null;
+    state_in: string[];
+    state_not_in: string[];
+    state_lt: string | null;
+    state_lte: string | null;
+    state_gt: string | null;
+    state_gte: string | null;
+    state_contains: string | null;
+    state_not_contains: string | null;
+    state_starts_with: string | null;
+    state_not_starts_with: string | null;
+    state_ends_with: string | null;
+    state_not_ends_with: string | null;
+    zip: string | null;
+    zip_not: string | null;
+    zip_in: string[];
+    zip_not_in: string[];
+    zip_lt: string | null;
+    zip_lte: string | null;
+    zip_gt: string | null;
+    zip_gte: string | null;
+    zip_contains: string | null;
+    zip_not_contains: string | null;
+    zip_starts_with: string | null;
+    zip_not_starts_with: string | null;
+    zip_ends_with: string | null;
+    zip_not_ends_with: string | null;
+    user: UserWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput | null;
+    _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput | null;
+  }
 
   export interface ArgsCustomerSignup {
     email: string;
@@ -3247,7 +5059,6 @@ export namespace MutationResolvers {
     description: string;
     imageUrl: string | null;
     varietal: string;
-    vendor: string;
   }
 
   export type CustomerSignupResolver = (
@@ -3338,7 +5149,9 @@ export namespace MutationResolvers {
 }
 
 export namespace AuthPayloadResolvers {
-  export const defaultResolvers = {};
+  export const defaultResolvers = {
+    token: (parent: AuthPayload) => parent.token
+  };
 
   export type TokenResolver = (
     parent: AuthPayload,
@@ -3402,6 +5215,7 @@ export interface Resolvers {
   Product: ProductResolvers.Type;
   Invoice: InvoiceResolvers.Type;
   PaymentRecord: PaymentRecordResolvers.Type;
+  ShippingAddress: ShippingAddressResolvers.Type;
   Mutation: MutationResolvers.Type;
   AuthPayload: AuthPayloadResolvers.Type;
   MutationResult: MutationResultResolvers.Type;

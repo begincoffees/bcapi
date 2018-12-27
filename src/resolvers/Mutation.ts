@@ -171,6 +171,7 @@ export const Mutation: MutationResolvers.Type = {
         amount: _args.amount,
         email: _args.email,
         created: stripePayment.created,
+        status: 'paid',
         stripePaymentId: stripePayment.id,
         stripeCustomerId: stripeId || stripePayment.customer,
         vendors:{connect: [..._args.vendors]},

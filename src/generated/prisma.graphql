@@ -1,5 +1,5 @@
 # source: https://begincoffeesprisma.herokuapp.com/bcprisma/test
-# timestamp: Sat Dec 22 2018 01:20:47 GMT-0600 (CST)
+# timestamp: Wed Dec 26 2018 23:18:22 GMT-0600 (CST)
 
 type AggregateCart {
   count: Int!
@@ -14,6 +14,10 @@ type AggregatePaymentRecord {
 }
 
 type AggregateProduct {
+  count: Int!
+}
+
+type AggregateShippingAddress {
   count: Int!
 }
 
@@ -359,6 +363,8 @@ type Invoice implements Node {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
+  shippingAddress(where: ShippingAddressWhereInput): ShippingAddress
+  status: String
   customer(where: UserWhereInput): User
   vendors(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
@@ -381,8 +387,10 @@ input InvoiceCreateInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
+  status: String
   items: ProductCreateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordCreateManyInput
+  shippingAddress: ShippingAddressCreateOneInput
   customer: UserCreateOneWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
 }
@@ -410,8 +418,10 @@ input InvoiceCreateWithoutCustomerInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
+  status: String
   items: ProductCreateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordCreateManyInput
+  shippingAddress: ShippingAddressCreateOneInput
   vendors: UserCreateManyWithoutSalesInput
 }
 
@@ -423,7 +433,9 @@ input InvoiceCreateWithoutItemsInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
+  status: String
   stripeRecord: PaymentRecordCreateManyInput
+  shippingAddress: ShippingAddressCreateOneInput
   customer: UserCreateOneWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
 }
@@ -436,8 +448,10 @@ input InvoiceCreateWithoutVendorsInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
+  status: String
   items: ProductCreateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordCreateManyInput
+  shippingAddress: ShippingAddressCreateOneInput
   customer: UserCreateOneWithoutPurchasesInput
 }
 
@@ -467,6 +481,8 @@ enum InvoiceOrderByInput {
   stripePaymentId_DESC
   stripeCustomerId_ASC
   stripeCustomerId_DESC
+  status_ASC
+  status_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -482,6 +498,7 @@ type InvoicePreviousValues {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
+  status: String
 }
 
 type InvoiceSubscriptionPayload {
@@ -531,8 +548,10 @@ input InvoiceUpdateInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
+  status: String
   items: ProductUpdateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordUpdateManyInput
+  shippingAddress: ShippingAddressUpdateOneInput
   customer: UserUpdateOneWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
 }
@@ -572,8 +591,10 @@ input InvoiceUpdateWithoutCustomerDataInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
+  status: String
   items: ProductUpdateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordUpdateManyInput
+  shippingAddress: ShippingAddressUpdateOneInput
   vendors: UserUpdateManyWithoutSalesInput
 }
 
@@ -585,7 +606,9 @@ input InvoiceUpdateWithoutItemsDataInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
+  status: String
   stripeRecord: PaymentRecordUpdateManyInput
+  shippingAddress: ShippingAddressUpdateOneInput
   customer: UserUpdateOneWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
 }
@@ -598,8 +621,10 @@ input InvoiceUpdateWithoutVendorsDataInput {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
+  status: String
   items: ProductUpdateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordUpdateManyInput
+  shippingAddress: ShippingAddressUpdateOneInput
   customer: UserUpdateOneWithoutPurchasesInput
 }
 
@@ -889,12 +914,53 @@ input InvoiceWhereInput {
 
   """All values not ending with the given string."""
   stripeCustomerId_not_ends_with: String
+  status: String
+
+  """All values that are not equal to given value."""
+  status_not: String
+
+  """All values that are contained in given list."""
+  status_in: [String!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [String!]
+
+  """All values less than the given value."""
+  status_lt: String
+
+  """All values less than or equal the given value."""
+  status_lte: String
+
+  """All values greater than the given value."""
+  status_gt: String
+
+  """All values greater than or equal the given value."""
+  status_gte: String
+
+  """All values containing the given string."""
+  status_contains: String
+
+  """All values not containing the given string."""
+  status_not_contains: String
+
+  """All values starting with the given string."""
+  status_starts_with: String
+
+  """All values not starting with the given string."""
+  status_not_starts_with: String
+
+  """All values ending with the given string."""
+  status_ends_with: String
+
+  """All values not ending with the given string."""
+  status_not_ends_with: String
   items_every: ProductWhereInput
   items_some: ProductWhereInput
   items_none: ProductWhereInput
   stripeRecord_every: PaymentRecordWhereInput
   stripeRecord_some: PaymentRecordWhereInput
   stripeRecord_none: PaymentRecordWhereInput
+  shippingAddress: ShippingAddressWhereInput
   customer: UserWhereInput
   vendors_every: UserWhereInput
   vendors_some: UserWhereInput
@@ -920,31 +986,37 @@ type Mutation {
   createInvoice(data: InvoiceCreateInput!): Invoice!
   createProduct(data: ProductCreateInput!): Product!
   createPaymentRecord(data: PaymentRecordCreateInput!): PaymentRecord!
+  createShippingAddress(data: ShippingAddressCreateInput!): ShippingAddress!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateCart(data: CartUpdateInput!, where: CartWhereUniqueInput!): Cart
   updateInvoice(data: InvoiceUpdateInput!, where: InvoiceWhereUniqueInput!): Invoice
   updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
   updatePaymentRecord(data: PaymentRecordUpdateInput!, where: PaymentRecordWhereUniqueInput!): PaymentRecord
+  updateShippingAddress(data: ShippingAddressUpdateInput!, where: ShippingAddressWhereUniqueInput!): ShippingAddress
   deleteUser(where: UserWhereUniqueInput!): User
   deleteCart(where: CartWhereUniqueInput!): Cart
   deleteInvoice(where: InvoiceWhereUniqueInput!): Invoice
   deleteProduct(where: ProductWhereUniqueInput!): Product
   deletePaymentRecord(where: PaymentRecordWhereUniqueInput!): PaymentRecord
+  deleteShippingAddress(where: ShippingAddressWhereUniqueInput!): ShippingAddress
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertCart(where: CartWhereUniqueInput!, create: CartCreateInput!, update: CartUpdateInput!): Cart!
   upsertInvoice(where: InvoiceWhereUniqueInput!, create: InvoiceCreateInput!, update: InvoiceUpdateInput!): Invoice!
   upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
   upsertPaymentRecord(where: PaymentRecordWhereUniqueInput!, create: PaymentRecordCreateInput!, update: PaymentRecordUpdateInput!): PaymentRecord!
+  upsertShippingAddress(where: ShippingAddressWhereUniqueInput!, create: ShippingAddressCreateInput!, update: ShippingAddressUpdateInput!): ShippingAddress!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   updateManyCarts(data: CartUpdateInput!, where: CartWhereInput): BatchPayload!
   updateManyInvoices(data: InvoiceUpdateInput!, where: InvoiceWhereInput): BatchPayload!
   updateManyProducts(data: ProductUpdateInput!, where: ProductWhereInput): BatchPayload!
   updateManyPaymentRecords(data: PaymentRecordUpdateInput!, where: PaymentRecordWhereInput): BatchPayload!
+  updateManyShippingAddresses(data: ShippingAddressUpdateInput!, where: ShippingAddressWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyCarts(where: CartWhereInput): BatchPayload!
   deleteManyInvoices(where: InvoiceWhereInput): BatchPayload!
   deleteManyProducts(where: ProductWhereInput): BatchPayload!
   deleteManyPaymentRecords(where: PaymentRecordWhereInput): BatchPayload!
+  deleteManyShippingAddresses(where: ShippingAddressWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -1975,16 +2047,19 @@ type Query {
   invoices(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice]!
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
   paymentRecords(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PaymentRecord]!
+  shippingAddresses(where: ShippingAddressWhereInput, orderBy: ShippingAddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ShippingAddress]!
   user(where: UserWhereUniqueInput!): User
   cart(where: CartWhereUniqueInput!): Cart
   invoice(where: InvoiceWhereUniqueInput!): Invoice
   product(where: ProductWhereUniqueInput!): Product
   paymentRecord(where: PaymentRecordWhereUniqueInput!): PaymentRecord
+  shippingAddress(where: ShippingAddressWhereUniqueInput!): ShippingAddress
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   cartsConnection(where: CartWhereInput, orderBy: CartOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartConnection!
   invoicesConnection(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InvoiceConnection!
   productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
   paymentRecordsConnection(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PaymentRecordConnection!
+  shippingAddressesConnection(where: ShippingAddressWhereInput, orderBy: ShippingAddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ShippingAddressConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1993,12 +2068,486 @@ type Query {
   ): Node
 }
 
+type ShippingAddress implements Node {
+  id: ID!
+  dateCreated: DateTime!
+  recipient: String!
+  street: String!
+  city: String!
+  state: String!
+  zip: String!
+  user(where: UserWhereInput): User!
+}
+
+"""A connection to a list of items."""
+type ShippingAddressConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ShippingAddressEdge]!
+  aggregate: AggregateShippingAddress!
+}
+
+input ShippingAddressCreateInput {
+  dateCreated: DateTime!
+  recipient: String!
+  street: String!
+  city: String!
+  state: String!
+  zip: String!
+  user: UserCreateOneWithoutShippingAddressesInput!
+}
+
+input ShippingAddressCreateManyWithoutUserInput {
+  create: [ShippingAddressCreateWithoutUserInput!]
+  connect: [ShippingAddressWhereUniqueInput!]
+}
+
+input ShippingAddressCreateOneInput {
+  create: ShippingAddressCreateInput
+  connect: ShippingAddressWhereUniqueInput
+}
+
+input ShippingAddressCreateWithoutUserInput {
+  dateCreated: DateTime!
+  recipient: String!
+  street: String!
+  city: String!
+  state: String!
+  zip: String!
+}
+
+"""An edge in a connection."""
+type ShippingAddressEdge {
+  """The item at the end of the edge."""
+  node: ShippingAddress!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ShippingAddressOrderByInput {
+  id_ASC
+  id_DESC
+  dateCreated_ASC
+  dateCreated_DESC
+  recipient_ASC
+  recipient_DESC
+  street_ASC
+  street_DESC
+  city_ASC
+  city_DESC
+  state_ASC
+  state_DESC
+  zip_ASC
+  zip_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ShippingAddressPreviousValues {
+  id: ID!
+  dateCreated: DateTime!
+  recipient: String!
+  street: String!
+  city: String!
+  state: String!
+  zip: String!
+}
+
+type ShippingAddressSubscriptionPayload {
+  mutation: MutationType!
+  node: ShippingAddress
+  updatedFields: [String!]
+  previousValues: ShippingAddressPreviousValues
+}
+
+input ShippingAddressSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ShippingAddressSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ShippingAddressSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ShippingAddressSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ShippingAddressWhereInput
+}
+
+input ShippingAddressUpdateDataInput {
+  dateCreated: DateTime
+  recipient: String
+  street: String
+  city: String
+  state: String
+  zip: String
+  user: UserUpdateOneWithoutShippingAddressesInput
+}
+
+input ShippingAddressUpdateInput {
+  dateCreated: DateTime
+  recipient: String
+  street: String
+  city: String
+  state: String
+  zip: String
+  user: UserUpdateOneWithoutShippingAddressesInput
+}
+
+input ShippingAddressUpdateManyWithoutUserInput {
+  create: [ShippingAddressCreateWithoutUserInput!]
+  connect: [ShippingAddressWhereUniqueInput!]
+  disconnect: [ShippingAddressWhereUniqueInput!]
+  delete: [ShippingAddressWhereUniqueInput!]
+  update: [ShippingAddressUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [ShippingAddressUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input ShippingAddressUpdateOneInput {
+  create: ShippingAddressCreateInput
+  connect: ShippingAddressWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: ShippingAddressUpdateDataInput
+  upsert: ShippingAddressUpsertNestedInput
+}
+
+input ShippingAddressUpdateWithoutUserDataInput {
+  dateCreated: DateTime
+  recipient: String
+  street: String
+  city: String
+  state: String
+  zip: String
+}
+
+input ShippingAddressUpdateWithWhereUniqueWithoutUserInput {
+  where: ShippingAddressWhereUniqueInput!
+  data: ShippingAddressUpdateWithoutUserDataInput!
+}
+
+input ShippingAddressUpsertNestedInput {
+  update: ShippingAddressUpdateDataInput!
+  create: ShippingAddressCreateInput!
+}
+
+input ShippingAddressUpsertWithWhereUniqueWithoutUserInput {
+  where: ShippingAddressWhereUniqueInput!
+  update: ShippingAddressUpdateWithoutUserDataInput!
+  create: ShippingAddressCreateWithoutUserInput!
+}
+
+input ShippingAddressWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ShippingAddressWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ShippingAddressWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ShippingAddressWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  dateCreated: DateTime
+
+  """All values that are not equal to given value."""
+  dateCreated_not: DateTime
+
+  """All values that are contained in given list."""
+  dateCreated_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  dateCreated_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  dateCreated_lt: DateTime
+
+  """All values less than or equal the given value."""
+  dateCreated_lte: DateTime
+
+  """All values greater than the given value."""
+  dateCreated_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  dateCreated_gte: DateTime
+  recipient: String
+
+  """All values that are not equal to given value."""
+  recipient_not: String
+
+  """All values that are contained in given list."""
+  recipient_in: [String!]
+
+  """All values that are not contained in given list."""
+  recipient_not_in: [String!]
+
+  """All values less than the given value."""
+  recipient_lt: String
+
+  """All values less than or equal the given value."""
+  recipient_lte: String
+
+  """All values greater than the given value."""
+  recipient_gt: String
+
+  """All values greater than or equal the given value."""
+  recipient_gte: String
+
+  """All values containing the given string."""
+  recipient_contains: String
+
+  """All values not containing the given string."""
+  recipient_not_contains: String
+
+  """All values starting with the given string."""
+  recipient_starts_with: String
+
+  """All values not starting with the given string."""
+  recipient_not_starts_with: String
+
+  """All values ending with the given string."""
+  recipient_ends_with: String
+
+  """All values not ending with the given string."""
+  recipient_not_ends_with: String
+  street: String
+
+  """All values that are not equal to given value."""
+  street_not: String
+
+  """All values that are contained in given list."""
+  street_in: [String!]
+
+  """All values that are not contained in given list."""
+  street_not_in: [String!]
+
+  """All values less than the given value."""
+  street_lt: String
+
+  """All values less than or equal the given value."""
+  street_lte: String
+
+  """All values greater than the given value."""
+  street_gt: String
+
+  """All values greater than or equal the given value."""
+  street_gte: String
+
+  """All values containing the given string."""
+  street_contains: String
+
+  """All values not containing the given string."""
+  street_not_contains: String
+
+  """All values starting with the given string."""
+  street_starts_with: String
+
+  """All values not starting with the given string."""
+  street_not_starts_with: String
+
+  """All values ending with the given string."""
+  street_ends_with: String
+
+  """All values not ending with the given string."""
+  street_not_ends_with: String
+  city: String
+
+  """All values that are not equal to given value."""
+  city_not: String
+
+  """All values that are contained in given list."""
+  city_in: [String!]
+
+  """All values that are not contained in given list."""
+  city_not_in: [String!]
+
+  """All values less than the given value."""
+  city_lt: String
+
+  """All values less than or equal the given value."""
+  city_lte: String
+
+  """All values greater than the given value."""
+  city_gt: String
+
+  """All values greater than or equal the given value."""
+  city_gte: String
+
+  """All values containing the given string."""
+  city_contains: String
+
+  """All values not containing the given string."""
+  city_not_contains: String
+
+  """All values starting with the given string."""
+  city_starts_with: String
+
+  """All values not starting with the given string."""
+  city_not_starts_with: String
+
+  """All values ending with the given string."""
+  city_ends_with: String
+
+  """All values not ending with the given string."""
+  city_not_ends_with: String
+  state: String
+
+  """All values that are not equal to given value."""
+  state_not: String
+
+  """All values that are contained in given list."""
+  state_in: [String!]
+
+  """All values that are not contained in given list."""
+  state_not_in: [String!]
+
+  """All values less than the given value."""
+  state_lt: String
+
+  """All values less than or equal the given value."""
+  state_lte: String
+
+  """All values greater than the given value."""
+  state_gt: String
+
+  """All values greater than or equal the given value."""
+  state_gte: String
+
+  """All values containing the given string."""
+  state_contains: String
+
+  """All values not containing the given string."""
+  state_not_contains: String
+
+  """All values starting with the given string."""
+  state_starts_with: String
+
+  """All values not starting with the given string."""
+  state_not_starts_with: String
+
+  """All values ending with the given string."""
+  state_ends_with: String
+
+  """All values not ending with the given string."""
+  state_not_ends_with: String
+  zip: String
+
+  """All values that are not equal to given value."""
+  zip_not: String
+
+  """All values that are contained in given list."""
+  zip_in: [String!]
+
+  """All values that are not contained in given list."""
+  zip_not_in: [String!]
+
+  """All values less than the given value."""
+  zip_lt: String
+
+  """All values less than or equal the given value."""
+  zip_lte: String
+
+  """All values greater than the given value."""
+  zip_gt: String
+
+  """All values greater than or equal the given value."""
+  zip_gte: String
+
+  """All values containing the given string."""
+  zip_contains: String
+
+  """All values not containing the given string."""
+  zip_not_contains: String
+
+  """All values starting with the given string."""
+  zip_starts_with: String
+
+  """All values not starting with the given string."""
+  zip_not_starts_with: String
+
+  """All values ending with the given string."""
+  zip_ends_with: String
+
+  """All values not ending with the given string."""
+  zip_not_ends_with: String
+  user: UserWhereInput
+  _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput
+  _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput
+  _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput
+}
+
+input ShippingAddressWhereUniqueInput {
+  id: ID
+}
+
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   cart(where: CartSubscriptionWhereInput): CartSubscriptionPayload
   invoice(where: InvoiceSubscriptionWhereInput): InvoiceSubscriptionPayload
   product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
   paymentRecord(where: PaymentRecordSubscriptionWhereInput): PaymentRecordSubscriptionPayload
+  shippingAddress(where: ShippingAddressSubscriptionWhereInput): ShippingAddressSubscriptionPayload
 }
 
 type User implements Node {
@@ -2013,9 +2562,10 @@ type User implements Node {
   password: String
   cart(where: CartWhereInput): Cart
   stripeId: String
-  purchases(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice!]
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
+  purchases(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice!]
   sales(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice!]
+  shippingAddresses(where: ShippingAddressWhereInput, orderBy: ShippingAddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ShippingAddress!]
 }
 
 """A connection to a list of items."""
@@ -2039,9 +2589,10 @@ input UserCreateInput {
   stripeId: String
   permissions: UserCreatepermissionsInput
   cart: CartCreateOneWithoutUserInput
-  purchases: InvoiceCreateManyWithoutCustomerInput
   products: ProductCreateManyWithoutVendorInput
+  purchases: InvoiceCreateManyWithoutCustomerInput
   sales: InvoiceCreateManyWithoutVendorsInput
+  shippingAddresses: ShippingAddressCreateManyWithoutUserInput
 }
 
 input UserCreateManyWithoutSalesInput {
@@ -2064,6 +2615,11 @@ input UserCreateOneWithoutPurchasesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutShippingAddressesInput {
+  create: UserCreateWithoutShippingAddressesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreatepermissionsInput {
   set: [String!]
 }
@@ -2078,9 +2634,10 @@ input UserCreateWithoutCartInput {
   password: String
   stripeId: String
   permissions: UserCreatepermissionsInput
-  purchases: InvoiceCreateManyWithoutCustomerInput
   products: ProductCreateManyWithoutVendorInput
+  purchases: InvoiceCreateManyWithoutCustomerInput
   sales: InvoiceCreateManyWithoutVendorsInput
+  shippingAddresses: ShippingAddressCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutProductsInput {
@@ -2096,6 +2653,7 @@ input UserCreateWithoutProductsInput {
   cart: CartCreateOneWithoutUserInput
   purchases: InvoiceCreateManyWithoutCustomerInput
   sales: InvoiceCreateManyWithoutVendorsInput
+  shippingAddresses: ShippingAddressCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutPurchasesInput {
@@ -2111,6 +2669,7 @@ input UserCreateWithoutPurchasesInput {
   cart: CartCreateOneWithoutUserInput
   products: ProductCreateManyWithoutVendorInput
   sales: InvoiceCreateManyWithoutVendorsInput
+  shippingAddresses: ShippingAddressCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutSalesInput {
@@ -2124,8 +2683,25 @@ input UserCreateWithoutSalesInput {
   stripeId: String
   permissions: UserCreatepermissionsInput
   cart: CartCreateOneWithoutUserInput
-  purchases: InvoiceCreateManyWithoutCustomerInput
   products: ProductCreateManyWithoutVendorInput
+  purchases: InvoiceCreateManyWithoutCustomerInput
+  shippingAddresses: ShippingAddressCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutShippingAddressesInput {
+  dateCreated: DateTime
+  role: String
+  email: String
+  firstName: String
+  lastName: String
+  bizName: String
+  password: String
+  stripeId: String
+  permissions: UserCreatepermissionsInput
+  cart: CartCreateOneWithoutUserInput
+  products: ProductCreateManyWithoutVendorInput
+  purchases: InvoiceCreateManyWithoutCustomerInput
+  sales: InvoiceCreateManyWithoutVendorsInput
 }
 
 """An edge in a connection."""
@@ -2225,9 +2801,10 @@ input UserUpdateInput {
   stripeId: String
   permissions: UserUpdatepermissionsInput
   cart: CartUpdateOneWithoutUserInput
-  purchases: InvoiceUpdateManyWithoutCustomerInput
   products: ProductUpdateManyWithoutVendorInput
+  purchases: InvoiceUpdateManyWithoutCustomerInput
   sales: InvoiceUpdateManyWithoutVendorsInput
+  shippingAddresses: ShippingAddressUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyWithoutSalesInput {
@@ -2265,6 +2842,14 @@ input UserUpdateOneWithoutPurchasesInput {
   upsert: UserUpsertWithoutPurchasesInput
 }
 
+input UserUpdateOneWithoutShippingAddressesInput {
+  create: UserCreateWithoutShippingAddressesInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutShippingAddressesDataInput
+  upsert: UserUpsertWithoutShippingAddressesInput
+}
+
 input UserUpdatepermissionsInput {
   set: [String!]
 }
@@ -2279,9 +2864,10 @@ input UserUpdateWithoutCartDataInput {
   password: String
   stripeId: String
   permissions: UserUpdatepermissionsInput
-  purchases: InvoiceUpdateManyWithoutCustomerInput
   products: ProductUpdateManyWithoutVendorInput
+  purchases: InvoiceUpdateManyWithoutCustomerInput
   sales: InvoiceUpdateManyWithoutVendorsInput
+  shippingAddresses: ShippingAddressUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutProductsDataInput {
@@ -2297,6 +2883,7 @@ input UserUpdateWithoutProductsDataInput {
   cart: CartUpdateOneWithoutUserInput
   purchases: InvoiceUpdateManyWithoutCustomerInput
   sales: InvoiceUpdateManyWithoutVendorsInput
+  shippingAddresses: ShippingAddressUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutPurchasesDataInput {
@@ -2312,6 +2899,7 @@ input UserUpdateWithoutPurchasesDataInput {
   cart: CartUpdateOneWithoutUserInput
   products: ProductUpdateManyWithoutVendorInput
   sales: InvoiceUpdateManyWithoutVendorsInput
+  shippingAddresses: ShippingAddressUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutSalesDataInput {
@@ -2325,8 +2913,25 @@ input UserUpdateWithoutSalesDataInput {
   stripeId: String
   permissions: UserUpdatepermissionsInput
   cart: CartUpdateOneWithoutUserInput
-  purchases: InvoiceUpdateManyWithoutCustomerInput
   products: ProductUpdateManyWithoutVendorInput
+  purchases: InvoiceUpdateManyWithoutCustomerInput
+  shippingAddresses: ShippingAddressUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutShippingAddressesDataInput {
+  dateCreated: DateTime
+  role: String
+  email: String
+  firstName: String
+  lastName: String
+  bizName: String
+  password: String
+  stripeId: String
+  permissions: UserUpdatepermissionsInput
+  cart: CartUpdateOneWithoutUserInput
+  products: ProductUpdateManyWithoutVendorInput
+  purchases: InvoiceUpdateManyWithoutCustomerInput
+  sales: InvoiceUpdateManyWithoutVendorsInput
 }
 
 input UserUpdateWithWhereUniqueWithoutSalesInput {
@@ -2347,6 +2952,11 @@ input UserUpsertWithoutProductsInput {
 input UserUpsertWithoutPurchasesInput {
   update: UserUpdateWithoutPurchasesDataInput!
   create: UserCreateWithoutPurchasesInput!
+}
+
+input UserUpsertWithoutShippingAddressesInput {
+  update: UserUpdateWithoutShippingAddressesDataInput!
+  create: UserCreateWithoutShippingAddressesInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutSalesInput {
@@ -2707,15 +3317,18 @@ input UserWhereInput {
   """All values not ending with the given string."""
   stripeId_not_ends_with: String
   cart: CartWhereInput
-  purchases_every: InvoiceWhereInput
-  purchases_some: InvoiceWhereInput
-  purchases_none: InvoiceWhereInput
   products_every: ProductWhereInput
   products_some: ProductWhereInput
   products_none: ProductWhereInput
+  purchases_every: InvoiceWhereInput
+  purchases_some: InvoiceWhereInput
+  purchases_none: InvoiceWhereInput
   sales_every: InvoiceWhereInput
   sales_some: InvoiceWhereInput
   sales_none: InvoiceWhereInput
+  shippingAddresses_every: ShippingAddressWhereInput
+  shippingAddresses_some: ShippingAddressWhereInput
+  shippingAddresses_none: ShippingAddressWhereInput
 }
 
 input UserWhereUniqueInput {
