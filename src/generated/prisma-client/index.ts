@@ -351,8 +351,10 @@ export interface ClientConstructor<T> {
 export type ProductOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "dateCreated_ASC"
-  | "dateCreated_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
   | "name_ASC"
   | "name_DESC"
   | "price_ASC"
@@ -360,31 +362,27 @@ export type ProductOrderByInput =
   | "description_ASC"
   | "description_DESC"
   | "varietal_ASC"
-  | "varietal_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "varietal_DESC";
 
 export type CartOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "dateCreated_ASC"
-  | "dateCreated_DESC"
-  | "itemCount_ASC"
-  | "itemCount_DESC"
-  | "totalPrice_ASC"
-  | "totalPrice_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "updatedAt_DESC"
+  | "itemCount_ASC"
+  | "itemCount_DESC"
+  | "totalPrice_ASC"
+  | "totalPrice_DESC";
 
 export type InvoiceOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "dateCreated_ASC"
-  | "dateCreated_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
   | "amount_ASC"
   | "amount_DESC"
   | "email_ASC"
@@ -398,17 +396,15 @@ export type InvoiceOrderByInput =
   | "stripeCustomerId_ASC"
   | "stripeCustomerId_DESC"
   | "status_ASC"
-  | "status_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "status_DESC";
 
 export type PaymentRecordOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "dateCreated_ASC"
-  | "dateCreated_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
   | "amount_ASC"
   | "amount_DESC"
   | "balanceTransaction_ASC"
@@ -424,17 +420,15 @@ export type PaymentRecordOrderByInput =
   | "status_ASC"
   | "status_DESC"
   | "data_ASC"
-  | "data_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "data_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "dateCreated_ASC"
-  | "dateCreated_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
   | "role_ASC"
   | "role_DESC"
   | "email_ASC"
@@ -448,17 +442,15 @@ export type UserOrderByInput =
   | "password_ASC"
   | "password_DESC"
   | "stripeId_ASC"
-  | "stripeId_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "stripeId_DESC";
 
 export type ShippingAddressOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "dateCreated_ASC"
-  | "dateCreated_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
   | "recipient_ASC"
   | "recipient_DESC"
   | "street_ASC"
@@ -468,11 +460,7 @@ export type ShippingAddressOrderByInput =
   | "state_ASC"
   | "state_DESC"
   | "zip_ASC"
-  | "zip_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "zip_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
@@ -498,7 +486,6 @@ export type CartWhereUniqueInput = AtLeastOne<{
 }>;
 
 export interface PaymentRecordUpdateDataInput {
-  dateCreated?: DateTimeInput;
   amount?: Int;
   balanceTransaction?: String;
   created?: Int;
@@ -524,14 +511,22 @@ export interface CartWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  dateCreated?: DateTimeInput;
-  dateCreated_not?: DateTimeInput;
-  dateCreated_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_lt?: DateTimeInput;
-  dateCreated_lte?: DateTimeInput;
-  dateCreated_gt?: DateTimeInput;
-  dateCreated_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   itemCount?: Int;
   itemCount_not?: Int;
   itemCount_in?: Int[] | Int;
@@ -584,14 +579,22 @@ export interface PaymentRecordWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  dateCreated?: DateTimeInput;
-  dateCreated_not?: DateTimeInput;
-  dateCreated_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_lt?: DateTimeInput;
-  dateCreated_lte?: DateTimeInput;
-  dateCreated_gt?: DateTimeInput;
-  dateCreated_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   amount?: Int;
   amount_not?: Int;
   amount_in?: Int[] | Int;
@@ -698,14 +701,22 @@ export interface PaymentRecordScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  dateCreated?: DateTimeInput;
-  dateCreated_not?: DateTimeInput;
-  dateCreated_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_lt?: DateTimeInput;
-  dateCreated_lte?: DateTimeInput;
-  dateCreated_gt?: DateTimeInput;
-  dateCreated_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   amount?: Int;
   amount_not?: Int;
   amount_in?: Int[] | Int;
@@ -812,14 +823,22 @@ export interface UserWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  dateCreated?: DateTimeInput;
-  dateCreated_not?: DateTimeInput;
-  dateCreated_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_lt?: DateTimeInput;
-  dateCreated_lte?: DateTimeInput;
-  dateCreated_gt?: DateTimeInput;
-  dateCreated_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   role?: String;
   role_not?: String;
   role_in?: String[] | String;
@@ -956,14 +975,22 @@ export interface ProductWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  dateCreated?: DateTimeInput;
-  dateCreated_not?: DateTimeInput;
-  dateCreated_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_lt?: DateTimeInput;
-  dateCreated_lte?: DateTimeInput;
-  dateCreated_gt?: DateTimeInput;
-  dateCreated_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   name?: String;
   name_not?: String;
   name_in?: String[] | String;
@@ -1045,7 +1072,6 @@ export interface UserUpsertWithoutPurchasesInput {
 }
 
 export interface UserUpdateWithoutCartDataInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserUpdatepermissionsInput;
   email?: String;
@@ -1061,7 +1087,6 @@ export interface UserUpdateWithoutCartDataInput {
 }
 
 export interface PaymentRecordUpdateManyDataInput {
-  dateCreated?: DateTimeInput;
   amount?: Int;
   balanceTransaction?: String;
   created?: Int;
@@ -1144,7 +1169,6 @@ export interface CartSubscriptionWhereInput {
 }
 
 export interface ProductUpdateWithoutVendorDataInput {
-  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
@@ -1154,7 +1178,6 @@ export interface ProductUpdateWithoutVendorDataInput {
 }
 
 export interface UserUpdateInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserUpdatepermissionsInput;
   email?: String;
@@ -1188,7 +1211,6 @@ export interface CartUpdateManyWithoutItemsInput {
 }
 
 export interface ShippingAddressUpdateManyMutationInput {
-  dateCreated?: DateTimeInput;
   recipient?: String;
   street?: String;
   city?: String;
@@ -1202,7 +1224,6 @@ export interface CartUpdateWithWhereUniqueWithoutItemsInput {
 }
 
 export interface ShippingAddressUpdateInput {
-  dateCreated?: DateTimeInput;
   recipient?: String;
   street?: String;
   city?: String;
@@ -1212,14 +1233,12 @@ export interface ShippingAddressUpdateInput {
 }
 
 export interface CartUpdateWithoutItemsDataInput {
-  dateCreated?: DateTimeInput;
   itemCount?: Int;
   totalPrice?: String;
   user?: UserUpdateOneRequiredWithoutCartInput;
 }
 
 export interface ProductUpdateInput {
-  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
@@ -1236,7 +1255,6 @@ export interface CartUpsertWithWhereUniqueWithoutItemsInput {
 }
 
 export interface ProductCreateInput {
-  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
@@ -1261,14 +1279,22 @@ export interface CartScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  dateCreated?: DateTimeInput;
-  dateCreated_not?: DateTimeInput;
-  dateCreated_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_lt?: DateTimeInput;
-  dateCreated_lte?: DateTimeInput;
-  dateCreated_gt?: DateTimeInput;
-  dateCreated_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   itemCount?: Int;
   itemCount_not?: Int;
   itemCount_in?: Int[] | Int;
@@ -1297,7 +1323,6 @@ export interface CartScalarWhereInput {
 }
 
 export interface PaymentRecordUpdateInput {
-  dateCreated?: DateTimeInput;
   amount?: Int;
   balanceTransaction?: String;
   created?: Int;
@@ -1314,7 +1339,6 @@ export interface CartUpdateManyWithWhereNestedInput {
 }
 
 export interface InvoiceUpdateManyMutationInput {
-  dateCreated?: DateTimeInput;
   amount?: String;
   email?: String;
   record?: Json;
@@ -1325,14 +1349,11 @@ export interface InvoiceUpdateManyMutationInput {
 }
 
 export interface CartUpdateManyDataInput {
-  dateCreated?: DateTimeInput;
   itemCount?: Int;
   totalPrice?: String;
 }
 
 export interface InvoiceCreateInput {
-  dateCreated?: DateTimeInput;
-  items?: ProductCreateManyWithoutPurchasesInput;
   amount?: String;
   email: String;
   record?: Json;
@@ -1342,6 +1363,7 @@ export interface InvoiceCreateInput {
   stripeCustomerId?: String;
   shippingAddress?: ShippingAddressCreateOneInput;
   status?: String;
+  items?: ProductCreateManyWithoutPurchasesInput;
   customer?: UserCreateOneWithoutPurchasesInput;
   vendors?: UserCreateManyWithoutSalesInput;
 }
@@ -1352,7 +1374,6 @@ export interface CartUpsertWithoutUserInput {
 }
 
 export interface CartUpdateManyMutationInput {
-  dateCreated?: DateTimeInput;
   itemCount?: Int;
   totalPrice?: String;
 }
@@ -1369,7 +1390,6 @@ export interface ProductUpsertWithWhereUniqueWithoutVendorInput {
 }
 
 export interface InvoiceUpdateWithoutItemsDataInput {
-  dateCreated?: DateTimeInput;
   amount?: String;
   email?: String;
   record?: Json;
@@ -1417,7 +1437,6 @@ export interface PaymentRecordUpdateWithWhereUniqueNestedInput {
 }
 
 export interface CartCreateInput {
-  dateCreated?: DateTimeInput;
   itemCount?: Int;
   totalPrice?: String;
   user: UserCreateOneWithoutCartInput;
@@ -1439,17 +1458,22 @@ export interface InvoiceWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  dateCreated?: DateTimeInput;
-  dateCreated_not?: DateTimeInput;
-  dateCreated_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_lt?: DateTimeInput;
-  dateCreated_lte?: DateTimeInput;
-  dateCreated_gt?: DateTimeInput;
-  dateCreated_gte?: DateTimeInput;
-  items_every?: ProductWhereInput;
-  items_some?: ProductWhereInput;
-  items_none?: ProductWhereInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   amount?: String;
   amount_not?: String;
   amount_in?: String[] | String;
@@ -1532,6 +1556,9 @@ export interface InvoiceWhereInput {
   status_not_starts_with?: String;
   status_ends_with?: String;
   status_not_ends_with?: String;
+  items_every?: ProductWhereInput;
+  items_some?: ProductWhereInput;
+  items_none?: ProductWhereInput;
   customer?: UserWhereInput;
   vendors_every?: UserWhereInput;
   vendors_some?: UserWhereInput;
@@ -1542,7 +1569,6 @@ export interface InvoiceWhereInput {
 }
 
 export interface UserCreateWithoutCartInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserCreatepermissionsInput;
   email?: String;
@@ -1572,14 +1598,22 @@ export interface ShippingAddressWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  dateCreated?: DateTimeInput;
-  dateCreated_not?: DateTimeInput;
-  dateCreated_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_lt?: DateTimeInput;
-  dateCreated_lte?: DateTimeInput;
-  dateCreated_gt?: DateTimeInput;
-  dateCreated_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   recipient?: String;
   recipient_not?: String;
   recipient_in?: String[] | String;
@@ -1708,7 +1742,6 @@ export interface ShippingAddressCreateOneInput {
 }
 
 export interface ShippingAddressUpdateDataInput {
-  dateCreated?: DateTimeInput;
   recipient?: String;
   street?: String;
   city?: String;
@@ -1735,7 +1768,6 @@ export interface CartCreateOneWithoutUserInput {
 }
 
 export interface UserUpdateWithoutShippingAddressesDataInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserUpdatepermissionsInput;
   email?: String;
@@ -1770,7 +1802,6 @@ export interface UserCreateOneWithoutProductsInput {
 }
 
 export interface CartUpdateWithoutUserDataInput {
-  dateCreated?: DateTimeInput;
   itemCount?: Int;
   totalPrice?: String;
   items?: ProductUpdateManyWithoutCartsInput;
@@ -1818,7 +1849,6 @@ export interface UserCreateManyWithoutSalesInput {
 }
 
 export interface ProductUpdateWithoutCartsDataInput {
-  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
@@ -1851,7 +1881,6 @@ export interface InvoiceCreateManyWithoutVendorsInput {
 }
 
 export interface UserUpdateWithoutProductsDataInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserUpdatepermissionsInput;
   email?: String;
@@ -1891,7 +1920,6 @@ export interface InvoiceUpdateManyWithoutCustomerInput {
 }
 
 export interface CartUpdateInput {
-  dateCreated?: DateTimeInput;
   itemCount?: Int;
   totalPrice?: String;
   user?: UserUpdateOneRequiredWithoutCartInput;
@@ -1915,8 +1943,6 @@ export interface ProductSubscriptionWhereInput {
 }
 
 export interface InvoiceUpdateWithoutCustomerDataInput {
-  dateCreated?: DateTimeInput;
-  items?: ProductUpdateManyWithoutPurchasesInput;
   amount?: String;
   email?: String;
   record?: Json;
@@ -1926,11 +1952,11 @@ export interface InvoiceUpdateWithoutCustomerDataInput {
   stripeCustomerId?: String;
   shippingAddress?: ShippingAddressUpdateOneInput;
   status?: String;
+  items?: ProductUpdateManyWithoutPurchasesInput;
   vendors?: UserUpdateManyWithoutSalesInput;
 }
 
 export interface UserUpdateManyMutationInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserUpdatepermissionsInput;
   email?: String;
@@ -1974,7 +2000,6 @@ export type PaymentRecordWhereUniqueInput = AtLeastOne<{
 }>;
 
 export interface ProductUpdateWithoutPurchasesDataInput {
-  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
@@ -2012,14 +2037,22 @@ export interface ProductScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  dateCreated?: DateTimeInput;
-  dateCreated_not?: DateTimeInput;
-  dateCreated_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_lt?: DateTimeInput;
-  dateCreated_lte?: DateTimeInput;
-  dateCreated_gt?: DateTimeInput;
-  dateCreated_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   name?: String;
   name_not?: String;
   name_in?: String[] | String;
@@ -2097,7 +2130,6 @@ export interface UserCreatepermissionsInput {
 }
 
 export interface ProductUpdateManyDataInput {
-  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
@@ -2105,7 +2137,6 @@ export interface ProductUpdateManyDataInput {
 }
 
 export interface CartCreateWithoutItemsInput {
-  dateCreated?: DateTimeInput;
   itemCount?: Int;
   totalPrice?: String;
   user: UserCreateOneWithoutCartInput;
@@ -2129,7 +2160,6 @@ export interface UserUpdateManyWithoutSalesInput {
 }
 
 export interface PaymentRecordCreateInput {
-  dateCreated: DateTimeInput;
   amount: Int;
   balanceTransaction: String;
   created: Int;
@@ -2146,7 +2176,6 @@ export interface UserUpdateWithWhereUniqueWithoutSalesInput {
 }
 
 export interface UserCreateWithoutShippingAddressesInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserCreatepermissionsInput;
   email?: String;
@@ -2162,7 +2191,6 @@ export interface UserCreateWithoutShippingAddressesInput {
 }
 
 export interface UserUpdateWithoutSalesDataInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserUpdatepermissionsInput;
   email?: String;
@@ -2178,7 +2206,6 @@ export interface UserUpdateWithoutSalesDataInput {
 }
 
 export interface ProductCreateWithoutCartsInput {
-  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
@@ -2211,8 +2238,6 @@ export interface ShippingAddressUpdateManyWithoutUserInput {
 }
 
 export interface InvoiceCreateWithoutCustomerInput {
-  dateCreated?: DateTimeInput;
-  items?: ProductCreateManyWithoutPurchasesInput;
   amount?: String;
   email: String;
   record?: Json;
@@ -2222,6 +2247,7 @@ export interface InvoiceCreateWithoutCustomerInput {
   stripeCustomerId?: String;
   shippingAddress?: ShippingAddressCreateOneInput;
   status?: String;
+  items?: ProductCreateManyWithoutPurchasesInput;
   vendors?: UserCreateManyWithoutSalesInput;
 }
 
@@ -2231,7 +2257,6 @@ export interface ShippingAddressUpdateWithWhereUniqueWithoutUserInput {
 }
 
 export interface UserCreateWithoutSalesInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserCreatepermissionsInput;
   email?: String;
@@ -2247,7 +2272,6 @@ export interface UserCreateWithoutSalesInput {
 }
 
 export interface ShippingAddressUpdateWithoutUserDataInput {
-  dateCreated?: DateTimeInput;
   recipient?: String;
   street?: String;
   city?: String;
@@ -2256,8 +2280,6 @@ export interface ShippingAddressUpdateWithoutUserDataInput {
 }
 
 export interface InvoiceCreateWithoutVendorsInput {
-  dateCreated?: DateTimeInput;
-  items?: ProductCreateManyWithoutPurchasesInput;
   amount?: String;
   email: String;
   record?: Json;
@@ -2267,6 +2289,7 @@ export interface InvoiceCreateWithoutVendorsInput {
   stripeCustomerId?: String;
   shippingAddress?: ShippingAddressCreateOneInput;
   status?: String;
+  items?: ProductCreateManyWithoutPurchasesInput;
   customer?: UserCreateOneWithoutPurchasesInput;
 }
 
@@ -2302,14 +2325,22 @@ export interface ShippingAddressScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  dateCreated?: DateTimeInput;
-  dateCreated_not?: DateTimeInput;
-  dateCreated_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_lt?: DateTimeInput;
-  dateCreated_lte?: DateTimeInput;
-  dateCreated_gt?: DateTimeInput;
-  dateCreated_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   recipient?: String;
   recipient_not?: String;
   recipient_in?: String[] | String;
@@ -2386,7 +2417,6 @@ export interface ShippingAddressScalarWhereInput {
 }
 
 export interface UserCreateInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserCreatepermissionsInput;
   email?: String;
@@ -2408,7 +2438,6 @@ export interface ShippingAddressUpdateManyWithWhereNestedInput {
 }
 
 export interface PaymentRecordUpdateManyMutationInput {
-  dateCreated?: DateTimeInput;
   amount?: Int;
   balanceTransaction?: String;
   created?: Int;
@@ -2420,7 +2449,6 @@ export interface PaymentRecordUpdateManyMutationInput {
 }
 
 export interface ShippingAddressUpdateManyDataInput {
-  dateCreated?: DateTimeInput;
   recipient?: String;
   street?: String;
   city?: String;
@@ -2459,14 +2487,22 @@ export interface UserScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  dateCreated?: DateTimeInput;
-  dateCreated_not?: DateTimeInput;
-  dateCreated_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_lt?: DateTimeInput;
-  dateCreated_lte?: DateTimeInput;
-  dateCreated_gt?: DateTimeInput;
-  dateCreated_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   role?: String;
   role_not?: String;
   role_in?: String[] | String;
@@ -2571,7 +2607,6 @@ export interface UserScalarWhereInput {
 }
 
 export interface InvoiceCreateWithoutItemsInput {
-  dateCreated?: DateTimeInput;
   amount?: String;
   email: String;
   record?: Json;
@@ -2591,14 +2626,12 @@ export interface UserUpdateManyWithWhereNestedInput {
 }
 
 export interface CartCreateWithoutUserInput {
-  dateCreated?: DateTimeInput;
   itemCount?: Int;
   totalPrice?: String;
   items?: ProductCreateManyWithoutCartsInput;
 }
 
 export interface UserUpdateManyDataInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserUpdatepermissionsInput;
   email?: String;
@@ -2610,7 +2643,6 @@ export interface UserUpdateManyDataInput {
 }
 
 export interface ProductCreateWithoutPurchasesInput {
-  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
@@ -2626,7 +2658,6 @@ export interface InvoiceUpsertWithWhereUniqueWithoutCustomerInput {
 }
 
 export interface UserCreateWithoutPurchasesInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserCreatepermissionsInput;
   email?: String;
@@ -2656,14 +2687,22 @@ export interface InvoiceScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  dateCreated?: DateTimeInput;
-  dateCreated_not?: DateTimeInput;
-  dateCreated_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_not_in?: DateTimeInput[] | DateTimeInput;
-  dateCreated_lt?: DateTimeInput;
-  dateCreated_lte?: DateTimeInput;
-  dateCreated_gt?: DateTimeInput;
-  dateCreated_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
   amount?: String;
   amount_not?: String;
   amount_in?: String[] | String;
@@ -2748,7 +2787,6 @@ export interface InvoiceScalarWhereInput {
 }
 
 export interface ProductUpdateManyMutationInput {
-  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
@@ -2766,7 +2804,6 @@ export interface ShippingAddressUpsertNestedInput {
 }
 
 export interface InvoiceUpdateManyDataInput {
-  dateCreated?: DateTimeInput;
   amount?: String;
   email?: String;
   record?: Json;
@@ -2777,7 +2814,6 @@ export interface InvoiceUpdateManyDataInput {
 }
 
 export interface ShippingAddressCreateInput {
-  dateCreated: DateTimeInput;
   recipient: String;
   street: String;
   city: String;
@@ -2806,7 +2842,6 @@ export interface InvoiceUpdateManyWithoutVendorsInput {
 }
 
 export interface ShippingAddressCreateWithoutUserInput {
-  dateCreated: DateTimeInput;
   recipient: String;
   street: String;
   city: String;
@@ -2815,7 +2850,6 @@ export interface ShippingAddressCreateWithoutUserInput {
 }
 
 export interface UserUpdateWithoutPurchasesDataInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserUpdatepermissionsInput;
   email?: String;
@@ -2840,8 +2874,6 @@ export interface UserUpdateOneWithoutPurchasesInput {
 }
 
 export interface InvoiceUpdateWithoutVendorsDataInput {
-  dateCreated?: DateTimeInput;
-  items?: ProductUpdateManyWithoutPurchasesInput;
   amount?: String;
   email?: String;
   record?: Json;
@@ -2851,6 +2883,7 @@ export interface InvoiceUpdateWithoutVendorsDataInput {
   stripeCustomerId?: String;
   shippingAddress?: ShippingAddressUpdateOneInput;
   status?: String;
+  items?: ProductUpdateManyWithoutPurchasesInput;
   customer?: UserUpdateOneWithoutPurchasesInput;
 }
 
@@ -2871,7 +2904,6 @@ export interface InvoiceSubscriptionWhereInput {
 }
 
 export interface UserCreateWithoutProductsInput {
-  dateCreated?: DateTimeInput;
   role?: String;
   permissions?: UserCreatepermissionsInput;
   email?: String;
@@ -2887,7 +2919,6 @@ export interface UserCreateWithoutProductsInput {
 }
 
 export interface ProductCreateWithoutVendorInput {
-  dateCreated?: DateTimeInput;
   name?: String;
   price?: String;
   description?: String;
@@ -2897,8 +2928,6 @@ export interface ProductCreateWithoutVendorInput {
 }
 
 export interface InvoiceUpdateInput {
-  dateCreated?: DateTimeInput;
-  items?: ProductUpdateManyWithoutPurchasesInput;
   amount?: String;
   email?: String;
   record?: Json;
@@ -2908,6 +2937,7 @@ export interface InvoiceUpdateInput {
   stripeCustomerId?: String;
   shippingAddress?: ShippingAddressUpdateOneInput;
   status?: String;
+  items?: ProductUpdateManyWithoutPurchasesInput;
   customer?: UserUpdateOneWithoutPurchasesInput;
   vendors?: UserUpdateManyWithoutSalesInput;
 }
@@ -2918,7 +2948,8 @@ export interface NodeNode {
 
 export interface UserPreviousValues {
   id: ID_Output;
-  dateCreated?: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
   role?: String;
   permissions: String[];
   email?: String;
@@ -2933,7 +2964,8 @@ export interface UserPreviousValuesPromise
   extends Promise<UserPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  dateCreated: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
   role: () => Promise<String>;
   permissions: () => Promise<String[]>;
   email: () => Promise<String>;
@@ -2948,7 +2980,8 @@ export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   role: () => Promise<AsyncIterator<String>>;
   permissions: () => Promise<AsyncIterator<String[]>>;
   email: () => Promise<AsyncIterator<String>>;
@@ -2977,7 +3010,8 @@ export interface CartEdgeSubscription
 
 export interface Invoice {
   id: ID_Output;
-  dateCreated?: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
   amount?: String;
   email: String;
   record?: Json;
@@ -2989,18 +3023,8 @@ export interface Invoice {
 
 export interface InvoicePromise extends Promise<Invoice>, Fragmentable {
   id: () => Promise<ID_Output>;
-  dateCreated: () => Promise<DateTimeOutput>;
-  items: <T = FragmentableArray<Product>>(
-    args?: {
-      where?: ProductWhereInput;
-      orderBy?: ProductOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
   amount: () => Promise<String>;
   email: () => Promise<String>;
   record: () => Promise<Json>;
@@ -3020,6 +3044,17 @@ export interface InvoicePromise extends Promise<Invoice>, Fragmentable {
   stripeCustomerId: () => Promise<String>;
   shippingAddress: <T = ShippingAddressPromise>() => T;
   status: () => Promise<String>;
+  items: <T = FragmentableArray<Product>>(
+    args?: {
+      where?: ProductWhereInput;
+      orderBy?: ProductOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   customer: <T = UserPromise>() => T;
   vendors: <T = FragmentableArray<User>>(
     args?: {
@@ -3038,18 +3073,8 @@ export interface InvoiceSubscription
   extends Promise<AsyncIterator<Invoice>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
-  items: <T = Promise<AsyncIterator<ProductSubscription>>>(
-    args?: {
-      where?: ProductWhereInput;
-      orderBy?: ProductOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   amount: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
   record: () => Promise<AsyncIterator<Json>>;
@@ -3069,6 +3094,17 @@ export interface InvoiceSubscription
   stripeCustomerId: () => Promise<AsyncIterator<String>>;
   shippingAddress: <T = ShippingAddressSubscription>() => T;
   status: () => Promise<AsyncIterator<String>>;
+  items: <T = Promise<AsyncIterator<ProductSubscription>>>(
+    args?: {
+      where?: ProductWhereInput;
+      orderBy?: ProductOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   customer: <T = UserSubscription>() => T;
   vendors: <T = Promise<AsyncIterator<UserSubscription>>>(
     args?: {
@@ -3103,7 +3139,8 @@ export interface InvoiceConnectionSubscription
 
 export interface ProductPreviousValues {
   id: ID_Output;
-  dateCreated?: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
   name?: String;
   price?: String;
   description?: String;
@@ -3114,7 +3151,8 @@ export interface ProductPreviousValuesPromise
   extends Promise<ProductPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  dateCreated: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
   name: () => Promise<String>;
   price: () => Promise<String>;
   description: () => Promise<String>;
@@ -3125,7 +3163,8 @@ export interface ProductPreviousValuesSubscription
   extends Promise<AsyncIterator<ProductPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   name: () => Promise<AsyncIterator<String>>;
   price: () => Promise<AsyncIterator<String>>;
   description: () => Promise<AsyncIterator<String>>;
@@ -3150,7 +3189,8 @@ export interface AggregateCartSubscription
 
 export interface Product {
   id: ID_Output;
-  dateCreated?: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
   name?: String;
   price?: String;
   description?: String;
@@ -3159,7 +3199,8 @@ export interface Product {
 
 export interface ProductPromise extends Promise<Product>, Fragmentable {
   id: () => Promise<ID_Output>;
-  dateCreated: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
   name: () => Promise<String>;
   price: () => Promise<String>;
   description: () => Promise<String>;
@@ -3193,7 +3234,8 @@ export interface ProductSubscription
   extends Promise<AsyncIterator<Product>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   name: () => Promise<AsyncIterator<String>>;
   price: () => Promise<AsyncIterator<String>>;
   description: () => Promise<AsyncIterator<String>>;
@@ -3225,7 +3267,8 @@ export interface ProductSubscription
 
 export interface User {
   id: ID_Output;
-  dateCreated?: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
   role?: String;
   permissions: String[];
   email?: String;
@@ -3238,7 +3281,8 @@ export interface User {
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
-  dateCreated: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
   role: () => Promise<String>;
   permissions: () => Promise<String[]>;
   email: () => Promise<String>;
@@ -3298,7 +3342,8 @@ export interface UserSubscription
   extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   role: () => Promise<AsyncIterator<String>>;
   permissions: () => Promise<AsyncIterator<String[]>>;
   email: () => Promise<AsyncIterator<String>>;
@@ -3372,7 +3417,8 @@ export interface UserEdgeSubscription
 
 export interface ShippingAddressPreviousValues {
   id: ID_Output;
-  dateCreated: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
   recipient: String;
   street: String;
   city: String;
@@ -3384,7 +3430,8 @@ export interface ShippingAddressPreviousValuesPromise
   extends Promise<ShippingAddressPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  dateCreated: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
   recipient: () => Promise<String>;
   street: () => Promise<String>;
   city: () => Promise<String>;
@@ -3396,7 +3443,8 @@ export interface ShippingAddressPreviousValuesSubscription
   extends Promise<AsyncIterator<ShippingAddressPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   recipient: () => Promise<AsyncIterator<String>>;
   street: () => Promise<AsyncIterator<String>>;
   city: () => Promise<AsyncIterator<String>>;
@@ -3504,14 +3552,16 @@ export interface UserSubscriptionPayloadSubscription
 
 export interface Cart {
   id: ID_Output;
-  dateCreated?: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
   itemCount?: Int;
   totalPrice?: String;
 }
 
 export interface CartPromise extends Promise<Cart>, Fragmentable {
   id: () => Promise<ID_Output>;
-  dateCreated: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
   itemCount: () => Promise<Int>;
   totalPrice: () => Promise<String>;
   user: <T = UserPromise>() => T;
@@ -3532,7 +3582,8 @@ export interface CartSubscription
   extends Promise<AsyncIterator<Cart>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   itemCount: () => Promise<AsyncIterator<Int>>;
   totalPrice: () => Promise<AsyncIterator<String>>;
   user: <T = UserSubscription>() => T;
@@ -3606,7 +3657,8 @@ export interface AggregatePaymentRecordSubscription
 
 export interface CartPreviousValues {
   id: ID_Output;
-  dateCreated?: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
   itemCount?: Int;
   totalPrice?: String;
 }
@@ -3615,7 +3667,8 @@ export interface CartPreviousValuesPromise
   extends Promise<CartPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  dateCreated: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
   itemCount: () => Promise<Int>;
   totalPrice: () => Promise<String>;
 }
@@ -3624,7 +3677,8 @@ export interface CartPreviousValuesSubscription
   extends Promise<AsyncIterator<CartPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   itemCount: () => Promise<AsyncIterator<Int>>;
   totalPrice: () => Promise<AsyncIterator<String>>;
 }
@@ -3729,7 +3783,8 @@ export interface UserConnectionSubscription
 
 export interface InvoicePreviousValues {
   id: ID_Output;
-  dateCreated?: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
   amount?: String;
   email: String;
   record?: Json;
@@ -3743,7 +3798,8 @@ export interface InvoicePreviousValuesPromise
   extends Promise<InvoicePreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  dateCreated: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
   amount: () => Promise<String>;
   email: () => Promise<String>;
   record: () => Promise<Json>;
@@ -3757,7 +3813,8 @@ export interface InvoicePreviousValuesSubscription
   extends Promise<AsyncIterator<InvoicePreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   amount: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
   record: () => Promise<AsyncIterator<Json>>;
@@ -3785,7 +3842,8 @@ export interface BatchPayloadSubscription
 
 export interface PaymentRecord {
   id: ID_Output;
-  dateCreated: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
   amount: Int;
   balanceTransaction: String;
   created: Int;
@@ -3800,7 +3858,8 @@ export interface PaymentRecordPromise
   extends Promise<PaymentRecord>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  dateCreated: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
   amount: () => Promise<Int>;
   balanceTransaction: () => Promise<String>;
   created: () => Promise<Int>;
@@ -3815,7 +3874,8 @@ export interface PaymentRecordSubscription
   extends Promise<AsyncIterator<PaymentRecord>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   amount: () => Promise<AsyncIterator<Int>>;
   balanceTransaction: () => Promise<AsyncIterator<String>>;
   created: () => Promise<AsyncIterator<Int>>;
@@ -3885,7 +3945,8 @@ export interface ProductSubscriptionPayloadSubscription
 
 export interface ShippingAddress {
   id: ID_Output;
-  dateCreated: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
   recipient: String;
   street: String;
   city: String;
@@ -3897,7 +3958,8 @@ export interface ShippingAddressPromise
   extends Promise<ShippingAddress>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  dateCreated: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
   recipient: () => Promise<String>;
   street: () => Promise<String>;
   city: () => Promise<String>;
@@ -3910,7 +3972,8 @@ export interface ShippingAddressSubscription
   extends Promise<AsyncIterator<ShippingAddress>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   recipient: () => Promise<AsyncIterator<String>>;
   street: () => Promise<AsyncIterator<String>>;
   city: () => Promise<AsyncIterator<String>>;
@@ -3921,7 +3984,8 @@ export interface ShippingAddressSubscription
 
 export interface PaymentRecordPreviousValues {
   id: ID_Output;
-  dateCreated: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
   amount: Int;
   balanceTransaction: String;
   created: Int;
@@ -3936,7 +4000,8 @@ export interface PaymentRecordPreviousValuesPromise
   extends Promise<PaymentRecordPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  dateCreated: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
   amount: () => Promise<Int>;
   balanceTransaction: () => Promise<String>;
   created: () => Promise<Int>;
@@ -3951,7 +4016,8 @@ export interface PaymentRecordPreviousValuesSubscription
   extends Promise<AsyncIterator<PaymentRecordPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  dateCreated: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   amount: () => Promise<AsyncIterator<Int>>;
   balanceTransaction: () => Promise<AsyncIterator<String>>;
   created: () => Promise<AsyncIterator<Int>>;

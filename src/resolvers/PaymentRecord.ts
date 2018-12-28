@@ -13,6 +13,8 @@ export interface PaymentRecordParent {
 
 export const PaymentRecord: PaymentRecordResolvers.Type = {
   ...PaymentRecordResolvers.defaultResolvers,
+  createdAt: parent => parent.createdAt,
+  updatedAt: parent => parent.updatedAt,
   amount: parent => parent.amount,
   balanceTransaction: parent => parent.balanceTransaction,
   created: parent => parent.created,

@@ -1,6 +1,7 @@
 type User {
   id: ID! @unique
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   role: String
   permissions: [String!]!
   email: String @unique
@@ -18,7 +19,8 @@ type User {
 
 type Cart {
   id: ID! @unique
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   itemCount: Int
   totalPrice: String
   user: User! @unique
@@ -27,8 +29,8 @@ type Cart {
 
 type Invoice {
   id: ID! @unique
-  dateCreated: DateTime
-  items: [Product!]! @relation(name: "INVOICE_ITEMS")
+  createdAt: DateTime!
+  updatedAt: DateTime!
   amount: String
   email: String!
   record: Json
@@ -38,13 +40,15 @@ type Invoice {
   stripeCustomerId: String
   shippingAddress: ShippingAddress
   status: String
+  items: [Product!]! @relation(name: "INVOICE_ITEMS")
   customer: User @relation(name: "CUSTOMER")
   vendors: [User!]! @relation(name: "VENDOR")
 }
 
 type PaymentRecord {
   id: ID! @unique
-  dateCreated: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   amount: Int!
   balanceTransaction: String!
   created: Int!
@@ -57,7 +61,8 @@ type PaymentRecord {
 
 type Product {
   id: ID! @unique
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String
   price: String
   description: String
@@ -69,7 +74,8 @@ type Product {
 
 type ShippingAddress {
   id: ID! @unique
-  dateCreated: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   recipient: String!
   street: String!
   city: String!

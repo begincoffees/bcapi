@@ -51,7 +51,7 @@ export const Mutation: MutationResolvers.Type = {
 
         return {
           token: token,
-          user: customer as UserParent
+          user: customer
         }
       }
     } catch(err) {
@@ -103,7 +103,7 @@ export const Mutation: MutationResolvers.Type = {
 
         return {
           token,
-          user: vendor as UserParent
+          user: vendor
         }
       }
 
@@ -176,6 +176,15 @@ export const Mutation: MutationResolvers.Type = {
         stripeCustomerId: stripeId || stripePayment.customer,
         vendors:{connect: [..._args.vendors]},
         customer: id ? {connect: {id}} : null,
+        shippingAddress: {
+          create: {
+            recipient: _args.recipient || '',
+            street: _args.street,
+            city: _args.city,
+            state: _args.state,
+            zip: _args.zip
+          }
+        },
         items: {connect: [..._args.items]}
       } as any)
 

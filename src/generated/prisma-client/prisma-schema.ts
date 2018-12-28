@@ -28,7 +28,8 @@ type BatchPayload {
 
 type Cart {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   itemCount: Int
   totalPrice: String
   user: User!
@@ -42,7 +43,6 @@ type CartConnection {
 }
 
 input CartCreateInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   user: UserCreateOneWithoutCartInput!
@@ -60,14 +60,12 @@ input CartCreateOneWithoutUserInput {
 }
 
 input CartCreateWithoutItemsInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   user: UserCreateOneWithoutCartInput!
 }
 
 input CartCreateWithoutUserInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   items: ProductCreateManyWithoutCartsInput
@@ -81,21 +79,20 @@ type CartEdge {
 enum CartOrderByInput {
   id_ASC
   id_DESC
-  dateCreated_ASC
-  dateCreated_DESC
-  itemCount_ASC
-  itemCount_DESC
-  totalPrice_ASC
-  totalPrice_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  itemCount_ASC
+  itemCount_DESC
+  totalPrice_ASC
+  totalPrice_DESC
 }
 
 type CartPreviousValues {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   itemCount: Int
   totalPrice: String
 }
@@ -115,14 +112,22 @@ input CartScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  dateCreated: DateTime
-  dateCreated_not: DateTime
-  dateCreated_in: [DateTime!]
-  dateCreated_not_in: [DateTime!]
-  dateCreated_lt: DateTime
-  dateCreated_lte: DateTime
-  dateCreated_gt: DateTime
-  dateCreated_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   itemCount: Int
   itemCount_not: Int
   itemCount_in: [Int!]
@@ -169,7 +174,6 @@ input CartSubscriptionWhereInput {
 }
 
 input CartUpdateInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   user: UserUpdateOneRequiredWithoutCartInput
@@ -177,13 +181,11 @@ input CartUpdateInput {
 }
 
 input CartUpdateManyDataInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
 }
 
 input CartUpdateManyMutationInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
 }
@@ -214,14 +216,12 @@ input CartUpdateOneWithoutUserInput {
 }
 
 input CartUpdateWithoutItemsDataInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   user: UserUpdateOneRequiredWithoutCartInput
 }
 
 input CartUpdateWithoutUserDataInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   items: ProductUpdateManyWithoutCartsInput
@@ -258,14 +258,22 @@ input CartWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  dateCreated: DateTime
-  dateCreated_not: DateTime
-  dateCreated_in: [DateTime!]
-  dateCreated_not_in: [DateTime!]
-  dateCreated_lt: DateTime
-  dateCreated_lte: DateTime
-  dateCreated_gt: DateTime
-  dateCreated_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   itemCount: Int
   itemCount_not: Int
   itemCount_in: [Int!]
@@ -305,8 +313,8 @@ scalar DateTime
 
 type Invoice {
   id: ID!
-  dateCreated: DateTime
-  items(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
   amount: String
   email: String!
   record: Json
@@ -316,6 +324,7 @@ type Invoice {
   stripeCustomerId: String
   shippingAddress: ShippingAddress
   status: String
+  items(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
   customer: User
   vendors(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
@@ -327,8 +336,6 @@ type InvoiceConnection {
 }
 
 input InvoiceCreateInput {
-  dateCreated: DateTime
-  items: ProductCreateManyWithoutPurchasesInput
   amount: String
   email: String!
   record: Json
@@ -338,6 +345,7 @@ input InvoiceCreateInput {
   stripeCustomerId: String
   shippingAddress: ShippingAddressCreateOneInput
   status: String
+  items: ProductCreateManyWithoutPurchasesInput
   customer: UserCreateOneWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
 }
@@ -358,8 +366,6 @@ input InvoiceCreateManyWithoutVendorsInput {
 }
 
 input InvoiceCreateWithoutCustomerInput {
-  dateCreated: DateTime
-  items: ProductCreateManyWithoutPurchasesInput
   amount: String
   email: String!
   record: Json
@@ -369,11 +375,11 @@ input InvoiceCreateWithoutCustomerInput {
   stripeCustomerId: String
   shippingAddress: ShippingAddressCreateOneInput
   status: String
+  items: ProductCreateManyWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
 }
 
 input InvoiceCreateWithoutItemsInput {
-  dateCreated: DateTime
   amount: String
   email: String!
   record: Json
@@ -388,8 +394,6 @@ input InvoiceCreateWithoutItemsInput {
 }
 
 input InvoiceCreateWithoutVendorsInput {
-  dateCreated: DateTime
-  items: ProductCreateManyWithoutPurchasesInput
   amount: String
   email: String!
   record: Json
@@ -399,6 +403,7 @@ input InvoiceCreateWithoutVendorsInput {
   stripeCustomerId: String
   shippingAddress: ShippingAddressCreateOneInput
   status: String
+  items: ProductCreateManyWithoutPurchasesInput
   customer: UserCreateOneWithoutPurchasesInput
 }
 
@@ -410,8 +415,10 @@ type InvoiceEdge {
 enum InvoiceOrderByInput {
   id_ASC
   id_DESC
-  dateCreated_ASC
-  dateCreated_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   amount_ASC
   amount_DESC
   email_ASC
@@ -426,15 +433,12 @@ enum InvoiceOrderByInput {
   stripeCustomerId_DESC
   status_ASC
   status_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
 }
 
 type InvoicePreviousValues {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   amount: String
   email: String!
   record: Json
@@ -459,14 +463,22 @@ input InvoiceScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  dateCreated: DateTime
-  dateCreated_not: DateTime
-  dateCreated_in: [DateTime!]
-  dateCreated_not_in: [DateTime!]
-  dateCreated_lt: DateTime
-  dateCreated_lte: DateTime
-  dateCreated_gt: DateTime
-  dateCreated_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   amount: String
   amount_not: String
   amount_in: [String!]
@@ -569,8 +581,6 @@ input InvoiceSubscriptionWhereInput {
 }
 
 input InvoiceUpdateInput {
-  dateCreated: DateTime
-  items: ProductUpdateManyWithoutPurchasesInput
   amount: String
   email: String
   record: Json
@@ -580,12 +590,12 @@ input InvoiceUpdateInput {
   stripeCustomerId: String
   shippingAddress: ShippingAddressUpdateOneInput
   status: String
+  items: ProductUpdateManyWithoutPurchasesInput
   customer: UserUpdateOneWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
 }
 
 input InvoiceUpdateManyDataInput {
-  dateCreated: DateTime
   amount: String
   email: String
   record: Json
@@ -596,7 +606,6 @@ input InvoiceUpdateManyDataInput {
 }
 
 input InvoiceUpdateManyMutationInput {
-  dateCreated: DateTime
   amount: String
   email: String
   record: Json
@@ -645,8 +654,6 @@ input InvoiceUpdateManyWithWhereNestedInput {
 }
 
 input InvoiceUpdateWithoutCustomerDataInput {
-  dateCreated: DateTime
-  items: ProductUpdateManyWithoutPurchasesInput
   amount: String
   email: String
   record: Json
@@ -656,11 +663,11 @@ input InvoiceUpdateWithoutCustomerDataInput {
   stripeCustomerId: String
   shippingAddress: ShippingAddressUpdateOneInput
   status: String
+  items: ProductUpdateManyWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
 }
 
 input InvoiceUpdateWithoutItemsDataInput {
-  dateCreated: DateTime
   amount: String
   email: String
   record: Json
@@ -675,8 +682,6 @@ input InvoiceUpdateWithoutItemsDataInput {
 }
 
 input InvoiceUpdateWithoutVendorsDataInput {
-  dateCreated: DateTime
-  items: ProductUpdateManyWithoutPurchasesInput
   amount: String
   email: String
   record: Json
@@ -686,6 +691,7 @@ input InvoiceUpdateWithoutVendorsDataInput {
   stripeCustomerId: String
   shippingAddress: ShippingAddressUpdateOneInput
   status: String
+  items: ProductUpdateManyWithoutPurchasesInput
   customer: UserUpdateOneWithoutPurchasesInput
 }
 
@@ -737,17 +743,22 @@ input InvoiceWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  dateCreated: DateTime
-  dateCreated_not: DateTime
-  dateCreated_in: [DateTime!]
-  dateCreated_not_in: [DateTime!]
-  dateCreated_lt: DateTime
-  dateCreated_lte: DateTime
-  dateCreated_gt: DateTime
-  dateCreated_gte: DateTime
-  items_every: ProductWhereInput
-  items_some: ProductWhereInput
-  items_none: ProductWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   amount: String
   amount_not: String
   amount_in: [String!]
@@ -830,6 +841,9 @@ input InvoiceWhereInput {
   status_not_starts_with: String
   status_ends_with: String
   status_not_ends_with: String
+  items_every: ProductWhereInput
+  items_some: ProductWhereInput
+  items_none: ProductWhereInput
   customer: UserWhereInput
   vendors_every: UserWhereInput
   vendors_some: UserWhereInput
@@ -905,7 +919,8 @@ type PageInfo {
 
 type PaymentRecord {
   id: ID!
-  dateCreated: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   amount: Int!
   balanceTransaction: String!
   created: Int!
@@ -923,7 +938,6 @@ type PaymentRecordConnection {
 }
 
 input PaymentRecordCreateInput {
-  dateCreated: DateTime!
   amount: Int!
   balanceTransaction: String!
   created: Int!
@@ -947,8 +961,10 @@ type PaymentRecordEdge {
 enum PaymentRecordOrderByInput {
   id_ASC
   id_DESC
-  dateCreated_ASC
-  dateCreated_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   amount_ASC
   amount_DESC
   balanceTransaction_ASC
@@ -965,15 +981,12 @@ enum PaymentRecordOrderByInput {
   status_DESC
   data_ASC
   data_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
 }
 
 type PaymentRecordPreviousValues {
   id: ID!
-  dateCreated: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   amount: Int!
   balanceTransaction: String!
   created: Int!
@@ -999,14 +1012,22 @@ input PaymentRecordScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  dateCreated: DateTime
-  dateCreated_not: DateTime
-  dateCreated_in: [DateTime!]
-  dateCreated_not_in: [DateTime!]
-  dateCreated_lt: DateTime
-  dateCreated_lte: DateTime
-  dateCreated_gt: DateTime
-  dateCreated_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   amount: Int
   amount_not: Int
   amount_in: [Int!]
@@ -1117,7 +1138,6 @@ input PaymentRecordSubscriptionWhereInput {
 }
 
 input PaymentRecordUpdateDataInput {
-  dateCreated: DateTime
   amount: Int
   balanceTransaction: String
   created: Int
@@ -1129,7 +1149,6 @@ input PaymentRecordUpdateDataInput {
 }
 
 input PaymentRecordUpdateInput {
-  dateCreated: DateTime
   amount: Int
   balanceTransaction: String
   created: Int
@@ -1141,7 +1160,6 @@ input PaymentRecordUpdateInput {
 }
 
 input PaymentRecordUpdateManyDataInput {
-  dateCreated: DateTime
   amount: Int
   balanceTransaction: String
   created: Int
@@ -1164,7 +1182,6 @@ input PaymentRecordUpdateManyInput {
 }
 
 input PaymentRecordUpdateManyMutationInput {
-  dateCreated: DateTime
   amount: Int
   balanceTransaction: String
   created: Int
@@ -1206,14 +1223,22 @@ input PaymentRecordWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  dateCreated: DateTime
-  dateCreated_not: DateTime
-  dateCreated_in: [DateTime!]
-  dateCreated_not_in: [DateTime!]
-  dateCreated_lt: DateTime
-  dateCreated_lte: DateTime
-  dateCreated_gt: DateTime
-  dateCreated_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   amount: Int
   amount_not: Int
   amount_in: [Int!]
@@ -1311,7 +1336,8 @@ input PaymentRecordWhereUniqueInput {
 
 type Product {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String
   price: String
   description: String
@@ -1328,7 +1354,6 @@ type ProductConnection {
 }
 
 input ProductCreateInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1354,7 +1379,6 @@ input ProductCreateManyWithoutVendorInput {
 }
 
 input ProductCreateWithoutCartsInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1364,7 +1388,6 @@ input ProductCreateWithoutCartsInput {
 }
 
 input ProductCreateWithoutPurchasesInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1374,7 +1397,6 @@ input ProductCreateWithoutPurchasesInput {
 }
 
 input ProductCreateWithoutVendorInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1391,8 +1413,10 @@ type ProductEdge {
 enum ProductOrderByInput {
   id_ASC
   id_DESC
-  dateCreated_ASC
-  dateCreated_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   name_ASC
   name_DESC
   price_ASC
@@ -1401,15 +1425,12 @@ enum ProductOrderByInput {
   description_DESC
   varietal_ASC
   varietal_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
 }
 
 type ProductPreviousValues {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String
   price: String
   description: String
@@ -1431,14 +1452,22 @@ input ProductScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  dateCreated: DateTime
-  dateCreated_not: DateTime
-  dateCreated_in: [DateTime!]
-  dateCreated_not_in: [DateTime!]
-  dateCreated_lt: DateTime
-  dateCreated_lte: DateTime
-  dateCreated_gt: DateTime
-  dateCreated_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   name: String
   name_not: String
   name_in: [String!]
@@ -1519,7 +1548,6 @@ input ProductSubscriptionWhereInput {
 }
 
 input ProductUpdateInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1530,7 +1558,6 @@ input ProductUpdateInput {
 }
 
 input ProductUpdateManyDataInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1538,7 +1565,6 @@ input ProductUpdateManyDataInput {
 }
 
 input ProductUpdateManyMutationInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1584,7 +1610,6 @@ input ProductUpdateManyWithWhereNestedInput {
 }
 
 input ProductUpdateWithoutCartsDataInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1594,7 +1619,6 @@ input ProductUpdateWithoutCartsDataInput {
 }
 
 input ProductUpdateWithoutPurchasesDataInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1604,7 +1628,6 @@ input ProductUpdateWithoutPurchasesDataInput {
 }
 
 input ProductUpdateWithoutVendorDataInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1661,14 +1684,22 @@ input ProductWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  dateCreated: DateTime
-  dateCreated_not: DateTime
-  dateCreated_in: [DateTime!]
-  dateCreated_not_in: [DateTime!]
-  dateCreated_lt: DateTime
-  dateCreated_lte: DateTime
-  dateCreated_gt: DateTime
-  dateCreated_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   name: String
   name_not: String
   name_in: [String!]
@@ -1765,7 +1796,8 @@ type Query {
 
 type ShippingAddress {
   id: ID!
-  dateCreated: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   recipient: String!
   street: String!
   city: String!
@@ -1781,7 +1813,6 @@ type ShippingAddressConnection {
 }
 
 input ShippingAddressCreateInput {
-  dateCreated: DateTime!
   recipient: String!
   street: String!
   city: String!
@@ -1801,7 +1832,6 @@ input ShippingAddressCreateOneInput {
 }
 
 input ShippingAddressCreateWithoutUserInput {
-  dateCreated: DateTime!
   recipient: String!
   street: String!
   city: String!
@@ -1817,8 +1847,10 @@ type ShippingAddressEdge {
 enum ShippingAddressOrderByInput {
   id_ASC
   id_DESC
-  dateCreated_ASC
-  dateCreated_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   recipient_ASC
   recipient_DESC
   street_ASC
@@ -1829,15 +1861,12 @@ enum ShippingAddressOrderByInput {
   state_DESC
   zip_ASC
   zip_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
 }
 
 type ShippingAddressPreviousValues {
   id: ID!
-  dateCreated: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   recipient: String!
   street: String!
   city: String!
@@ -1860,14 +1889,22 @@ input ShippingAddressScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  dateCreated: DateTime
-  dateCreated_not: DateTime
-  dateCreated_in: [DateTime!]
-  dateCreated_not_in: [DateTime!]
-  dateCreated_lt: DateTime
-  dateCreated_lte: DateTime
-  dateCreated_gt: DateTime
-  dateCreated_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   recipient: String
   recipient_not: String
   recipient_in: [String!]
@@ -1962,7 +1999,6 @@ input ShippingAddressSubscriptionWhereInput {
 }
 
 input ShippingAddressUpdateDataInput {
-  dateCreated: DateTime
   recipient: String
   street: String
   city: String
@@ -1972,7 +2008,6 @@ input ShippingAddressUpdateDataInput {
 }
 
 input ShippingAddressUpdateInput {
-  dateCreated: DateTime
   recipient: String
   street: String
   city: String
@@ -1982,7 +2017,6 @@ input ShippingAddressUpdateInput {
 }
 
 input ShippingAddressUpdateManyDataInput {
-  dateCreated: DateTime
   recipient: String
   street: String
   city: String
@@ -1991,7 +2025,6 @@ input ShippingAddressUpdateManyDataInput {
 }
 
 input ShippingAddressUpdateManyMutationInput {
-  dateCreated: DateTime
   recipient: String
   street: String
   city: String
@@ -2025,7 +2058,6 @@ input ShippingAddressUpdateOneInput {
 }
 
 input ShippingAddressUpdateWithoutUserDataInput {
-  dateCreated: DateTime
   recipient: String
   street: String
   city: String
@@ -2064,14 +2096,22 @@ input ShippingAddressWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  dateCreated: DateTime
-  dateCreated_not: DateTime
-  dateCreated_in: [DateTime!]
-  dateCreated_not_in: [DateTime!]
-  dateCreated_lt: DateTime
-  dateCreated_lte: DateTime
-  dateCreated_gt: DateTime
-  dateCreated_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   recipient: String
   recipient_not: String
   recipient_in: [String!]
@@ -2163,7 +2203,8 @@ type Subscription {
 
 type User {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   role: String
   permissions: [String!]!
   email: String
@@ -2186,7 +2227,6 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  dateCreated: DateTime
   role: String
   permissions: UserCreatepermissionsInput
   email: String
@@ -2232,7 +2272,6 @@ input UserCreatepermissionsInput {
 }
 
 input UserCreateWithoutCartInput {
-  dateCreated: DateTime
   role: String
   permissions: UserCreatepermissionsInput
   email: String
@@ -2248,7 +2287,6 @@ input UserCreateWithoutCartInput {
 }
 
 input UserCreateWithoutProductsInput {
-  dateCreated: DateTime
   role: String
   permissions: UserCreatepermissionsInput
   email: String
@@ -2264,7 +2302,6 @@ input UserCreateWithoutProductsInput {
 }
 
 input UserCreateWithoutPurchasesInput {
-  dateCreated: DateTime
   role: String
   permissions: UserCreatepermissionsInput
   email: String
@@ -2280,7 +2317,6 @@ input UserCreateWithoutPurchasesInput {
 }
 
 input UserCreateWithoutSalesInput {
-  dateCreated: DateTime
   role: String
   permissions: UserCreatepermissionsInput
   email: String
@@ -2296,7 +2332,6 @@ input UserCreateWithoutSalesInput {
 }
 
 input UserCreateWithoutShippingAddressesInput {
-  dateCreated: DateTime
   role: String
   permissions: UserCreatepermissionsInput
   email: String
@@ -2319,8 +2354,10 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
-  dateCreated_ASC
-  dateCreated_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   role_ASC
   role_DESC
   email_ASC
@@ -2335,15 +2372,12 @@ enum UserOrderByInput {
   password_DESC
   stripeId_ASC
   stripeId_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
 }
 
 type UserPreviousValues {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   role: String
   permissions: [String!]!
   email: String
@@ -2369,14 +2403,22 @@ input UserScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  dateCreated: DateTime
-  dateCreated_not: DateTime
-  dateCreated_in: [DateTime!]
-  dateCreated_not_in: [DateTime!]
-  dateCreated_lt: DateTime
-  dateCreated_lte: DateTime
-  dateCreated_gt: DateTime
-  dateCreated_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   role: String
   role_not: String
   role_in: [String!]
@@ -2499,7 +2541,6 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
-  dateCreated: DateTime
   role: String
   permissions: UserUpdatepermissionsInput
   email: String
@@ -2516,7 +2557,6 @@ input UserUpdateInput {
 }
 
 input UserUpdateManyDataInput {
-  dateCreated: DateTime
   role: String
   permissions: UserUpdatepermissionsInput
   email: String
@@ -2528,7 +2568,6 @@ input UserUpdateManyDataInput {
 }
 
 input UserUpdateManyMutationInput {
-  dateCreated: DateTime
   role: String
   permissions: UserUpdatepermissionsInput
   email: String
@@ -2592,7 +2631,6 @@ input UserUpdatepermissionsInput {
 }
 
 input UserUpdateWithoutCartDataInput {
-  dateCreated: DateTime
   role: String
   permissions: UserUpdatepermissionsInput
   email: String
@@ -2608,7 +2646,6 @@ input UserUpdateWithoutCartDataInput {
 }
 
 input UserUpdateWithoutProductsDataInput {
-  dateCreated: DateTime
   role: String
   permissions: UserUpdatepermissionsInput
   email: String
@@ -2624,7 +2661,6 @@ input UserUpdateWithoutProductsDataInput {
 }
 
 input UserUpdateWithoutPurchasesDataInput {
-  dateCreated: DateTime
   role: String
   permissions: UserUpdatepermissionsInput
   email: String
@@ -2640,7 +2676,6 @@ input UserUpdateWithoutPurchasesDataInput {
 }
 
 input UserUpdateWithoutSalesDataInput {
-  dateCreated: DateTime
   role: String
   permissions: UserUpdatepermissionsInput
   email: String
@@ -2656,7 +2691,6 @@ input UserUpdateWithoutSalesDataInput {
 }
 
 input UserUpdateWithoutShippingAddressesDataInput {
-  dateCreated: DateTime
   role: String
   permissions: UserUpdatepermissionsInput
   email: String
@@ -2717,14 +2751,22 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  dateCreated: DateTime
-  dateCreated_not: DateTime
-  dateCreated_in: [DateTime!]
-  dateCreated_not_in: [DateTime!]
-  dateCreated_lt: DateTime
-  dateCreated_lte: DateTime
-  dateCreated_gt: DateTime
-  dateCreated_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   role: String
   role_not: String
   role_in: [String!]

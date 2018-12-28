@@ -1,5 +1,5 @@
 # source: https://begincoffeesprisma.herokuapp.com/bcprisma/test
-# timestamp: Wed Dec 26 2018 23:18:22 GMT-0600 (CST)
+# timestamp: Thu Dec 27 2018 18:23:38 GMT-0600 (CST)
 
 type AggregateCart {
   count: Int!
@@ -32,7 +32,8 @@ type BatchPayload {
 
 type Cart implements Node {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   itemCount: Int
   totalPrice: String
   user(where: UserWhereInput): User!
@@ -50,7 +51,6 @@ type CartConnection {
 }
 
 input CartCreateInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   user: UserCreateOneWithoutCartInput!
@@ -68,14 +68,12 @@ input CartCreateOneWithoutUserInput {
 }
 
 input CartCreateWithoutItemsInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   user: UserCreateOneWithoutCartInput!
 }
 
 input CartCreateWithoutUserInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   items: ProductCreateManyWithoutCartsInput
@@ -93,21 +91,20 @@ type CartEdge {
 enum CartOrderByInput {
   id_ASC
   id_DESC
-  dateCreated_ASC
-  dateCreated_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   itemCount_ASC
   itemCount_DESC
   totalPrice_ASC
   totalPrice_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type CartPreviousValues {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   itemCount: Int
   totalPrice: String
 }
@@ -152,7 +149,6 @@ input CartSubscriptionWhereInput {
 }
 
 input CartUpdateInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   user: UserUpdateOneWithoutCartInput
@@ -178,14 +174,12 @@ input CartUpdateOneWithoutUserInput {
 }
 
 input CartUpdateWithoutItemsDataInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   user: UserUpdateOneWithoutCartInput
 }
 
 input CartUpdateWithoutUserDataInput {
-  dateCreated: DateTime
   itemCount: Int
   totalPrice: String
   items: ProductUpdateManyWithoutCartsInput
@@ -256,28 +250,50 @@ input CartWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  dateCreated: DateTime
+  createdAt: DateTime
 
   """All values that are not equal to given value."""
-  dateCreated_not: DateTime
+  createdAt_not: DateTime
 
   """All values that are contained in given list."""
-  dateCreated_in: [DateTime!]
+  createdAt_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  dateCreated_not_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
 
   """All values less than the given value."""
-  dateCreated_lt: DateTime
+  createdAt_lt: DateTime
 
   """All values less than or equal the given value."""
-  dateCreated_lte: DateTime
+  createdAt_lte: DateTime
 
   """All values greater than the given value."""
-  dateCreated_gt: DateTime
+  createdAt_gt: DateTime
 
   """All values greater than or equal the given value."""
-  dateCreated_gte: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   itemCount: Int
 
   """All values that are not equal to given value."""
@@ -354,8 +370,8 @@ scalar DateTime
 
 type Invoice implements Node {
   id: ID!
-  dateCreated: DateTime
-  items(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
   amount: String
   email: String!
   record: Json
@@ -365,6 +381,7 @@ type Invoice implements Node {
   stripeCustomerId: String
   shippingAddress(where: ShippingAddressWhereInput): ShippingAddress
   status: String
+  items(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
   customer(where: UserWhereInput): User
   vendors(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
@@ -380,7 +397,6 @@ type InvoiceConnection {
 }
 
 input InvoiceCreateInput {
-  dateCreated: DateTime
   amount: String
   email: String!
   record: Json
@@ -388,9 +404,9 @@ input InvoiceCreateInput {
   stripePaymentId: String
   stripeCustomerId: String
   status: String
-  items: ProductCreateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordCreateManyInput
   shippingAddress: ShippingAddressCreateOneInput
+  items: ProductCreateManyWithoutPurchasesInput
   customer: UserCreateOneWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
 }
@@ -411,7 +427,6 @@ input InvoiceCreateManyWithoutVendorsInput {
 }
 
 input InvoiceCreateWithoutCustomerInput {
-  dateCreated: DateTime
   amount: String
   email: String!
   record: Json
@@ -419,14 +434,13 @@ input InvoiceCreateWithoutCustomerInput {
   stripePaymentId: String
   stripeCustomerId: String
   status: String
-  items: ProductCreateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordCreateManyInput
   shippingAddress: ShippingAddressCreateOneInput
+  items: ProductCreateManyWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
 }
 
 input InvoiceCreateWithoutItemsInput {
-  dateCreated: DateTime
   amount: String
   email: String!
   record: Json
@@ -441,7 +455,6 @@ input InvoiceCreateWithoutItemsInput {
 }
 
 input InvoiceCreateWithoutVendorsInput {
-  dateCreated: DateTime
   amount: String
   email: String!
   record: Json
@@ -449,9 +462,9 @@ input InvoiceCreateWithoutVendorsInput {
   stripePaymentId: String
   stripeCustomerId: String
   status: String
-  items: ProductCreateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordCreateManyInput
   shippingAddress: ShippingAddressCreateOneInput
+  items: ProductCreateManyWithoutPurchasesInput
   customer: UserCreateOneWithoutPurchasesInput
 }
 
@@ -467,8 +480,10 @@ type InvoiceEdge {
 enum InvoiceOrderByInput {
   id_ASC
   id_DESC
-  dateCreated_ASC
-  dateCreated_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   amount_ASC
   amount_DESC
   email_ASC
@@ -483,15 +498,12 @@ enum InvoiceOrderByInput {
   stripeCustomerId_DESC
   status_ASC
   status_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type InvoicePreviousValues {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   amount: String
   email: String!
   record: Json
@@ -541,7 +553,6 @@ input InvoiceSubscriptionWhereInput {
 }
 
 input InvoiceUpdateInput {
-  dateCreated: DateTime
   amount: String
   email: String
   record: Json
@@ -549,9 +560,9 @@ input InvoiceUpdateInput {
   stripePaymentId: String
   stripeCustomerId: String
   status: String
-  items: ProductUpdateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordUpdateManyInput
   shippingAddress: ShippingAddressUpdateOneInput
+  items: ProductUpdateManyWithoutPurchasesInput
   customer: UserUpdateOneWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
 }
@@ -584,7 +595,6 @@ input InvoiceUpdateManyWithoutVendorsInput {
 }
 
 input InvoiceUpdateWithoutCustomerDataInput {
-  dateCreated: DateTime
   amount: String
   email: String
   record: Json
@@ -592,14 +602,13 @@ input InvoiceUpdateWithoutCustomerDataInput {
   stripePaymentId: String
   stripeCustomerId: String
   status: String
-  items: ProductUpdateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordUpdateManyInput
   shippingAddress: ShippingAddressUpdateOneInput
+  items: ProductUpdateManyWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
 }
 
 input InvoiceUpdateWithoutItemsDataInput {
-  dateCreated: DateTime
   amount: String
   email: String
   record: Json
@@ -614,7 +623,6 @@ input InvoiceUpdateWithoutItemsDataInput {
 }
 
 input InvoiceUpdateWithoutVendorsDataInput {
-  dateCreated: DateTime
   amount: String
   email: String
   record: Json
@@ -622,9 +630,9 @@ input InvoiceUpdateWithoutVendorsDataInput {
   stripePaymentId: String
   stripeCustomerId: String
   status: String
-  items: ProductUpdateManyWithoutPurchasesInput
   stripeRecord: PaymentRecordUpdateManyInput
   shippingAddress: ShippingAddressUpdateOneInput
+  items: ProductUpdateManyWithoutPurchasesInput
   customer: UserUpdateOneWithoutPurchasesInput
 }
 
@@ -710,28 +718,50 @@ input InvoiceWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  dateCreated: DateTime
+  createdAt: DateTime
 
   """All values that are not equal to given value."""
-  dateCreated_not: DateTime
+  createdAt_not: DateTime
 
   """All values that are contained in given list."""
-  dateCreated_in: [DateTime!]
+  createdAt_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  dateCreated_not_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
 
   """All values less than the given value."""
-  dateCreated_lt: DateTime
+  createdAt_lt: DateTime
 
   """All values less than or equal the given value."""
-  dateCreated_lte: DateTime
+  createdAt_lte: DateTime
 
   """All values greater than the given value."""
-  dateCreated_gt: DateTime
+  createdAt_gt: DateTime
 
   """All values greater than or equal the given value."""
-  dateCreated_gte: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   amount: String
 
   """All values that are not equal to given value."""
@@ -954,13 +984,13 @@ input InvoiceWhereInput {
 
   """All values not ending with the given string."""
   status_not_ends_with: String
-  items_every: ProductWhereInput
-  items_some: ProductWhereInput
-  items_none: ProductWhereInput
   stripeRecord_every: PaymentRecordWhereInput
   stripeRecord_some: PaymentRecordWhereInput
   stripeRecord_none: PaymentRecordWhereInput
   shippingAddress: ShippingAddressWhereInput
+  items_every: ProductWhereInput
+  items_some: ProductWhereInput
+  items_none: ProductWhereInput
   customer: UserWhereInput
   vendors_every: UserWhereInput
   vendors_some: UserWhereInput
@@ -1048,7 +1078,8 @@ type PageInfo {
 
 type PaymentRecord implements Node {
   id: ID!
-  dateCreated: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   amount: Int!
   balanceTransaction: String!
   created: Int!
@@ -1070,7 +1101,6 @@ type PaymentRecordConnection {
 }
 
 input PaymentRecordCreateInput {
-  dateCreated: DateTime!
   amount: Int!
   balanceTransaction: String!
   created: Int!
@@ -1098,8 +1128,10 @@ type PaymentRecordEdge {
 enum PaymentRecordOrderByInput {
   id_ASC
   id_DESC
-  dateCreated_ASC
-  dateCreated_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   amount_ASC
   amount_DESC
   balanceTransaction_ASC
@@ -1116,15 +1148,12 @@ enum PaymentRecordOrderByInput {
   status_DESC
   data_ASC
   data_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type PaymentRecordPreviousValues {
   id: ID!
-  dateCreated: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   amount: Int!
   balanceTransaction: String!
   created: Int!
@@ -1175,7 +1204,6 @@ input PaymentRecordSubscriptionWhereInput {
 }
 
 input PaymentRecordUpdateDataInput {
-  dateCreated: DateTime
   amount: Int
   balanceTransaction: String
   created: Int
@@ -1187,7 +1215,6 @@ input PaymentRecordUpdateDataInput {
 }
 
 input PaymentRecordUpdateInput {
-  dateCreated: DateTime
   amount: Int
   balanceTransaction: String
   created: Int
@@ -1267,28 +1294,50 @@ input PaymentRecordWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  dateCreated: DateTime
+  createdAt: DateTime
 
   """All values that are not equal to given value."""
-  dateCreated_not: DateTime
+  createdAt_not: DateTime
 
   """All values that are contained in given list."""
-  dateCreated_in: [DateTime!]
+  createdAt_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  dateCreated_not_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
 
   """All values less than the given value."""
-  dateCreated_lt: DateTime
+  createdAt_lt: DateTime
 
   """All values less than or equal the given value."""
-  dateCreated_lte: DateTime
+  createdAt_lte: DateTime
 
   """All values greater than the given value."""
-  dateCreated_gt: DateTime
+  createdAt_gt: DateTime
 
   """All values greater than or equal the given value."""
-  dateCreated_gte: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   amount: Int
 
   """All values that are not equal to given value."""
@@ -1544,7 +1593,8 @@ input PaymentRecordWhereUniqueInput {
 
 type Product implements Node {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String
   price: String
   description: String
@@ -1565,7 +1615,6 @@ type ProductConnection {
 }
 
 input ProductCreateInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1591,7 +1640,6 @@ input ProductCreateManyWithoutVendorInput {
 }
 
 input ProductCreateWithoutCartsInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1601,7 +1649,6 @@ input ProductCreateWithoutCartsInput {
 }
 
 input ProductCreateWithoutPurchasesInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1611,7 +1658,6 @@ input ProductCreateWithoutPurchasesInput {
 }
 
 input ProductCreateWithoutVendorInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1632,8 +1678,10 @@ type ProductEdge {
 enum ProductOrderByInput {
   id_ASC
   id_DESC
-  dateCreated_ASC
-  dateCreated_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   name_ASC
   name_DESC
   price_ASC
@@ -1642,15 +1690,12 @@ enum ProductOrderByInput {
   description_DESC
   varietal_ASC
   varietal_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type ProductPreviousValues {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String
   price: String
   description: String
@@ -1697,7 +1742,6 @@ input ProductSubscriptionWhereInput {
 }
 
 input ProductUpdateInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1735,7 +1779,6 @@ input ProductUpdateManyWithoutVendorInput {
 }
 
 input ProductUpdateWithoutCartsDataInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1745,7 +1788,6 @@ input ProductUpdateWithoutCartsDataInput {
 }
 
 input ProductUpdateWithoutPurchasesDataInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1755,7 +1797,6 @@ input ProductUpdateWithoutPurchasesDataInput {
 }
 
 input ProductUpdateWithoutVendorDataInput {
-  dateCreated: DateTime
   name: String
   price: String
   description: String
@@ -1846,28 +1887,50 @@ input ProductWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  dateCreated: DateTime
+  createdAt: DateTime
 
   """All values that are not equal to given value."""
-  dateCreated_not: DateTime
+  createdAt_not: DateTime
 
   """All values that are contained in given list."""
-  dateCreated_in: [DateTime!]
+  createdAt_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  dateCreated_not_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
 
   """All values less than the given value."""
-  dateCreated_lt: DateTime
+  createdAt_lt: DateTime
 
   """All values less than or equal the given value."""
-  dateCreated_lte: DateTime
+  createdAt_lte: DateTime
 
   """All values greater than the given value."""
-  dateCreated_gt: DateTime
+  createdAt_gt: DateTime
 
   """All values greater than or equal the given value."""
-  dateCreated_gte: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   name: String
 
   """All values that are not equal to given value."""
@@ -2070,7 +2133,8 @@ type Query {
 
 type ShippingAddress implements Node {
   id: ID!
-  dateCreated: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   recipient: String!
   street: String!
   city: String!
@@ -2090,7 +2154,6 @@ type ShippingAddressConnection {
 }
 
 input ShippingAddressCreateInput {
-  dateCreated: DateTime!
   recipient: String!
   street: String!
   city: String!
@@ -2110,7 +2173,6 @@ input ShippingAddressCreateOneInput {
 }
 
 input ShippingAddressCreateWithoutUserInput {
-  dateCreated: DateTime!
   recipient: String!
   street: String!
   city: String!
@@ -2130,8 +2192,10 @@ type ShippingAddressEdge {
 enum ShippingAddressOrderByInput {
   id_ASC
   id_DESC
-  dateCreated_ASC
-  dateCreated_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   recipient_ASC
   recipient_DESC
   street_ASC
@@ -2142,15 +2206,12 @@ enum ShippingAddressOrderByInput {
   state_DESC
   zip_ASC
   zip_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type ShippingAddressPreviousValues {
   id: ID!
-  dateCreated: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   recipient: String!
   street: String!
   city: String!
@@ -2198,7 +2259,6 @@ input ShippingAddressSubscriptionWhereInput {
 }
 
 input ShippingAddressUpdateDataInput {
-  dateCreated: DateTime
   recipient: String
   street: String
   city: String
@@ -2208,7 +2268,6 @@ input ShippingAddressUpdateDataInput {
 }
 
 input ShippingAddressUpdateInput {
-  dateCreated: DateTime
   recipient: String
   street: String
   city: String
@@ -2236,7 +2295,6 @@ input ShippingAddressUpdateOneInput {
 }
 
 input ShippingAddressUpdateWithoutUserDataInput {
-  dateCreated: DateTime
   recipient: String
   street: String
   city: String
@@ -2309,28 +2367,50 @@ input ShippingAddressWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  dateCreated: DateTime
+  createdAt: DateTime
 
   """All values that are not equal to given value."""
-  dateCreated_not: DateTime
+  createdAt_not: DateTime
 
   """All values that are contained in given list."""
-  dateCreated_in: [DateTime!]
+  createdAt_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  dateCreated_not_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
 
   """All values less than the given value."""
-  dateCreated_lt: DateTime
+  createdAt_lt: DateTime
 
   """All values less than or equal the given value."""
-  dateCreated_lte: DateTime
+  createdAt_lte: DateTime
 
   """All values greater than the given value."""
-  dateCreated_gt: DateTime
+  createdAt_gt: DateTime
 
   """All values greater than or equal the given value."""
-  dateCreated_gte: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   recipient: String
 
   """All values that are not equal to given value."""
@@ -2552,7 +2632,8 @@ type Subscription {
 
 type User implements Node {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   role: String
   permissions: [String!]!
   email: String
@@ -2579,7 +2660,6 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  dateCreated: DateTime
   role: String
   email: String
   firstName: String
@@ -2625,7 +2705,6 @@ input UserCreatepermissionsInput {
 }
 
 input UserCreateWithoutCartInput {
-  dateCreated: DateTime
   role: String
   email: String
   firstName: String
@@ -2641,7 +2720,6 @@ input UserCreateWithoutCartInput {
 }
 
 input UserCreateWithoutProductsInput {
-  dateCreated: DateTime
   role: String
   email: String
   firstName: String
@@ -2657,7 +2735,6 @@ input UserCreateWithoutProductsInput {
 }
 
 input UserCreateWithoutPurchasesInput {
-  dateCreated: DateTime
   role: String
   email: String
   firstName: String
@@ -2673,7 +2750,6 @@ input UserCreateWithoutPurchasesInput {
 }
 
 input UserCreateWithoutSalesInput {
-  dateCreated: DateTime
   role: String
   email: String
   firstName: String
@@ -2689,7 +2765,6 @@ input UserCreateWithoutSalesInput {
 }
 
 input UserCreateWithoutShippingAddressesInput {
-  dateCreated: DateTime
   role: String
   email: String
   firstName: String
@@ -2716,8 +2791,10 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
-  dateCreated_ASC
-  dateCreated_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   role_ASC
   role_DESC
   email_ASC
@@ -2732,15 +2809,12 @@ enum UserOrderByInput {
   password_DESC
   stripeId_ASC
   stripeId_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type UserPreviousValues {
   id: ID!
-  dateCreated: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
   role: String
   permissions: [String!]!
   email: String
@@ -2791,7 +2865,6 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
-  dateCreated: DateTime
   role: String
   email: String
   firstName: String
@@ -2855,7 +2928,6 @@ input UserUpdatepermissionsInput {
 }
 
 input UserUpdateWithoutCartDataInput {
-  dateCreated: DateTime
   role: String
   email: String
   firstName: String
@@ -2871,7 +2943,6 @@ input UserUpdateWithoutCartDataInput {
 }
 
 input UserUpdateWithoutProductsDataInput {
-  dateCreated: DateTime
   role: String
   email: String
   firstName: String
@@ -2887,7 +2958,6 @@ input UserUpdateWithoutProductsDataInput {
 }
 
 input UserUpdateWithoutPurchasesDataInput {
-  dateCreated: DateTime
   role: String
   email: String
   firstName: String
@@ -2903,7 +2973,6 @@ input UserUpdateWithoutPurchasesDataInput {
 }
 
 input UserUpdateWithoutSalesDataInput {
-  dateCreated: DateTime
   role: String
   email: String
   firstName: String
@@ -2919,7 +2988,6 @@ input UserUpdateWithoutSalesDataInput {
 }
 
 input UserUpdateWithoutShippingAddressesDataInput {
-  dateCreated: DateTime
   role: String
   email: String
   firstName: String
@@ -3014,28 +3082,50 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  dateCreated: DateTime
+  createdAt: DateTime
 
   """All values that are not equal to given value."""
-  dateCreated_not: DateTime
+  createdAt_not: DateTime
 
   """All values that are contained in given list."""
-  dateCreated_in: [DateTime!]
+  createdAt_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  dateCreated_not_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
 
   """All values less than the given value."""
-  dateCreated_lt: DateTime
+  createdAt_lt: DateTime
 
   """All values less than or equal the given value."""
-  dateCreated_lte: DateTime
+  createdAt_lte: DateTime
 
   """All values greater than the given value."""
-  dateCreated_gt: DateTime
+  createdAt_gt: DateTime
 
   """All values greater than or equal the given value."""
-  dateCreated_gte: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   role: String
 
   """All values that are not equal to given value."""

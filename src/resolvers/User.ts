@@ -30,6 +30,8 @@ export const User: UserResolvers.Type = {
   lastName: parent => parent.lastName,
   bizName: parent => parent.bizName,
   password: parent => parent.password,
+  createdAt: parent => parent.createdAt,
+  updatedAt: parent => parent.updatedAt,
   cart: async (parent, args, context: any, info) => {
     try {
       const id = getUserId(context)
