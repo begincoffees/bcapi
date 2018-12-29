@@ -1803,7 +1803,7 @@ type ShippingAddress {
   city: String!
   state: String!
   zip: String!
-  user: User!
+  user: User
 }
 
 type ShippingAddressConnection {
@@ -1818,7 +1818,7 @@ input ShippingAddressCreateInput {
   city: String!
   state: String!
   zip: String!
-  user: UserCreateOneWithoutShippingAddressesInput!
+  user: UserCreateOneWithoutShippingAddressesInput
 }
 
 input ShippingAddressCreateManyWithoutUserInput {
@@ -2004,7 +2004,7 @@ input ShippingAddressUpdateDataInput {
   city: String
   state: String
   zip: String
-  user: UserUpdateOneRequiredWithoutShippingAddressesInput
+  user: UserUpdateOneWithoutShippingAddressesInput
 }
 
 input ShippingAddressUpdateInput {
@@ -2013,7 +2013,7 @@ input ShippingAddressUpdateInput {
   city: String
   state: String
   zip: String
-  user: UserUpdateOneRequiredWithoutShippingAddressesInput
+  user: UserUpdateOneWithoutShippingAddressesInput
 }
 
 input ShippingAddressUpdateManyDataInput {
@@ -2601,13 +2601,6 @@ input UserUpdateOneRequiredWithoutCartInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneRequiredWithoutShippingAddressesInput {
-  create: UserCreateWithoutShippingAddressesInput
-  update: UserUpdateWithoutShippingAddressesDataInput
-  upsert: UserUpsertWithoutShippingAddressesInput
-  connect: UserWhereUniqueInput
-}
-
 input UserUpdateOneWithoutProductsInput {
   create: UserCreateWithoutProductsInput
   update: UserUpdateWithoutProductsDataInput
@@ -2621,6 +2614,15 @@ input UserUpdateOneWithoutPurchasesInput {
   create: UserCreateWithoutPurchasesInput
   update: UserUpdateWithoutPurchasesDataInput
   upsert: UserUpsertWithoutPurchasesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneWithoutShippingAddressesInput {
+  create: UserCreateWithoutShippingAddressesInput
+  update: UserUpdateWithoutShippingAddressesDataInput
+  upsert: UserUpsertWithoutShippingAddressesInput
   delete: Boolean
   disconnect: Boolean
   connect: UserWhereUniqueInput

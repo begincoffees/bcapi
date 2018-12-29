@@ -38,8 +38,8 @@ type Invoice {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
-  shippingAddress: ShippingAddress
   status: String
+  shippingAddress: ShippingAddress @unique
   items: [Product!]! @relation(name: "INVOICE_ITEMS")
   customer: User @relation(name: "CUSTOMER")
   vendors: [User!]! @relation(name: "VENDOR")
@@ -81,5 +81,5 @@ type ShippingAddress {
   city: String!
   state: String!
   zip: String!
-  user: User! @unique
+  user: User @unique
 }

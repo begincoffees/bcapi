@@ -2243,7 +2243,7 @@ type ShippingAddress implements Node {
   city: String!
   state: String!
   zip: String!
-  user(where: UserWhereInput): User!
+  user(where: UserWhereInput): User
 }
 
 """A connection to a list of items."""
@@ -2262,7 +2262,7 @@ input ShippingAddressCreateInput {
   city: String!
   state: String!
   zip: String!
-  user: UserCreateOneWithoutShippingAddressesInput!
+  user: UserCreateOneWithoutShippingAddressesInput
 }
 
 input ShippingAddressCreateManyWithoutUserInput {
@@ -3021,6 +3021,7 @@ input UserUpdateOneWithoutPurchasesInput {
 input UserUpdateOneWithoutShippingAddressesInput {
   create: UserCreateWithoutShippingAddressesInput
   connect: UserWhereUniqueInput
+  disconnect: Boolean
   delete: Boolean
   update: UserUpdateWithoutShippingAddressesDataInput
   upsert: UserUpsertWithoutShippingAddressesInput
@@ -4863,6 +4864,7 @@ export interface CartUpsertWithoutUserInput {
 export interface UserUpdateOneWithoutShippingAddressesInput {
   create?: UserCreateWithoutShippingAddressesInput
   connect?: UserWhereUniqueInput
+  disconnect?: Boolean
   delete?: Boolean
   update?: UserUpdateWithoutShippingAddressesDataInput
   upsert?: UserUpsertWithoutShippingAddressesInput
@@ -5225,7 +5227,7 @@ export interface ShippingAddressCreateInput {
   city: String
   state: String
   zip: String
-  user: UserCreateOneWithoutShippingAddressesInput
+  user?: UserCreateOneWithoutShippingAddressesInput
 }
 
 export interface InvoiceUpdateManyWithoutItemsInput {
@@ -5291,7 +5293,7 @@ export interface ShippingAddress extends Node {
   city: String
   state: String
   zip: String
-  user: User
+  user?: User
 }
 
 export interface User extends Node {

@@ -11,10 +11,12 @@ export interface Viewer {
 export interface AuthPayload {
   token: string
   user: User
+
 }
 export interface MutationResult {
   success: boolean | null
 }
+
 
 type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
@@ -1229,7 +1231,7 @@ export interface ShippingAddressUpdateInput {
   city?: String;
   state?: String;
   zip?: String;
-  user?: UserUpdateOneRequiredWithoutShippingAddressesInput;
+  user?: UserUpdateOneWithoutShippingAddressesInput;
 }
 
 export interface CartUpdateWithoutItemsDataInput {
@@ -1747,7 +1749,7 @@ export interface ShippingAddressUpdateDataInput {
   city?: String;
   state?: String;
   zip?: String;
-  user?: UserUpdateOneRequiredWithoutShippingAddressesInput;
+  user?: UserUpdateOneWithoutShippingAddressesInput;
 }
 
 export interface UserCreateOneWithoutShippingAddressesInput {
@@ -1755,10 +1757,12 @@ export interface UserCreateOneWithoutShippingAddressesInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface UserUpdateOneRequiredWithoutShippingAddressesInput {
+export interface UserUpdateOneWithoutShippingAddressesInput {
   create?: UserCreateWithoutShippingAddressesInput;
   update?: UserUpdateWithoutShippingAddressesDataInput;
   upsert?: UserUpsertWithoutShippingAddressesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
   connect?: UserWhereUniqueInput;
 }
 
@@ -2819,7 +2823,7 @@ export interface ShippingAddressCreateInput {
   city: String;
   state: String;
   zip: String;
-  user: UserCreateOneWithoutShippingAddressesInput;
+  user?: UserCreateOneWithoutShippingAddressesInput;
 }
 
 export interface InvoiceUpdateManyWithoutVendorsInput {

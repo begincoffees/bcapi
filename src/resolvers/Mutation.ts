@@ -167,6 +167,9 @@ export const Mutation: MutationResolvers.Type = {
       /**
        * save the payment data to db
        */
+
+      const shippingAddressUser = id ? {user: {connect: {id}}} : {}
+      console.log(id ? 'yes' : 'no')
       await context.db.createInvoice({
         amount: _args.amount,
         email: _args.email,
@@ -182,7 +185,8 @@ export const Mutation: MutationResolvers.Type = {
             street: _args.street,
             city: _args.city,
             state: _args.state,
-            zip: _args.zip
+            zip: _args.zip,
+            ...shippingAddressUser
           }
         },
         items: {connect: [..._args.items]}

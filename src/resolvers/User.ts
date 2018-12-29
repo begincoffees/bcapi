@@ -89,5 +89,19 @@ export const User: UserResolvers.Type = {
       return []
     }
   },
-  shippingAddresses: () => null
+  shippingAddresses: async (parent, args, context: Context, info) => {
+    try {
+      const id = getUserId(context)
+      
+      const addresses = await context.db
+        .user({id})
+        .shippingAddresses()
+        .then(res => res)
+        
+      return addresses
+    }catch {
+      console.debug('trouble getting user addresses')
+      return []
+    }
+  },
 };

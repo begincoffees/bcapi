@@ -1,5 +1,5 @@
 # source: https://begincoffeesprisma.herokuapp.com/bcprisma/test
-# timestamp: Thu Dec 27 2018 18:23:38 GMT-0600 (CST)
+# timestamp: Fri Dec 28 2018 18:21:56 GMT-0600 (CST)
 
 type AggregateCart {
   count: Int!
@@ -2140,7 +2140,7 @@ type ShippingAddress implements Node {
   city: String!
   state: String!
   zip: String!
-  user(where: UserWhereInput): User!
+  user(where: UserWhereInput): User
 }
 
 """A connection to a list of items."""
@@ -2159,7 +2159,7 @@ input ShippingAddressCreateInput {
   city: String!
   state: String!
   zip: String!
-  user: UserCreateOneWithoutShippingAddressesInput!
+  user: UserCreateOneWithoutShippingAddressesInput
 }
 
 input ShippingAddressCreateManyWithoutUserInput {
@@ -2918,6 +2918,7 @@ input UserUpdateOneWithoutPurchasesInput {
 input UserUpdateOneWithoutShippingAddressesInput {
   create: UserCreateWithoutShippingAddressesInput
   connect: UserWhereUniqueInput
+  disconnect: Boolean
   delete: Boolean
   update: UserUpdateWithoutShippingAddressesDataInput
   upsert: UserUpsertWithoutShippingAddressesInput
