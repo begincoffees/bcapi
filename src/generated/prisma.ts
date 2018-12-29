@@ -8,20 +8,20 @@ export interface Query {
     carts: <T = Cart[]>(args: { where?: CartWhereInput, orderBy?: CartOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     invoices: <T = Invoice[]>(args: { where?: InvoiceWhereInput, orderBy?: InvoiceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     products: <T = Product[]>(args: { where?: ProductWhereInput, orderBy?: ProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    paymentRecords: <T = PaymentRecord[]>(args: { where?: PaymentRecordWhereInput, orderBy?: PaymentRecordOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     shippingAddresses: <T = ShippingAddress[]>(args: { where?: ShippingAddressWhereInput, orderBy?: ShippingAddressOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    paymentRecords: <T = PaymentRecord[]>(args: { where?: PaymentRecordWhereInput, orderBy?: PaymentRecordOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     user: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     cart: <T = Cart | null>(args: { where: CartWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     invoice: <T = Invoice | null>(args: { where: InvoiceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     product: <T = Product | null>(args: { where: ProductWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    paymentRecord: <T = PaymentRecord | null>(args: { where: PaymentRecordWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     shippingAddress: <T = ShippingAddress | null>(args: { where: ShippingAddressWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    paymentRecord: <T = PaymentRecord | null>(args: { where: PaymentRecordWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     usersConnection: <T = UserConnection>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     cartsConnection: <T = CartConnection>(args: { where?: CartWhereInput, orderBy?: CartOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     invoicesConnection: <T = InvoiceConnection>(args: { where?: InvoiceWhereInput, orderBy?: InvoiceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     productsConnection: <T = ProductConnection>(args: { where?: ProductWhereInput, orderBy?: ProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    paymentRecordsConnection: <T = PaymentRecordConnection>(args: { where?: PaymentRecordWhereInput, orderBy?: PaymentRecordOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     shippingAddressesConnection: <T = ShippingAddressConnection>(args: { where?: ShippingAddressWhereInput, orderBy?: ShippingAddressOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    paymentRecordsConnection: <T = PaymentRecordConnection>(args: { where?: PaymentRecordWhereInput, orderBy?: PaymentRecordOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
@@ -30,38 +30,38 @@ export interface Mutation {
     createCart: <T = Cart>(args: { data: CartCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createInvoice: <T = Invoice>(args: { data: InvoiceCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createProduct: <T = Product>(args: { data: ProductCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    createPaymentRecord: <T = PaymentRecord>(args: { data: PaymentRecordCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createShippingAddress: <T = ShippingAddress>(args: { data: ShippingAddressCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createPaymentRecord: <T = PaymentRecord>(args: { data: PaymentRecordCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateUser: <T = User | null>(args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateCart: <T = Cart | null>(args: { data: CartUpdateInput, where: CartWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateInvoice: <T = Invoice | null>(args: { data: InvoiceUpdateInput, where: InvoiceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateProduct: <T = Product | null>(args: { data: ProductUpdateInput, where: ProductWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updatePaymentRecord: <T = PaymentRecord | null>(args: { data: PaymentRecordUpdateInput, where: PaymentRecordWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateShippingAddress: <T = ShippingAddress | null>(args: { data: ShippingAddressUpdateInput, where: ShippingAddressWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updatePaymentRecord: <T = PaymentRecord | null>(args: { data: PaymentRecordUpdateInput, where: PaymentRecordWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteUser: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteCart: <T = Cart | null>(args: { where: CartWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteInvoice: <T = Invoice | null>(args: { where: InvoiceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteProduct: <T = Product | null>(args: { where: ProductWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deletePaymentRecord: <T = PaymentRecord | null>(args: { where: PaymentRecordWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteShippingAddress: <T = ShippingAddress | null>(args: { where: ShippingAddressWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deletePaymentRecord: <T = PaymentRecord | null>(args: { where: PaymentRecordWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertUser: <T = User>(args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertCart: <T = Cart>(args: { where: CartWhereUniqueInput, create: CartCreateInput, update: CartUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertInvoice: <T = Invoice>(args: { where: InvoiceWhereUniqueInput, create: InvoiceCreateInput, update: InvoiceUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertProduct: <T = Product>(args: { where: ProductWhereUniqueInput, create: ProductCreateInput, update: ProductUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    upsertPaymentRecord: <T = PaymentRecord>(args: { where: PaymentRecordWhereUniqueInput, create: PaymentRecordCreateInput, update: PaymentRecordUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertShippingAddress: <T = ShippingAddress>(args: { where: ShippingAddressWhereUniqueInput, create: ShippingAddressCreateInput, update: ShippingAddressUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertPaymentRecord: <T = PaymentRecord>(args: { where: PaymentRecordWhereUniqueInput, create: PaymentRecordCreateInput, update: PaymentRecordUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyUsers: <T = BatchPayload>(args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyCarts: <T = BatchPayload>(args: { data: CartUpdateInput, where?: CartWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyInvoices: <T = BatchPayload>(args: { data: InvoiceUpdateInput, where?: InvoiceWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyProducts: <T = BatchPayload>(args: { data: ProductUpdateInput, where?: ProductWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyPaymentRecords: <T = BatchPayload>(args: { data: PaymentRecordUpdateInput, where?: PaymentRecordWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyShippingAddresses: <T = BatchPayload>(args: { data: ShippingAddressUpdateInput, where?: ShippingAddressWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyPaymentRecords: <T = BatchPayload>(args: { data: PaymentRecordUpdateInput, where?: PaymentRecordWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyCarts: <T = BatchPayload>(args: { where?: CartWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyInvoices: <T = BatchPayload>(args: { where?: InvoiceWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyProducts: <T = BatchPayload>(args: { where?: ProductWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyPaymentRecords: <T = BatchPayload>(args: { where?: PaymentRecordWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyShippingAddresses: <T = BatchPayload>(args: { where?: ShippingAddressWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
+    deleteManyShippingAddresses: <T = BatchPayload>(args: { where?: ShippingAddressWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyPaymentRecords: <T = BatchPayload>(args: { where?: PaymentRecordWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
 export interface Subscription {
@@ -69,8 +69,8 @@ export interface Subscription {
     cart: <T = CartSubscriptionPayload | null>(args: { where?: CartSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
     invoice: <T = InvoiceSubscriptionPayload | null>(args: { where?: InvoiceSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
     product: <T = ProductSubscriptionPayload | null>(args: { where?: ProductSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
-    paymentRecord: <T = PaymentRecordSubscriptionPayload | null>(args: { where?: PaymentRecordSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
-    shippingAddress: <T = ShippingAddressSubscriptionPayload | null>(args: { where?: ShippingAddressSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
+    shippingAddress: <T = ShippingAddressSubscriptionPayload | null>(args: { where?: ShippingAddressSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    paymentRecord: <T = PaymentRecordSubscriptionPayload | null>(args: { where?: PaymentRecordSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
   }
 
 export interface Exists {
@@ -78,8 +78,8 @@ export interface Exists {
   Cart: (where?: CartWhereInput) => Promise<boolean>
   Invoice: (where?: InvoiceWhereInput) => Promise<boolean>
   Product: (where?: ProductWhereInput) => Promise<boolean>
-  PaymentRecord: (where?: PaymentRecordWhereInput) => Promise<boolean>
   ShippingAddress: (where?: ShippingAddressWhereInput) => Promise<boolean>
+  PaymentRecord: (where?: PaymentRecordWhereInput) => Promise<boolean>
 }
 
 export interface Prisma {
@@ -482,8 +482,8 @@ type Invoice implements Node {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
-  shippingAddress(where: ShippingAddressWhereInput): ShippingAddress
   status: String
+  shippingAddress(where: ShippingAddressWhereInput): ShippingAddress
   items(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
   customer(where: UserWhereInput): User
   vendors(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -508,7 +508,7 @@ input InvoiceCreateInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordCreateManyInput
-  shippingAddress: ShippingAddressCreateOneInput
+  shippingAddress: ShippingAddressCreateOneWithoutInvoicesInput
   items: ProductCreateManyWithoutPurchasesInput
   customer: UserCreateOneWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
@@ -521,6 +521,11 @@ input InvoiceCreateManyWithoutCustomerInput {
 
 input InvoiceCreateManyWithoutItemsInput {
   create: [InvoiceCreateWithoutItemsInput!]
+  connect: [InvoiceWhereUniqueInput!]
+}
+
+input InvoiceCreateManyWithoutShippingAddressInput {
+  create: [InvoiceCreateWithoutShippingAddressInput!]
   connect: [InvoiceWhereUniqueInput!]
 }
 
@@ -538,7 +543,7 @@ input InvoiceCreateWithoutCustomerInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordCreateManyInput
-  shippingAddress: ShippingAddressCreateOneInput
+  shippingAddress: ShippingAddressCreateOneWithoutInvoicesInput
   items: ProductCreateManyWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
 }
@@ -552,7 +557,21 @@ input InvoiceCreateWithoutItemsInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordCreateManyInput
-  shippingAddress: ShippingAddressCreateOneInput
+  shippingAddress: ShippingAddressCreateOneWithoutInvoicesInput
+  customer: UserCreateOneWithoutPurchasesInput
+  vendors: UserCreateManyWithoutSalesInput
+}
+
+input InvoiceCreateWithoutShippingAddressInput {
+  amount: String
+  email: String!
+  record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
+  status: String
+  stripeRecord: PaymentRecordCreateManyInput
+  items: ProductCreateManyWithoutPurchasesInput
   customer: UserCreateOneWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
 }
@@ -566,7 +585,7 @@ input InvoiceCreateWithoutVendorsInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordCreateManyInput
-  shippingAddress: ShippingAddressCreateOneInput
+  shippingAddress: ShippingAddressCreateOneWithoutInvoicesInput
   items: ProductCreateManyWithoutPurchasesInput
   customer: UserCreateOneWithoutPurchasesInput
 }
@@ -664,7 +683,7 @@ input InvoiceUpdateInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordUpdateManyInput
-  shippingAddress: ShippingAddressUpdateOneInput
+  shippingAddress: ShippingAddressUpdateOneWithoutInvoicesInput
   items: ProductUpdateManyWithoutPurchasesInput
   customer: UserUpdateOneWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
@@ -688,6 +707,15 @@ input InvoiceUpdateManyWithoutItemsInput {
   upsert: [InvoiceUpsertWithWhereUniqueWithoutItemsInput!]
 }
 
+input InvoiceUpdateManyWithoutShippingAddressInput {
+  create: [InvoiceCreateWithoutShippingAddressInput!]
+  connect: [InvoiceWhereUniqueInput!]
+  disconnect: [InvoiceWhereUniqueInput!]
+  delete: [InvoiceWhereUniqueInput!]
+  update: [InvoiceUpdateWithWhereUniqueWithoutShippingAddressInput!]
+  upsert: [InvoiceUpsertWithWhereUniqueWithoutShippingAddressInput!]
+}
+
 input InvoiceUpdateManyWithoutVendorsInput {
   create: [InvoiceCreateWithoutVendorsInput!]
   connect: [InvoiceWhereUniqueInput!]
@@ -706,7 +734,7 @@ input InvoiceUpdateWithoutCustomerDataInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordUpdateManyInput
-  shippingAddress: ShippingAddressUpdateOneInput
+  shippingAddress: ShippingAddressUpdateOneWithoutInvoicesInput
   items: ProductUpdateManyWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
 }
@@ -720,7 +748,21 @@ input InvoiceUpdateWithoutItemsDataInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordUpdateManyInput
-  shippingAddress: ShippingAddressUpdateOneInput
+  shippingAddress: ShippingAddressUpdateOneWithoutInvoicesInput
+  customer: UserUpdateOneWithoutPurchasesInput
+  vendors: UserUpdateManyWithoutSalesInput
+}
+
+input InvoiceUpdateWithoutShippingAddressDataInput {
+  amount: String
+  email: String
+  record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
+  status: String
+  stripeRecord: PaymentRecordUpdateManyInput
+  items: ProductUpdateManyWithoutPurchasesInput
   customer: UserUpdateOneWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
 }
@@ -734,7 +776,7 @@ input InvoiceUpdateWithoutVendorsDataInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordUpdateManyInput
-  shippingAddress: ShippingAddressUpdateOneInput
+  shippingAddress: ShippingAddressUpdateOneWithoutInvoicesInput
   items: ProductUpdateManyWithoutPurchasesInput
   customer: UserUpdateOneWithoutPurchasesInput
 }
@@ -747,6 +789,11 @@ input InvoiceUpdateWithWhereUniqueWithoutCustomerInput {
 input InvoiceUpdateWithWhereUniqueWithoutItemsInput {
   where: InvoiceWhereUniqueInput!
   data: InvoiceUpdateWithoutItemsDataInput!
+}
+
+input InvoiceUpdateWithWhereUniqueWithoutShippingAddressInput {
+  where: InvoiceWhereUniqueInput!
+  data: InvoiceUpdateWithoutShippingAddressDataInput!
 }
 
 input InvoiceUpdateWithWhereUniqueWithoutVendorsInput {
@@ -764,6 +811,12 @@ input InvoiceUpsertWithWhereUniqueWithoutItemsInput {
   where: InvoiceWhereUniqueInput!
   update: InvoiceUpdateWithoutItemsDataInput!
   create: InvoiceCreateWithoutItemsInput!
+}
+
+input InvoiceUpsertWithWhereUniqueWithoutShippingAddressInput {
+  where: InvoiceWhereUniqueInput!
+  update: InvoiceUpdateWithoutShippingAddressDataInput!
+  create: InvoiceCreateWithoutShippingAddressInput!
 }
 
 input InvoiceUpsertWithWhereUniqueWithoutVendorsInput {
@@ -1118,38 +1171,38 @@ type Mutation {
   createCart(data: CartCreateInput!): Cart!
   createInvoice(data: InvoiceCreateInput!): Invoice!
   createProduct(data: ProductCreateInput!): Product!
-  createPaymentRecord(data: PaymentRecordCreateInput!): PaymentRecord!
   createShippingAddress(data: ShippingAddressCreateInput!): ShippingAddress!
+  createPaymentRecord(data: PaymentRecordCreateInput!): PaymentRecord!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateCart(data: CartUpdateInput!, where: CartWhereUniqueInput!): Cart
   updateInvoice(data: InvoiceUpdateInput!, where: InvoiceWhereUniqueInput!): Invoice
   updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
-  updatePaymentRecord(data: PaymentRecordUpdateInput!, where: PaymentRecordWhereUniqueInput!): PaymentRecord
   updateShippingAddress(data: ShippingAddressUpdateInput!, where: ShippingAddressWhereUniqueInput!): ShippingAddress
+  updatePaymentRecord(data: PaymentRecordUpdateInput!, where: PaymentRecordWhereUniqueInput!): PaymentRecord
   deleteUser(where: UserWhereUniqueInput!): User
   deleteCart(where: CartWhereUniqueInput!): Cart
   deleteInvoice(where: InvoiceWhereUniqueInput!): Invoice
   deleteProduct(where: ProductWhereUniqueInput!): Product
-  deletePaymentRecord(where: PaymentRecordWhereUniqueInput!): PaymentRecord
   deleteShippingAddress(where: ShippingAddressWhereUniqueInput!): ShippingAddress
+  deletePaymentRecord(where: PaymentRecordWhereUniqueInput!): PaymentRecord
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertCart(where: CartWhereUniqueInput!, create: CartCreateInput!, update: CartUpdateInput!): Cart!
   upsertInvoice(where: InvoiceWhereUniqueInput!, create: InvoiceCreateInput!, update: InvoiceUpdateInput!): Invoice!
   upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
-  upsertPaymentRecord(where: PaymentRecordWhereUniqueInput!, create: PaymentRecordCreateInput!, update: PaymentRecordUpdateInput!): PaymentRecord!
   upsertShippingAddress(where: ShippingAddressWhereUniqueInput!, create: ShippingAddressCreateInput!, update: ShippingAddressUpdateInput!): ShippingAddress!
+  upsertPaymentRecord(where: PaymentRecordWhereUniqueInput!, create: PaymentRecordCreateInput!, update: PaymentRecordUpdateInput!): PaymentRecord!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   updateManyCarts(data: CartUpdateInput!, where: CartWhereInput): BatchPayload!
   updateManyInvoices(data: InvoiceUpdateInput!, where: InvoiceWhereInput): BatchPayload!
   updateManyProducts(data: ProductUpdateInput!, where: ProductWhereInput): BatchPayload!
-  updateManyPaymentRecords(data: PaymentRecordUpdateInput!, where: PaymentRecordWhereInput): BatchPayload!
   updateManyShippingAddresses(data: ShippingAddressUpdateInput!, where: ShippingAddressWhereInput): BatchPayload!
+  updateManyPaymentRecords(data: PaymentRecordUpdateInput!, where: PaymentRecordWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyCarts(where: CartWhereInput): BatchPayload!
   deleteManyInvoices(where: InvoiceWhereInput): BatchPayload!
   deleteManyProducts(where: ProductWhereInput): BatchPayload!
-  deleteManyPaymentRecords(where: PaymentRecordWhereInput): BatchPayload!
   deleteManyShippingAddresses(where: ShippingAddressWhereInput): BatchPayload!
+  deleteManyPaymentRecords(where: PaymentRecordWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -2212,20 +2265,20 @@ type Query {
   carts(where: CartWhereInput, orderBy: CartOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Cart]!
   invoices(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice]!
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
-  paymentRecords(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PaymentRecord]!
   shippingAddresses(where: ShippingAddressWhereInput, orderBy: ShippingAddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ShippingAddress]!
+  paymentRecords(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PaymentRecord]!
   user(where: UserWhereUniqueInput!): User
   cart(where: CartWhereUniqueInput!): Cart
   invoice(where: InvoiceWhereUniqueInput!): Invoice
   product(where: ProductWhereUniqueInput!): Product
-  paymentRecord(where: PaymentRecordWhereUniqueInput!): PaymentRecord
   shippingAddress(where: ShippingAddressWhereUniqueInput!): ShippingAddress
+  paymentRecord(where: PaymentRecordWhereUniqueInput!): PaymentRecord
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   cartsConnection(where: CartWhereInput, orderBy: CartOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartConnection!
   invoicesConnection(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InvoiceConnection!
   productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
-  paymentRecordsConnection(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PaymentRecordConnection!
   shippingAddressesConnection(where: ShippingAddressWhereInput, orderBy: ShippingAddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ShippingAddressConnection!
+  paymentRecordsConnection(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PaymentRecordConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -2244,6 +2297,7 @@ type ShippingAddress implements Node {
   state: String!
   zip: String!
   user(where: UserWhereInput): User
+  invoices(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice!]
 }
 
 """A connection to a list of items."""
@@ -2263,6 +2317,7 @@ input ShippingAddressCreateInput {
   state: String!
   zip: String!
   user: UserCreateOneWithoutShippingAddressesInput
+  invoices: InvoiceCreateManyWithoutShippingAddressInput
 }
 
 input ShippingAddressCreateManyWithoutUserInput {
@@ -2270,9 +2325,18 @@ input ShippingAddressCreateManyWithoutUserInput {
   connect: [ShippingAddressWhereUniqueInput!]
 }
 
-input ShippingAddressCreateOneInput {
-  create: ShippingAddressCreateInput
+input ShippingAddressCreateOneWithoutInvoicesInput {
+  create: ShippingAddressCreateWithoutInvoicesInput
   connect: ShippingAddressWhereUniqueInput
+}
+
+input ShippingAddressCreateWithoutInvoicesInput {
+  recipient: String!
+  street: String!
+  city: String!
+  state: String!
+  zip: String!
+  user: UserCreateOneWithoutShippingAddressesInput
 }
 
 input ShippingAddressCreateWithoutUserInput {
@@ -2281,6 +2345,7 @@ input ShippingAddressCreateWithoutUserInput {
   city: String!
   state: String!
   zip: String!
+  invoices: InvoiceCreateManyWithoutShippingAddressInput
 }
 
 """An edge in a connection."""
@@ -2361,15 +2426,6 @@ input ShippingAddressSubscriptionWhereInput {
   node: ShippingAddressWhereInput
 }
 
-input ShippingAddressUpdateDataInput {
-  recipient: String
-  street: String
-  city: String
-  state: String
-  zip: String
-  user: UserUpdateOneWithoutShippingAddressesInput
-}
-
 input ShippingAddressUpdateInput {
   recipient: String
   street: String
@@ -2377,6 +2433,7 @@ input ShippingAddressUpdateInput {
   state: String
   zip: String
   user: UserUpdateOneWithoutShippingAddressesInput
+  invoices: InvoiceUpdateManyWithoutShippingAddressInput
 }
 
 input ShippingAddressUpdateManyWithoutUserInput {
@@ -2388,13 +2445,22 @@ input ShippingAddressUpdateManyWithoutUserInput {
   upsert: [ShippingAddressUpsertWithWhereUniqueWithoutUserInput!]
 }
 
-input ShippingAddressUpdateOneInput {
-  create: ShippingAddressCreateInput
+input ShippingAddressUpdateOneWithoutInvoicesInput {
+  create: ShippingAddressCreateWithoutInvoicesInput
   connect: ShippingAddressWhereUniqueInput
   disconnect: Boolean
   delete: Boolean
-  update: ShippingAddressUpdateDataInput
-  upsert: ShippingAddressUpsertNestedInput
+  update: ShippingAddressUpdateWithoutInvoicesDataInput
+  upsert: ShippingAddressUpsertWithoutInvoicesInput
+}
+
+input ShippingAddressUpdateWithoutInvoicesDataInput {
+  recipient: String
+  street: String
+  city: String
+  state: String
+  zip: String
+  user: UserUpdateOneWithoutShippingAddressesInput
 }
 
 input ShippingAddressUpdateWithoutUserDataInput {
@@ -2403,6 +2469,7 @@ input ShippingAddressUpdateWithoutUserDataInput {
   city: String
   state: String
   zip: String
+  invoices: InvoiceUpdateManyWithoutShippingAddressInput
 }
 
 input ShippingAddressUpdateWithWhereUniqueWithoutUserInput {
@@ -2410,9 +2477,9 @@ input ShippingAddressUpdateWithWhereUniqueWithoutUserInput {
   data: ShippingAddressUpdateWithoutUserDataInput!
 }
 
-input ShippingAddressUpsertNestedInput {
-  update: ShippingAddressUpdateDataInput!
-  create: ShippingAddressCreateInput!
+input ShippingAddressUpsertWithoutInvoicesInput {
+  update: ShippingAddressUpdateWithoutInvoicesDataInput!
+  create: ShippingAddressCreateWithoutInvoicesInput!
 }
 
 input ShippingAddressUpsertWithWhereUniqueWithoutUserInput {
@@ -2715,9 +2782,9 @@ input ShippingAddressWhereInput {
   """All values not ending with the given string."""
   zip_not_ends_with: String
   user: UserWhereInput
-  _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput
-  _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput
-  _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput
+  invoices_every: InvoiceWhereInput
+  invoices_some: InvoiceWhereInput
+  invoices_none: InvoiceWhereInput
 }
 
 input ShippingAddressWhereUniqueInput {
@@ -2729,8 +2796,8 @@ type Subscription {
   cart(where: CartSubscriptionWhereInput): CartSubscriptionPayload
   invoice(where: InvoiceSubscriptionWhereInput): InvoiceSubscriptionPayload
   product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
-  paymentRecord(where: PaymentRecordSubscriptionWhereInput): PaymentRecordSubscriptionPayload
   shippingAddress(where: ShippingAddressSubscriptionWhereInput): ShippingAddressSubscriptionPayload
+  paymentRecord(where: PaymentRecordSubscriptionWhereInput): PaymentRecordSubscriptionPayload
 }
 
 type User implements Node {
@@ -3650,14 +3717,20 @@ export type MutationType =   'CREATED' |
   'UPDATED' |
   'DELETED'
 
-export interface ProductCreateInput {
-  name?: String
-  price?: String
-  description?: String
-  varietal?: String
-  vendor?: UserCreateOneWithoutProductsInput
-  carts?: CartCreateManyWithoutItemsInput
-  purchases?: InvoiceCreateManyWithoutItemsInput
+export interface UserUpdateInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  stripeId?: String
+  permissions?: UserUpdatepermissionsInput
+  cart?: CartUpdateOneWithoutUserInput
+  products?: ProductUpdateManyWithoutVendorInput
+  purchases?: InvoiceUpdateManyWithoutCustomerInput
+  sales?: InvoiceUpdateManyWithoutVendorsInput
+  shippingAddresses?: ShippingAddressUpdateManyWithoutUserInput
 }
 
 export interface UserWhereInput {
@@ -3921,22 +3994,17 @@ export interface ShippingAddressWhereInput {
   zip_ends_with?: String
   zip_not_ends_with?: String
   user?: UserWhereInput
-  _MagicalBackRelation_InvoiceToShippingAddress_every?: InvoiceWhereInput
-  _MagicalBackRelation_InvoiceToShippingAddress_some?: InvoiceWhereInput
-  _MagicalBackRelation_InvoiceToShippingAddress_none?: InvoiceWhereInput
+  invoices_every?: InvoiceWhereInput
+  invoices_some?: InvoiceWhereInput
+  invoices_none?: InvoiceWhereInput
 }
 
-export interface UserCreateOneWithoutCartInput {
-  create?: UserCreateWithoutCartInput
-  connect?: UserWhereUniqueInput
+export interface ProductCreateManyWithoutPurchasesInput {
+  create?: ProductCreateWithoutPurchasesInput[] | ProductCreateWithoutPurchasesInput
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
 }
 
-export interface UserUpsertWithoutPurchasesInput {
-  update: UserUpdateWithoutPurchasesDataInput
-  create: UserCreateWithoutPurchasesInput
-}
-
-export interface UserCreateWithoutCartInput {
+export interface UserUpdateWithoutSalesDataInput {
   role?: String
   email?: String
   firstName?: String
@@ -3944,11 +4012,20 @@ export interface UserCreateWithoutCartInput {
   bizName?: String
   password?: String
   stripeId?: String
-  permissions?: UserCreatepermissionsInput
-  products?: ProductCreateManyWithoutVendorInput
-  purchases?: InvoiceCreateManyWithoutCustomerInput
-  sales?: InvoiceCreateManyWithoutVendorsInput
-  shippingAddresses?: ShippingAddressCreateManyWithoutUserInput
+  permissions?: UserUpdatepermissionsInput
+  cart?: CartUpdateOneWithoutUserInput
+  products?: ProductUpdateManyWithoutVendorInput
+  purchases?: InvoiceUpdateManyWithoutCustomerInput
+  shippingAddresses?: ShippingAddressUpdateManyWithoutUserInput
+}
+
+export interface ProductCreateWithoutPurchasesInput {
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+  vendor?: UserCreateOneWithoutProductsInput
+  carts?: CartCreateManyWithoutItemsInput
 }
 
 export interface ProductUpdateWithWhereUniqueWithoutCartsInput {
@@ -3956,9 +4033,9 @@ export interface ProductUpdateWithWhereUniqueWithoutCartsInput {
   data: ProductUpdateWithoutCartsDataInput
 }
 
-export interface InvoiceCreateManyWithoutVendorsInput {
-  create?: InvoiceCreateWithoutVendorsInput[] | InvoiceCreateWithoutVendorsInput
-  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+export interface UserCreateOneWithoutPurchasesInput {
+  create?: UserCreateWithoutPurchasesInput
+  connect?: UserWhereUniqueInput
 }
 
 export interface InvoiceWhereInput {
@@ -4086,18 +4163,19 @@ export interface InvoiceWhereInput {
   vendors_none?: UserWhereInput
 }
 
-export interface InvoiceCreateWithoutVendorsInput {
-  amount?: String
-  email: String
-  record?: Json
-  created?: Int
-  stripePaymentId?: String
-  stripeCustomerId?: String
-  status?: String
-  stripeRecord?: PaymentRecordCreateManyInput
-  shippingAddress?: ShippingAddressCreateOneInput
-  items?: ProductCreateManyWithoutPurchasesInput
-  customer?: UserCreateOneWithoutPurchasesInput
+export interface UserCreateWithoutPurchasesInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  stripeId?: String
+  permissions?: UserCreatepermissionsInput
+  cart?: CartCreateOneWithoutUserInput
+  products?: ProductCreateManyWithoutVendorInput
+  sales?: InvoiceCreateManyWithoutVendorsInput
+  shippingAddresses?: ShippingAddressCreateManyWithoutUserInput
 }
 
 export interface ProductWhereInput {
@@ -4199,9 +4277,9 @@ export interface ProductWhereInput {
   purchases_none?: InvoiceWhereInput
 }
 
-export interface ProductCreateManyWithoutPurchasesInput {
-  create?: ProductCreateWithoutPurchasesInput[] | ProductCreateWithoutPurchasesInput
-  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+export interface ShippingAddressCreateManyWithoutUserInput {
+  create?: ShippingAddressCreateWithoutUserInput[] | ShippingAddressCreateWithoutUserInput
+  connect?: ShippingAddressWhereUniqueInput[] | ShippingAddressWhereUniqueInput
 }
 
 export interface InvoiceSubscriptionWhereInput {
@@ -4215,13 +4293,13 @@ export interface InvoiceSubscriptionWhereInput {
   node?: InvoiceWhereInput
 }
 
-export interface ProductCreateWithoutPurchasesInput {
-  name?: String
-  price?: String
-  description?: String
-  varietal?: String
-  vendor?: UserCreateOneWithoutProductsInput
-  carts?: CartCreateManyWithoutItemsInput
+export interface ShippingAddressCreateWithoutUserInput {
+  recipient: String
+  street: String
+  city: String
+  state: String
+  zip: String
+  invoices?: InvoiceCreateManyWithoutShippingAddressInput
 }
 
 export interface CartWhereInput {
@@ -4286,21 +4364,52 @@ export interface CartWhereInput {
   items_none?: ProductWhereInput
 }
 
-export interface UserCreateOneWithoutPurchasesInput {
-  create?: UserCreateWithoutPurchasesInput
-  connect?: UserWhereUniqueInput
+export interface InvoiceCreateManyWithoutShippingAddressInput {
+  create?: InvoiceCreateWithoutShippingAddressInput[] | InvoiceCreateWithoutShippingAddressInput
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
 }
 
-export interface ShippingAddressUpdateInput {
-  recipient?: String
-  street?: String
-  city?: String
-  state?: String
-  zip?: String
-  user?: UserUpdateOneWithoutShippingAddressesInput
+export interface PaymentRecordUpdateInput {
+  amount?: Int
+  balanceTransaction?: String
+  created?: Int
+  currency?: String
+  stripeCustomerId?: String
+  stripePaymentId?: String
+  status?: String
+  data?: Json
 }
 
-export interface UserCreateWithoutPurchasesInput {
+export interface InvoiceCreateWithoutShippingAddressInput {
+  amount?: String
+  email: String
+  record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
+  status?: String
+  stripeRecord?: PaymentRecordCreateManyInput
+  items?: ProductCreateManyWithoutPurchasesInput
+  customer?: UserCreateOneWithoutPurchasesInput
+  vendors?: UserCreateManyWithoutSalesInput
+}
+
+export interface UserWhereUniqueInput {
+  id?: ID_Input
+  email?: String
+  stripeId?: String
+}
+
+export interface UserCreateManyWithoutSalesInput {
+  create?: UserCreateWithoutSalesInput[] | UserCreateWithoutSalesInput
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+}
+
+export interface InvoiceWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface UserCreateWithoutSalesInput {
   role?: String
   email?: String
   firstName?: String
@@ -4311,34 +4420,11 @@ export interface UserCreateWithoutPurchasesInput {
   permissions?: UserCreatepermissionsInput
   cart?: CartCreateOneWithoutUserInput
   products?: ProductCreateManyWithoutVendorInput
-  sales?: InvoiceCreateManyWithoutVendorsInput
+  purchases?: InvoiceCreateManyWithoutCustomerInput
   shippingAddresses?: ShippingAddressCreateManyWithoutUserInput
 }
 
-export interface UserWhereUniqueInput {
-  id?: ID_Input
-  email?: String
-  stripeId?: String
-}
-
-export interface ShippingAddressCreateManyWithoutUserInput {
-  create?: ShippingAddressCreateWithoutUserInput[] | ShippingAddressCreateWithoutUserInput
-  connect?: ShippingAddressWhereUniqueInput[] | ShippingAddressWhereUniqueInput
-}
-
-export interface InvoiceWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface ShippingAddressCreateWithoutUserInput {
-  recipient: String
-  street: String
-  city: String
-  state: String
-  zip: String
-}
-
-export interface PaymentRecordWhereUniqueInput {
+export interface ShippingAddressWhereUniqueInput {
   id?: ID_Input
 }
 
@@ -4366,7 +4452,7 @@ export interface InvoiceCreateWithoutItemsInput {
   stripeCustomerId?: String
   status?: String
   stripeRecord?: PaymentRecordCreateManyInput
-  shippingAddress?: ShippingAddressCreateOneInput
+  shippingAddress?: ShippingAddressCreateOneWithoutInvoicesInput
   customer?: UserCreateOneWithoutPurchasesInput
   vendors?: UserCreateManyWithoutSalesInput
 }
@@ -4378,38 +4464,6 @@ export interface CartUpdateInput {
   items?: ProductUpdateManyWithoutCartsInput
 }
 
-export interface UserCreateManyWithoutSalesInput {
-  create?: UserCreateWithoutSalesInput[] | UserCreateWithoutSalesInput
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
-}
-
-export interface ProductUpsertWithWhereUniqueWithoutCartsInput {
-  where: ProductWhereUniqueInput
-  update: ProductUpdateWithoutCartsDataInput
-  create: ProductCreateWithoutCartsInput
-}
-
-export interface UserCreateWithoutSalesInput {
-  role?: String
-  email?: String
-  firstName?: String
-  lastName?: String
-  bizName?: String
-  password?: String
-  stripeId?: String
-  permissions?: UserCreatepermissionsInput
-  cart?: CartCreateOneWithoutUserInput
-  products?: ProductCreateManyWithoutVendorInput
-  purchases?: InvoiceCreateManyWithoutCustomerInput
-  shippingAddresses?: ShippingAddressCreateManyWithoutUserInput
-}
-
-export interface InvoiceUpsertWithWhereUniqueWithoutCustomerInput {
-  where: InvoiceWhereUniqueInput
-  update: InvoiceUpdateWithoutCustomerDataInput
-  create: InvoiceCreateWithoutCustomerInput
-}
-
 export interface CartCreateInput {
   itemCount?: Int
   totalPrice?: String
@@ -4417,9 +4471,10 @@ export interface CartCreateInput {
   items?: ProductCreateManyWithoutCartsInput
 }
 
-export interface UserUpsertWithoutShippingAddressesInput {
-  update: UserUpdateWithoutShippingAddressesDataInput
-  create: UserCreateWithoutShippingAddressesInput
+export interface ProductUpsertWithWhereUniqueWithoutCartsInput {
+  where: ProductWhereUniqueInput
+  update: ProductUpdateWithoutCartsDataInput
+  create: ProductCreateWithoutCartsInput
 }
 
 export interface InvoiceCreateInput {
@@ -4431,10 +4486,41 @@ export interface InvoiceCreateInput {
   stripeCustomerId?: String
   status?: String
   stripeRecord?: PaymentRecordCreateManyInput
-  shippingAddress?: ShippingAddressCreateOneInput
+  shippingAddress?: ShippingAddressCreateOneWithoutInvoicesInput
   items?: ProductCreateManyWithoutPurchasesInput
   customer?: UserCreateOneWithoutPurchasesInput
   vendors?: UserCreateManyWithoutSalesInput
+}
+
+export interface InvoiceUpsertWithWhereUniqueWithoutCustomerInput {
+  where: InvoiceWhereUniqueInput
+  update: InvoiceUpdateWithoutCustomerDataInput
+  create: InvoiceCreateWithoutCustomerInput
+}
+
+export interface ProductCreateInput {
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+  vendor?: UserCreateOneWithoutProductsInput
+  carts?: CartCreateManyWithoutItemsInput
+  purchases?: InvoiceCreateManyWithoutItemsInput
+}
+
+export interface UserUpsertWithoutShippingAddressesInput {
+  update: UserUpdateWithoutShippingAddressesDataInput
+  create: UserCreateWithoutShippingAddressesInput
+}
+
+export interface ShippingAddressCreateInput {
+  recipient: String
+  street: String
+  city: String
+  state: String
+  zip: String
+  user?: UserCreateOneWithoutShippingAddressesInput
+  invoices?: InvoiceCreateManyWithoutShippingAddressInput
 }
 
 export interface InvoiceUpsertWithWhereUniqueWithoutItemsInput {
@@ -4443,59 +4529,25 @@ export interface InvoiceUpsertWithWhereUniqueWithoutItemsInput {
   create: InvoiceCreateWithoutItemsInput
 }
 
-export interface InvoiceUpsertWithWhereUniqueWithoutVendorsInput {
+export interface UserUpsertWithWhereUniqueWithoutSalesInput {
+  where: UserWhereUniqueInput
+  update: UserUpdateWithoutSalesDataInput
+  create: UserCreateWithoutSalesInput
+}
+
+export interface InvoiceUpdateWithWhereUniqueWithoutItemsInput {
   where: InvoiceWhereUniqueInput
-  update: InvoiceUpdateWithoutVendorsDataInput
-  create: InvoiceCreateWithoutVendorsInput
-}
-
-export interface UserUpdateWithoutSalesDataInput {
-  role?: String
-  email?: String
-  firstName?: String
-  lastName?: String
-  bizName?: String
-  password?: String
-  stripeId?: String
-  permissions?: UserUpdatepermissionsInput
-  cart?: CartUpdateOneWithoutUserInput
-  products?: ProductUpdateManyWithoutVendorInput
-  purchases?: InvoiceUpdateManyWithoutCustomerInput
-  shippingAddresses?: ShippingAddressUpdateManyWithoutUserInput
-}
-
-export interface UserUpdateInput {
-  role?: String
-  email?: String
-  firstName?: String
-  lastName?: String
-  bizName?: String
-  password?: String
-  stripeId?: String
-  permissions?: UserUpdatepermissionsInput
-  cart?: CartUpdateOneWithoutUserInput
-  products?: ProductUpdateManyWithoutVendorInput
-  purchases?: InvoiceUpdateManyWithoutCustomerInput
-  sales?: InvoiceUpdateManyWithoutVendorsInput
-  shippingAddresses?: ShippingAddressUpdateManyWithoutUserInput
-}
-
-export interface UserUpdateManyWithoutSalesInput {
-  create?: UserCreateWithoutSalesInput[] | UserCreateWithoutSalesInput
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput
-  update?: UserUpdateWithWhereUniqueWithoutSalesInput[] | UserUpdateWithWhereUniqueWithoutSalesInput
-  upsert?: UserUpsertWithWhereUniqueWithoutSalesInput[] | UserUpsertWithWhereUniqueWithoutSalesInput
+  data: InvoiceUpdateWithoutItemsDataInput
 }
 
 export interface UserUpdatepermissionsInput {
   set?: String[] | String
 }
 
-export interface InvoiceUpdateWithWhereUniqueWithoutItemsInput {
-  where: InvoiceWhereUniqueInput
-  data: InvoiceUpdateWithoutItemsDataInput
+export interface CartUpsertWithWhereUniqueWithoutItemsInput {
+  where: CartWhereUniqueInput
+  update: CartUpdateWithoutItemsDataInput
+  create: CartCreateWithoutItemsInput
 }
 
 export interface CartUpdateOneWithoutUserInput {
@@ -4507,10 +4559,10 @@ export interface CartUpdateOneWithoutUserInput {
   upsert?: CartUpsertWithoutUserInput
 }
 
-export interface CartUpsertWithWhereUniqueWithoutItemsInput {
-  where: CartWhereUniqueInput
-  update: CartUpdateWithoutItemsDataInput
-  create: CartCreateWithoutItemsInput
+export interface InvoiceUpsertWithWhereUniqueWithoutVendorsInput {
+  where: InvoiceWhereUniqueInput
+  update: InvoiceUpdateWithoutVendorsDataInput
+  create: InvoiceCreateWithoutVendorsInput
 }
 
 export interface CartUpdateWithoutUserDataInput {
@@ -4519,20 +4571,10 @@ export interface CartUpdateWithoutUserDataInput {
   items?: ProductUpdateManyWithoutCartsInput
 }
 
-export interface UserCreateInput {
-  role?: String
-  email?: String
-  firstName?: String
-  lastName?: String
-  bizName?: String
-  password?: String
-  stripeId?: String
-  permissions?: UserCreatepermissionsInput
-  cart?: CartCreateOneWithoutUserInput
-  products?: ProductCreateManyWithoutVendorInput
-  purchases?: InvoiceCreateManyWithoutCustomerInput
-  sales?: InvoiceCreateManyWithoutVendorsInput
-  shippingAddresses?: ShippingAddressCreateManyWithoutUserInput
+export interface ShippingAddressUpsertWithWhereUniqueWithoutUserInput {
+  where: ShippingAddressWhereUniqueInput
+  update: ShippingAddressUpdateWithoutUserDataInput
+  create: ShippingAddressCreateWithoutUserInput
 }
 
 export interface PaymentRecordWhereInput {
@@ -4660,6 +4702,22 @@ export interface PaymentRecordWhereInput {
   _MagicalBackRelation_InvoiceToPaymentRecord_none?: InvoiceWhereInput
 }
 
+export interface UserCreateInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  stripeId?: String
+  permissions?: UserCreatepermissionsInput
+  cart?: CartCreateOneWithoutUserInput
+  products?: ProductCreateManyWithoutVendorInput
+  purchases?: InvoiceCreateManyWithoutCustomerInput
+  sales?: InvoiceCreateManyWithoutVendorsInput
+  shippingAddresses?: ShippingAddressCreateManyWithoutUserInput
+}
+
 export interface CartCreateOneWithoutUserInput {
   create?: CartCreateWithoutUserInput
   connect?: CartWhereUniqueInput
@@ -4668,11 +4726,6 @@ export interface CartCreateOneWithoutUserInput {
 export interface ProductCreateManyWithoutCartsInput {
   create?: ProductCreateWithoutCartsInput[] | ProductCreateWithoutCartsInput
   connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
-}
-
-export interface UserCreateOneWithoutProductsInput {
-  create?: UserCreateWithoutProductsInput
-  connect?: UserWhereUniqueInput
 }
 
 export interface ProductUpdateWithoutCartsDataInput {
@@ -4684,9 +4737,9 @@ export interface ProductUpdateWithoutCartsDataInput {
   purchases?: InvoiceUpdateManyWithoutItemsInput
 }
 
-export interface InvoiceCreateManyWithoutCustomerInput {
-  create?: InvoiceCreateWithoutCustomerInput[] | InvoiceCreateWithoutCustomerInput
-  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+export interface UserCreateOneWithoutProductsInput {
+  create?: UserCreateWithoutProductsInput
+  connect?: UserWhereUniqueInput
 }
 
 export interface UserUpdateOneWithoutProductsInput {
@@ -4698,9 +4751,9 @@ export interface UserUpdateOneWithoutProductsInput {
   upsert?: UserUpsertWithoutProductsInput
 }
 
-export interface PaymentRecordCreateManyInput {
-  create?: PaymentRecordCreateInput[] | PaymentRecordCreateInput
-  connect?: PaymentRecordWhereUniqueInput[] | PaymentRecordWhereUniqueInput
+export interface InvoiceCreateManyWithoutCustomerInput {
+  create?: InvoiceCreateWithoutCustomerInput[] | InvoiceCreateWithoutCustomerInput
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
 }
 
 export interface UserUpdateWithoutProductsDataInput {
@@ -4718,9 +4771,9 @@ export interface UserUpdateWithoutProductsDataInput {
   shippingAddresses?: ShippingAddressUpdateManyWithoutUserInput
 }
 
-export interface ShippingAddressCreateOneInput {
-  create?: ShippingAddressCreateInput
-  connect?: ShippingAddressWhereUniqueInput
+export interface PaymentRecordCreateManyInput {
+  create?: PaymentRecordCreateInput[] | PaymentRecordCreateInput
+  connect?: PaymentRecordWhereUniqueInput[] | PaymentRecordWhereUniqueInput
 }
 
 export interface InvoiceUpdateManyWithoutCustomerInput {
@@ -4732,9 +4785,9 @@ export interface InvoiceUpdateManyWithoutCustomerInput {
   upsert?: InvoiceUpsertWithWhereUniqueWithoutCustomerInput[] | InvoiceUpsertWithWhereUniqueWithoutCustomerInput
 }
 
-export interface UserCreateOneWithoutShippingAddressesInput {
-  create?: UserCreateWithoutShippingAddressesInput
-  connect?: UserWhereUniqueInput
+export interface ShippingAddressCreateOneWithoutInvoicesInput {
+  create?: ShippingAddressCreateWithoutInvoicesInput
+  connect?: ShippingAddressWhereUniqueInput
 }
 
 export interface InvoiceUpdateWithWhereUniqueWithoutCustomerInput {
@@ -4742,9 +4795,9 @@ export interface InvoiceUpdateWithWhereUniqueWithoutCustomerInput {
   data: InvoiceUpdateWithoutCustomerDataInput
 }
 
-export interface ProductCreateManyWithoutVendorInput {
-  create?: ProductCreateWithoutVendorInput[] | ProductCreateWithoutVendorInput
-  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+export interface UserCreateOneWithoutShippingAddressesInput {
+  create?: UserCreateWithoutShippingAddressesInput
+  connect?: UserWhereUniqueInput
 }
 
 export interface InvoiceUpdateWithoutCustomerDataInput {
@@ -4756,14 +4809,14 @@ export interface InvoiceUpdateWithoutCustomerDataInput {
   stripeCustomerId?: String
   status?: String
   stripeRecord?: PaymentRecordUpdateManyInput
-  shippingAddress?: ShippingAddressUpdateOneInput
+  shippingAddress?: ShippingAddressUpdateOneWithoutInvoicesInput
   items?: ProductUpdateManyWithoutPurchasesInput
   vendors?: UserUpdateManyWithoutSalesInput
 }
 
-export interface CartCreateManyWithoutItemsInput {
-  create?: CartCreateWithoutItemsInput[] | CartCreateWithoutItemsInput
-  connect?: CartWhereUniqueInput[] | CartWhereUniqueInput
+export interface ProductCreateManyWithoutVendorInput {
+  create?: ProductCreateWithoutVendorInput[] | ProductCreateWithoutVendorInput
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
 }
 
 export interface PaymentRecordUpdateManyInput {
@@ -4775,15 +4828,9 @@ export interface PaymentRecordUpdateManyInput {
   upsert?: PaymentRecordUpsertWithWhereUniqueNestedInput[] | PaymentRecordUpsertWithWhereUniqueNestedInput
 }
 
-export interface ShippingAddressSubscriptionWhereInput {
-  AND?: ShippingAddressSubscriptionWhereInput[] | ShippingAddressSubscriptionWhereInput
-  OR?: ShippingAddressSubscriptionWhereInput[] | ShippingAddressSubscriptionWhereInput
-  NOT?: ShippingAddressSubscriptionWhereInput[] | ShippingAddressSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: ShippingAddressWhereInput
+export interface CartCreateManyWithoutItemsInput {
+  create?: CartCreateWithoutItemsInput[] | CartCreateWithoutItemsInput
+  connect?: CartWhereUniqueInput[] | CartWhereUniqueInput
 }
 
 export interface PaymentRecordUpdateWithWhereUniqueNestedInput {
@@ -4791,15 +4838,9 @@ export interface PaymentRecordUpdateWithWhereUniqueNestedInput {
   data: PaymentRecordUpdateDataInput
 }
 
-export interface ProductSubscriptionWhereInput {
-  AND?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
-  OR?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
-  NOT?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: ProductWhereInput
+export interface UserCreateOneWithoutCartInput {
+  create?: UserCreateWithoutCartInput
+  connect?: UserWhereUniqueInput
 }
 
 export interface PaymentRecordUpdateDataInput {
@@ -4813,6 +4854,57 @@ export interface PaymentRecordUpdateDataInput {
   data?: Json
 }
 
+export interface InvoiceCreateManyWithoutVendorsInput {
+  create?: InvoiceCreateWithoutVendorsInput[] | InvoiceCreateWithoutVendorsInput
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+}
+
+export interface PaymentRecordUpsertWithWhereUniqueNestedInput {
+  where: PaymentRecordWhereUniqueInput
+  update: PaymentRecordUpdateDataInput
+  create: PaymentRecordCreateInput
+}
+
+export interface PaymentRecordSubscriptionWhereInput {
+  AND?: PaymentRecordSubscriptionWhereInput[] | PaymentRecordSubscriptionWhereInput
+  OR?: PaymentRecordSubscriptionWhereInput[] | PaymentRecordSubscriptionWhereInput
+  NOT?: PaymentRecordSubscriptionWhereInput[] | PaymentRecordSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: PaymentRecordWhereInput
+}
+
+export interface ShippingAddressUpdateOneWithoutInvoicesInput {
+  create?: ShippingAddressCreateWithoutInvoicesInput
+  connect?: ShippingAddressWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: ShippingAddressUpdateWithoutInvoicesDataInput
+  upsert?: ShippingAddressUpsertWithoutInvoicesInput
+}
+
+export interface ProductSubscriptionWhereInput {
+  AND?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  OR?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  NOT?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ProductWhereInput
+}
+
+export interface ShippingAddressUpdateWithoutInvoicesDataInput {
+  recipient?: String
+  street?: String
+  city?: String
+  state?: String
+  zip?: String
+  user?: UserUpdateOneWithoutShippingAddressesInput
+}
+
 export interface UserSubscriptionWhereInput {
   AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
   OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
@@ -4824,43 +4916,6 @@ export interface UserSubscriptionWhereInput {
   node?: UserWhereInput
 }
 
-export interface PaymentRecordUpsertWithWhereUniqueNestedInput {
-  where: PaymentRecordWhereUniqueInput
-  update: PaymentRecordUpdateDataInput
-  create: PaymentRecordCreateInput
-}
-
-export interface CartWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface ShippingAddressUpdateOneInput {
-  create?: ShippingAddressCreateInput
-  connect?: ShippingAddressWhereUniqueInput
-  disconnect?: Boolean
-  delete?: Boolean
-  update?: ShippingAddressUpdateDataInput
-  upsert?: ShippingAddressUpsertNestedInput
-}
-
-export interface ShippingAddressWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface ShippingAddressUpdateDataInput {
-  recipient?: String
-  street?: String
-  city?: String
-  state?: String
-  zip?: String
-  user?: UserUpdateOneWithoutShippingAddressesInput
-}
-
-export interface CartUpsertWithoutUserInput {
-  update: CartUpdateWithoutUserDataInput
-  create: CartCreateWithoutUserInput
-}
-
 export interface UserUpdateOneWithoutShippingAddressesInput {
   create?: UserCreateWithoutShippingAddressesInput
   connect?: UserWhereUniqueInput
@@ -4870,9 +4925,8 @@ export interface UserUpdateOneWithoutShippingAddressesInput {
   upsert?: UserUpsertWithoutShippingAddressesInput
 }
 
-export interface ShippingAddressUpsertNestedInput {
-  update: ShippingAddressUpdateDataInput
-  create: ShippingAddressCreateInput
+export interface CartWhereUniqueInput {
+  id?: ID_Input
 }
 
 export interface UserUpdateWithoutShippingAddressesDataInput {
@@ -4890,10 +4944,8 @@ export interface UserUpdateWithoutShippingAddressesDataInput {
   sales?: InvoiceUpdateManyWithoutVendorsInput
 }
 
-export interface UserUpsertWithWhereUniqueWithoutSalesInput {
-  where: UserWhereUniqueInput
-  update: UserUpdateWithoutSalesDataInput
-  create: UserCreateWithoutSalesInput
+export interface PaymentRecordWhereUniqueInput {
+  id?: ID_Input
 }
 
 export interface ProductUpdateManyWithoutVendorInput {
@@ -4905,18 +4957,9 @@ export interface ProductUpdateManyWithoutVendorInput {
   upsert?: ProductUpsertWithWhereUniqueWithoutVendorInput[] | ProductUpsertWithWhereUniqueWithoutVendorInput
 }
 
-export interface InvoiceUpdateWithoutItemsDataInput {
-  amount?: String
-  email?: String
-  record?: Json
-  created?: Int
-  stripePaymentId?: String
-  stripeCustomerId?: String
-  status?: String
-  stripeRecord?: PaymentRecordUpdateManyInput
-  shippingAddress?: ShippingAddressUpdateOneInput
-  customer?: UserUpdateOneWithoutPurchasesInput
-  vendors?: UserUpdateManyWithoutSalesInput
+export interface CartUpsertWithoutUserInput {
+  update: CartUpdateWithoutUserDataInput
+  create: CartCreateWithoutUserInput
 }
 
 export interface ProductUpdateWithWhereUniqueWithoutVendorInput {
@@ -4924,9 +4967,9 @@ export interface ProductUpdateWithWhereUniqueWithoutVendorInput {
   data: ProductUpdateWithoutVendorDataInput
 }
 
-export interface UserUpsertWithoutCartInput {
-  update: UserUpdateWithoutCartDataInput
-  create: UserCreateWithoutCartInput
+export interface ShippingAddressUpsertWithoutInvoicesInput {
+  update: ShippingAddressUpdateWithoutInvoicesDataInput
+  create: ShippingAddressCreateWithoutInvoicesInput
 }
 
 export interface ProductUpdateWithoutVendorDataInput {
@@ -4938,10 +4981,18 @@ export interface ProductUpdateWithoutVendorDataInput {
   purchases?: InvoiceUpdateManyWithoutItemsInput
 }
 
-export interface CartCreateWithoutUserInput {
-  itemCount?: Int
-  totalPrice?: String
-  items?: ProductCreateManyWithoutCartsInput
+export interface InvoiceUpdateWithoutItemsDataInput {
+  amount?: String
+  email?: String
+  record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
+  status?: String
+  stripeRecord?: PaymentRecordUpdateManyInput
+  shippingAddress?: ShippingAddressUpdateOneWithoutInvoicesInput
+  customer?: UserUpdateOneWithoutPurchasesInput
+  vendors?: UserUpdateManyWithoutSalesInput
 }
 
 export interface CartUpdateManyWithoutItemsInput {
@@ -4951,6 +5002,42 @@ export interface CartUpdateManyWithoutItemsInput {
   delete?: CartWhereUniqueInput[] | CartWhereUniqueInput
   update?: CartUpdateWithWhereUniqueWithoutItemsInput[] | CartUpdateWithWhereUniqueWithoutItemsInput
   upsert?: CartUpsertWithWhereUniqueWithoutItemsInput[] | CartUpsertWithWhereUniqueWithoutItemsInput
+}
+
+export interface UserUpsertWithoutCartInput {
+  update: UserUpdateWithoutCartDataInput
+  create: UserCreateWithoutCartInput
+}
+
+export interface CartUpdateWithWhereUniqueWithoutItemsInput {
+  where: CartWhereUniqueInput
+  data: CartUpdateWithoutItemsDataInput
+}
+
+export interface InvoiceUpsertWithWhereUniqueWithoutShippingAddressInput {
+  where: InvoiceWhereUniqueInput
+  update: InvoiceUpdateWithoutShippingAddressDataInput
+  create: InvoiceCreateWithoutShippingAddressInput
+}
+
+export interface CartUpdateWithoutItemsDataInput {
+  itemCount?: Int
+  totalPrice?: String
+  user?: UserUpdateOneWithoutCartInput
+}
+
+export interface CartCreateWithoutUserInput {
+  itemCount?: Int
+  totalPrice?: String
+  items?: ProductCreateManyWithoutCartsInput
+}
+
+export interface UserUpdateOneWithoutCartInput {
+  create?: UserCreateWithoutCartInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutCartDataInput
+  upsert?: UserUpsertWithoutCartInput
 }
 
 export interface UserCreateWithoutProductsInput {
@@ -4968,9 +5055,19 @@ export interface UserCreateWithoutProductsInput {
   shippingAddresses?: ShippingAddressCreateManyWithoutUserInput
 }
 
-export interface CartUpdateWithWhereUniqueWithoutItemsInput {
-  where: CartWhereUniqueInput
-  data: CartUpdateWithoutItemsDataInput
+export interface UserUpdateWithoutCartDataInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  stripeId?: String
+  permissions?: UserUpdatepermissionsInput
+  products?: ProductUpdateManyWithoutVendorInput
+  purchases?: InvoiceUpdateManyWithoutCustomerInput
+  sales?: InvoiceUpdateManyWithoutVendorsInput
+  shippingAddresses?: ShippingAddressUpdateManyWithoutUserInput
 }
 
 export interface PaymentRecordCreateInput {
@@ -4984,10 +5081,13 @@ export interface PaymentRecordCreateInput {
   data?: Json
 }
 
-export interface CartUpdateWithoutItemsDataInput {
-  itemCount?: Int
-  totalPrice?: String
-  user?: UserUpdateOneWithoutCartInput
+export interface InvoiceUpdateManyWithoutVendorsInput {
+  create?: InvoiceCreateWithoutVendorsInput[] | InvoiceCreateWithoutVendorsInput
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  disconnect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  delete?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  update?: InvoiceUpdateWithWhereUniqueWithoutVendorsInput[] | InvoiceUpdateWithWhereUniqueWithoutVendorsInput
+  upsert?: InvoiceUpsertWithWhereUniqueWithoutVendorsInput[] | InvoiceUpsertWithWhereUniqueWithoutVendorsInput
 }
 
 export interface UserCreateWithoutShippingAddressesInput {
@@ -5005,12 +5105,9 @@ export interface UserCreateWithoutShippingAddressesInput {
   sales?: InvoiceCreateManyWithoutVendorsInput
 }
 
-export interface UserUpdateOneWithoutCartInput {
-  create?: UserCreateWithoutCartInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutCartDataInput
-  upsert?: UserUpsertWithoutCartInput
+export interface InvoiceUpdateWithWhereUniqueWithoutVendorsInput {
+  where: InvoiceWhereUniqueInput
+  data: InvoiceUpdateWithoutVendorsDataInput
 }
 
 export interface CartCreateWithoutItemsInput {
@@ -5019,19 +5116,41 @@ export interface CartCreateWithoutItemsInput {
   user: UserCreateOneWithoutCartInput
 }
 
-export interface UserUpdateWithoutCartDataInput {
-  role?: String
+export interface InvoiceUpdateWithoutVendorsDataInput {
+  amount?: String
   email?: String
-  firstName?: String
-  lastName?: String
-  bizName?: String
-  password?: String
-  stripeId?: String
-  permissions?: UserUpdatepermissionsInput
-  products?: ProductUpdateManyWithoutVendorInput
-  purchases?: InvoiceUpdateManyWithoutCustomerInput
-  sales?: InvoiceUpdateManyWithoutVendorsInput
-  shippingAddresses?: ShippingAddressUpdateManyWithoutUserInput
+  record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
+  status?: String
+  stripeRecord?: PaymentRecordUpdateManyInput
+  shippingAddress?: ShippingAddressUpdateOneWithoutInvoicesInput
+  items?: ProductUpdateManyWithoutPurchasesInput
+  customer?: UserUpdateOneWithoutPurchasesInput
+}
+
+export interface InvoiceCreateWithoutVendorsInput {
+  amount?: String
+  email: String
+  record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
+  status?: String
+  stripeRecord?: PaymentRecordCreateManyInput
+  shippingAddress?: ShippingAddressCreateOneWithoutInvoicesInput
+  items?: ProductCreateManyWithoutPurchasesInput
+  customer?: UserCreateOneWithoutPurchasesInput
+}
+
+export interface ProductUpdateManyWithoutPurchasesInput {
+  create?: ProductCreateWithoutPurchasesInput[] | ProductCreateWithoutPurchasesInput
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  update?: ProductUpdateWithWhereUniqueWithoutPurchasesInput[] | ProductUpdateWithWhereUniqueWithoutPurchasesInput
+  upsert?: ProductUpsertWithWhereUniqueWithoutPurchasesInput[] | ProductUpsertWithWhereUniqueWithoutPurchasesInput
 }
 
 export interface CartSubscriptionWhereInput {
@@ -5045,78 +5164,13 @@ export interface CartSubscriptionWhereInput {
   node?: CartWhereInput
 }
 
-export interface InvoiceUpdateManyWithoutVendorsInput {
-  create?: InvoiceCreateWithoutVendorsInput[] | InvoiceCreateWithoutVendorsInput
-  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
-  disconnect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
-  delete?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
-  update?: InvoiceUpdateWithWhereUniqueWithoutVendorsInput[] | InvoiceUpdateWithWhereUniqueWithoutVendorsInput
-  upsert?: InvoiceUpsertWithWhereUniqueWithoutVendorsInput[] | InvoiceUpsertWithWhereUniqueWithoutVendorsInput
-}
-
-export interface ProductWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface InvoiceUpdateWithWhereUniqueWithoutVendorsInput {
-  where: InvoiceWhereUniqueInput
-  data: InvoiceUpdateWithoutVendorsDataInput
-}
-
-export interface UserUpsertWithoutProductsInput {
-  update: UserUpdateWithoutProductsDataInput
-  create: UserCreateWithoutProductsInput
-}
-
-export interface InvoiceUpdateWithoutVendorsDataInput {
-  amount?: String
-  email?: String
-  record?: Json
-  created?: Int
-  stripePaymentId?: String
-  stripeCustomerId?: String
-  status?: String
-  stripeRecord?: PaymentRecordUpdateManyInput
-  shippingAddress?: ShippingAddressUpdateOneInput
-  items?: ProductUpdateManyWithoutPurchasesInput
-  customer?: UserUpdateOneWithoutPurchasesInput
-}
-
-export interface UserUpdateWithWhereUniqueWithoutSalesInput {
-  where: UserWhereUniqueInput
-  data: UserUpdateWithoutSalesDataInput
-}
-
-export interface ProductUpdateManyWithoutPurchasesInput {
-  create?: ProductCreateWithoutPurchasesInput[] | ProductCreateWithoutPurchasesInput
-  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
-  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
-  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
-  update?: ProductUpdateWithWhereUniqueWithoutPurchasesInput[] | ProductUpdateWithWhereUniqueWithoutPurchasesInput
-  upsert?: ProductUpsertWithWhereUniqueWithoutPurchasesInput[] | ProductUpsertWithWhereUniqueWithoutPurchasesInput
-}
-
-export interface UserCreatepermissionsInput {
-  set?: String[] | String
-}
-
 export interface ProductUpdateWithWhereUniqueWithoutPurchasesInput {
   where: ProductWhereUniqueInput
   data: ProductUpdateWithoutPurchasesDataInput
 }
 
-export interface InvoiceCreateWithoutCustomerInput {
-  amount?: String
-  email: String
-  record?: Json
-  created?: Int
-  stripePaymentId?: String
-  stripeCustomerId?: String
-  status?: String
-  stripeRecord?: PaymentRecordCreateManyInput
-  shippingAddress?: ShippingAddressCreateOneInput
-  items?: ProductCreateManyWithoutPurchasesInput
-  vendors?: UserCreateManyWithoutSalesInput
+export interface ProductWhereUniqueInput {
+  id?: ID_Input
 }
 
 export interface ProductUpdateWithoutPurchasesDataInput {
@@ -5128,13 +5182,9 @@ export interface ProductUpdateWithoutPurchasesDataInput {
   carts?: CartUpdateManyWithoutItemsInput
 }
 
-export interface ProductCreateWithoutVendorInput {
-  name?: String
-  price?: String
-  description?: String
-  varietal?: String
-  carts?: CartCreateManyWithoutItemsInput
-  purchases?: InvoiceCreateManyWithoutItemsInput
+export interface UserUpsertWithoutProductsInput {
+  update: UserUpdateWithoutProductsDataInput
+  create: UserCreateWithoutProductsInput
 }
 
 export interface ProductUpsertWithWhereUniqueWithoutPurchasesInput {
@@ -5143,15 +5193,13 @@ export interface ProductUpsertWithWhereUniqueWithoutPurchasesInput {
   create: ProductCreateWithoutPurchasesInput
 }
 
-export interface PaymentRecordUpdateInput {
-  amount?: Int
-  balanceTransaction?: String
-  created?: Int
-  currency?: String
-  stripeCustomerId?: String
-  stripePaymentId?: String
-  status?: String
-  data?: Json
+export interface InvoiceUpdateManyWithoutItemsInput {
+  create?: InvoiceCreateWithoutItemsInput[] | InvoiceCreateWithoutItemsInput
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  disconnect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  delete?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  update?: InvoiceUpdateWithWhereUniqueWithoutItemsInput[] | InvoiceUpdateWithWhereUniqueWithoutItemsInput
+  upsert?: InvoiceUpsertWithWhereUniqueWithoutItemsInput[] | InvoiceUpsertWithWhereUniqueWithoutItemsInput
 }
 
 export interface UserUpdateOneWithoutPurchasesInput {
@@ -5163,10 +5211,8 @@ export interface UserUpdateOneWithoutPurchasesInput {
   upsert?: UserUpsertWithoutPurchasesInput
 }
 
-export interface ProductUpsertWithWhereUniqueWithoutVendorInput {
-  where: ProductWhereUniqueInput
-  update: ProductUpdateWithoutVendorDataInput
-  create: ProductCreateWithoutVendorInput
+export interface UserCreatepermissionsInput {
+  set?: String[] | String
 }
 
 export interface UserUpdateWithoutPurchasesDataInput {
@@ -5184,32 +5230,18 @@ export interface UserUpdateWithoutPurchasesDataInput {
   shippingAddresses?: ShippingAddressUpdateManyWithoutUserInput
 }
 
-export interface ProductCreateWithoutCartsInput {
-  name?: String
-  price?: String
-  description?: String
-  varietal?: String
-  vendor?: UserCreateOneWithoutProductsInput
-  purchases?: InvoiceCreateManyWithoutItemsInput
-}
-
-export interface ShippingAddressUpsertWithWhereUniqueWithoutUserInput {
-  where: ShippingAddressWhereUniqueInput
-  update: ShippingAddressUpdateWithoutUserDataInput
-  create: ShippingAddressCreateWithoutUserInput
-}
-
-export interface ShippingAddressUpdateWithoutUserDataInput {
-  recipient?: String
-  street?: String
-  city?: String
-  state?: String
-  zip?: String
-}
-
-export interface ShippingAddressUpdateWithWhereUniqueWithoutUserInput {
-  where: ShippingAddressWhereUniqueInput
-  data: ShippingAddressUpdateWithoutUserDataInput
+export interface InvoiceCreateWithoutCustomerInput {
+  amount?: String
+  email: String
+  record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
+  status?: String
+  stripeRecord?: PaymentRecordCreateManyInput
+  shippingAddress?: ShippingAddressCreateOneWithoutInvoicesInput
+  items?: ProductCreateManyWithoutPurchasesInput
+  vendors?: UserCreateManyWithoutSalesInput
 }
 
 export interface ShippingAddressUpdateManyWithoutUserInput {
@@ -5221,22 +5253,38 @@ export interface ShippingAddressUpdateManyWithoutUserInput {
   upsert?: ShippingAddressUpsertWithWhereUniqueWithoutUserInput[] | ShippingAddressUpsertWithWhereUniqueWithoutUserInput
 }
 
-export interface ShippingAddressCreateInput {
-  recipient: String
-  street: String
-  city: String
-  state: String
-  zip: String
-  user?: UserCreateOneWithoutShippingAddressesInput
+export interface ProductCreateWithoutVendorInput {
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+  carts?: CartCreateManyWithoutItemsInput
+  purchases?: InvoiceCreateManyWithoutItemsInput
 }
 
-export interface InvoiceUpdateManyWithoutItemsInput {
-  create?: InvoiceCreateWithoutItemsInput[] | InvoiceCreateWithoutItemsInput
-  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
-  disconnect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
-  delete?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
-  update?: InvoiceUpdateWithWhereUniqueWithoutItemsInput[] | InvoiceUpdateWithWhereUniqueWithoutItemsInput
-  upsert?: InvoiceUpsertWithWhereUniqueWithoutItemsInput[] | InvoiceUpsertWithWhereUniqueWithoutItemsInput
+export interface ShippingAddressUpdateWithWhereUniqueWithoutUserInput {
+  where: ShippingAddressWhereUniqueInput
+  data: ShippingAddressUpdateWithoutUserDataInput
+}
+
+export interface ShippingAddressSubscriptionWhereInput {
+  AND?: ShippingAddressSubscriptionWhereInput[] | ShippingAddressSubscriptionWhereInput
+  OR?: ShippingAddressSubscriptionWhereInput[] | ShippingAddressSubscriptionWhereInput
+  NOT?: ShippingAddressSubscriptionWhereInput[] | ShippingAddressSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ShippingAddressWhereInput
+}
+
+export interface ShippingAddressUpdateWithoutUserDataInput {
+  recipient?: String
+  street?: String
+  city?: String
+  state?: String
+  zip?: String
+  invoices?: InvoiceUpdateManyWithoutShippingAddressInput
 }
 
 export interface InvoiceUpdateInput {
@@ -5248,21 +5296,106 @@ export interface InvoiceUpdateInput {
   stripeCustomerId?: String
   status?: String
   stripeRecord?: PaymentRecordUpdateManyInput
-  shippingAddress?: ShippingAddressUpdateOneInput
+  shippingAddress?: ShippingAddressUpdateOneWithoutInvoicesInput
   items?: ProductUpdateManyWithoutPurchasesInput
   customer?: UserUpdateOneWithoutPurchasesInput
   vendors?: UserUpdateManyWithoutSalesInput
 }
 
-export interface PaymentRecordSubscriptionWhereInput {
-  AND?: PaymentRecordSubscriptionWhereInput[] | PaymentRecordSubscriptionWhereInput
-  OR?: PaymentRecordSubscriptionWhereInput[] | PaymentRecordSubscriptionWhereInput
-  NOT?: PaymentRecordSubscriptionWhereInput[] | PaymentRecordSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: PaymentRecordWhereInput
+export interface InvoiceUpdateManyWithoutShippingAddressInput {
+  create?: InvoiceCreateWithoutShippingAddressInput[] | InvoiceCreateWithoutShippingAddressInput
+  connect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  disconnect?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  delete?: InvoiceWhereUniqueInput[] | InvoiceWhereUniqueInput
+  update?: InvoiceUpdateWithWhereUniqueWithoutShippingAddressInput[] | InvoiceUpdateWithWhereUniqueWithoutShippingAddressInput
+  upsert?: InvoiceUpsertWithWhereUniqueWithoutShippingAddressInput[] | InvoiceUpsertWithWhereUniqueWithoutShippingAddressInput
+}
+
+export interface UserUpsertWithoutPurchasesInput {
+  update: UserUpdateWithoutPurchasesDataInput
+  create: UserCreateWithoutPurchasesInput
+}
+
+export interface UserUpdateWithWhereUniqueWithoutSalesInput {
+  where: UserWhereUniqueInput
+  data: UserUpdateWithoutSalesDataInput
+}
+
+export interface UserUpdateManyWithoutSalesInput {
+  create?: UserCreateWithoutSalesInput[] | UserCreateWithoutSalesInput
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  update?: UserUpdateWithWhereUniqueWithoutSalesInput[] | UserUpdateWithWhereUniqueWithoutSalesInput
+  upsert?: UserUpsertWithWhereUniqueWithoutSalesInput[] | UserUpsertWithWhereUniqueWithoutSalesInput
+}
+
+export interface InvoiceUpdateWithoutShippingAddressDataInput {
+  amount?: String
+  email?: String
+  record?: Json
+  created?: Int
+  stripePaymentId?: String
+  stripeCustomerId?: String
+  status?: String
+  stripeRecord?: PaymentRecordUpdateManyInput
+  items?: ProductUpdateManyWithoutPurchasesInput
+  customer?: UserUpdateOneWithoutPurchasesInput
+  vendors?: UserUpdateManyWithoutSalesInput
+}
+
+export interface InvoiceUpdateWithWhereUniqueWithoutShippingAddressInput {
+  where: InvoiceWhereUniqueInput
+  data: InvoiceUpdateWithoutShippingAddressDataInput
+}
+
+export interface ProductCreateWithoutCartsInput {
+  name?: String
+  price?: String
+  description?: String
+  varietal?: String
+  vendor?: UserCreateOneWithoutProductsInput
+  purchases?: InvoiceCreateManyWithoutItemsInput
+}
+
+export interface ProductUpsertWithWhereUniqueWithoutVendorInput {
+  where: ProductWhereUniqueInput
+  update: ProductUpdateWithoutVendorDataInput
+  create: ProductCreateWithoutVendorInput
+}
+
+export interface ShippingAddressUpdateInput {
+  recipient?: String
+  street?: String
+  city?: String
+  state?: String
+  zip?: String
+  user?: UserUpdateOneWithoutShippingAddressesInput
+  invoices?: InvoiceUpdateManyWithoutShippingAddressInput
+}
+
+export interface UserCreateWithoutCartInput {
+  role?: String
+  email?: String
+  firstName?: String
+  lastName?: String
+  bizName?: String
+  password?: String
+  stripeId?: String
+  permissions?: UserCreatepermissionsInput
+  products?: ProductCreateManyWithoutVendorInput
+  purchases?: InvoiceCreateManyWithoutCustomerInput
+  sales?: InvoiceCreateManyWithoutVendorsInput
+  shippingAddresses?: ShippingAddressCreateManyWithoutUserInput
+}
+
+export interface ShippingAddressCreateWithoutInvoicesInput {
+  recipient: String
+  street: String
+  city: String
+  state: String
+  zip: String
+  user?: UserCreateOneWithoutShippingAddressesInput
 }
 
 /*
@@ -5273,15 +5406,18 @@ export interface Node {
   id: ID_Output
 }
 
-export interface ShippingAddressPreviousValues {
+export interface PaymentRecordPreviousValues {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
-  recipient: String
-  street: String
-  city: String
-  state: String
-  zip: String
+  amount: Int
+  balanceTransaction: String
+  created: Int
+  currency: String
+  stripeCustomerId: String
+  stripePaymentId: String
+  status: String
+  data?: Json
 }
 
 export interface ShippingAddress extends Node {
@@ -5294,6 +5430,7 @@ export interface ShippingAddress extends Node {
   state: String
   zip: String
   user?: User
+  invoices?: Invoice[]
 }
 
 export interface User extends Node {
@@ -5323,8 +5460,8 @@ export interface BatchPayload {
  * An edge in a connection.
 
  */
-export interface ShippingAddressEdge {
-  node: ShippingAddress
+export interface PaymentRecordEdge {
+  node: PaymentRecord
   cursor: String
 }
 
@@ -5348,11 +5485,11 @@ export interface ProductPreviousValues {
   varietal?: String
 }
 
-export interface AggregateShippingAddress {
+export interface AggregatePaymentRecord {
   count: Int
 }
 
-export interface AggregatePaymentRecord {
+export interface AggregateShippingAddress {
   count: Int
 }
 
@@ -5360,10 +5497,10 @@ export interface AggregatePaymentRecord {
  * A connection to a list of items.
 
  */
-export interface ShippingAddressConnection {
+export interface PaymentRecordConnection {
   pageInfo: PageInfo
-  edges: ShippingAddressEdge[]
-  aggregate: AggregateShippingAddress
+  edges: PaymentRecordEdge[]
+  aggregate: AggregatePaymentRecord
 }
 
 export interface AggregateProduct {
@@ -5374,8 +5511,8 @@ export interface AggregateProduct {
  * An edge in a connection.
 
  */
-export interface PaymentRecordEdge {
-  node: PaymentRecord
+export interface ShippingAddressEdge {
+  node: ShippingAddress
   cursor: String
 }
 
@@ -5412,18 +5549,15 @@ export interface InvoiceEdge {
   cursor: String
 }
 
-export interface PaymentRecordPreviousValues {
+export interface ShippingAddressPreviousValues {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
-  amount: Int
-  balanceTransaction: String
-  created: Int
-  currency: String
-  stripeCustomerId: String
-  stripePaymentId: String
-  status: String
-  data?: Json
+  recipient: String
+  street: String
+  city: String
+  state: String
+  zip: String
 }
 
 export interface AggregateCart {
@@ -5470,11 +5604,11 @@ export interface UserEdge {
   cursor: String
 }
 
-export interface PaymentRecordSubscriptionPayload {
+export interface ShippingAddressSubscriptionPayload {
   mutation: MutationType
-  node?: PaymentRecord
+  node?: ShippingAddress
   updatedFields?: String[]
-  previousValues?: PaymentRecordPreviousValues
+  previousValues?: ShippingAddressPreviousValues
 }
 
 /*
@@ -5499,10 +5633,10 @@ export interface CartSubscriptionPayload {
  * A connection to a list of items.
 
  */
-export interface PaymentRecordConnection {
+export interface ShippingAddressConnection {
   pageInfo: PageInfo
-  edges: PaymentRecordEdge[]
-  aggregate: AggregatePaymentRecord
+  edges: ShippingAddressEdge[]
+  aggregate: AggregateShippingAddress
 }
 
 export interface CartPreviousValues {
@@ -5528,8 +5662,8 @@ export interface Invoice extends Node {
   created?: Int
   stripePaymentId?: String
   stripeCustomerId?: String
-  shippingAddress?: ShippingAddress
   status?: String
+  shippingAddress?: ShippingAddress
   items?: Product[]
   customer?: User
   vendors?: User[]
@@ -5544,11 +5678,11 @@ export interface CartEdge {
   cursor: String
 }
 
-export interface ShippingAddressSubscriptionPayload {
+export interface PaymentRecordSubscriptionPayload {
   mutation: MutationType
-  node?: ShippingAddress
+  node?: PaymentRecord
   updatedFields?: String[]
-  previousValues?: ShippingAddressPreviousValues
+  previousValues?: PaymentRecordPreviousValues
 }
 
 export interface ProductSubscriptionPayload {

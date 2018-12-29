@@ -1,5 +1,5 @@
 # source: https://begincoffeesprisma.herokuapp.com/bcprisma/test
-# timestamp: Fri Dec 28 2018 18:21:56 GMT-0600 (CST)
+# timestamp: Fri Dec 28 2018 18:39:28 GMT-0600 (CST)
 
 type AggregateCart {
   count: Int!
@@ -379,8 +379,8 @@ type Invoice implements Node {
   created: Int
   stripePaymentId: String
   stripeCustomerId: String
-  shippingAddress(where: ShippingAddressWhereInput): ShippingAddress
   status: String
+  shippingAddress(where: ShippingAddressWhereInput): ShippingAddress
   items(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
   customer(where: UserWhereInput): User
   vendors(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -405,7 +405,7 @@ input InvoiceCreateInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordCreateManyInput
-  shippingAddress: ShippingAddressCreateOneInput
+  shippingAddress: ShippingAddressCreateOneWithoutInvoicesInput
   items: ProductCreateManyWithoutPurchasesInput
   customer: UserCreateOneWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
@@ -418,6 +418,11 @@ input InvoiceCreateManyWithoutCustomerInput {
 
 input InvoiceCreateManyWithoutItemsInput {
   create: [InvoiceCreateWithoutItemsInput!]
+  connect: [InvoiceWhereUniqueInput!]
+}
+
+input InvoiceCreateManyWithoutShippingAddressInput {
+  create: [InvoiceCreateWithoutShippingAddressInput!]
   connect: [InvoiceWhereUniqueInput!]
 }
 
@@ -435,7 +440,7 @@ input InvoiceCreateWithoutCustomerInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordCreateManyInput
-  shippingAddress: ShippingAddressCreateOneInput
+  shippingAddress: ShippingAddressCreateOneWithoutInvoicesInput
   items: ProductCreateManyWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
 }
@@ -449,7 +454,21 @@ input InvoiceCreateWithoutItemsInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordCreateManyInput
-  shippingAddress: ShippingAddressCreateOneInput
+  shippingAddress: ShippingAddressCreateOneWithoutInvoicesInput
+  customer: UserCreateOneWithoutPurchasesInput
+  vendors: UserCreateManyWithoutSalesInput
+}
+
+input InvoiceCreateWithoutShippingAddressInput {
+  amount: String
+  email: String!
+  record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
+  status: String
+  stripeRecord: PaymentRecordCreateManyInput
+  items: ProductCreateManyWithoutPurchasesInput
   customer: UserCreateOneWithoutPurchasesInput
   vendors: UserCreateManyWithoutSalesInput
 }
@@ -463,7 +482,7 @@ input InvoiceCreateWithoutVendorsInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordCreateManyInput
-  shippingAddress: ShippingAddressCreateOneInput
+  shippingAddress: ShippingAddressCreateOneWithoutInvoicesInput
   items: ProductCreateManyWithoutPurchasesInput
   customer: UserCreateOneWithoutPurchasesInput
 }
@@ -561,7 +580,7 @@ input InvoiceUpdateInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordUpdateManyInput
-  shippingAddress: ShippingAddressUpdateOneInput
+  shippingAddress: ShippingAddressUpdateOneWithoutInvoicesInput
   items: ProductUpdateManyWithoutPurchasesInput
   customer: UserUpdateOneWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
@@ -585,6 +604,15 @@ input InvoiceUpdateManyWithoutItemsInput {
   upsert: [InvoiceUpsertWithWhereUniqueWithoutItemsInput!]
 }
 
+input InvoiceUpdateManyWithoutShippingAddressInput {
+  create: [InvoiceCreateWithoutShippingAddressInput!]
+  connect: [InvoiceWhereUniqueInput!]
+  disconnect: [InvoiceWhereUniqueInput!]
+  delete: [InvoiceWhereUniqueInput!]
+  update: [InvoiceUpdateWithWhereUniqueWithoutShippingAddressInput!]
+  upsert: [InvoiceUpsertWithWhereUniqueWithoutShippingAddressInput!]
+}
+
 input InvoiceUpdateManyWithoutVendorsInput {
   create: [InvoiceCreateWithoutVendorsInput!]
   connect: [InvoiceWhereUniqueInput!]
@@ -603,7 +631,7 @@ input InvoiceUpdateWithoutCustomerDataInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordUpdateManyInput
-  shippingAddress: ShippingAddressUpdateOneInput
+  shippingAddress: ShippingAddressUpdateOneWithoutInvoicesInput
   items: ProductUpdateManyWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
 }
@@ -617,7 +645,21 @@ input InvoiceUpdateWithoutItemsDataInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordUpdateManyInput
-  shippingAddress: ShippingAddressUpdateOneInput
+  shippingAddress: ShippingAddressUpdateOneWithoutInvoicesInput
+  customer: UserUpdateOneWithoutPurchasesInput
+  vendors: UserUpdateManyWithoutSalesInput
+}
+
+input InvoiceUpdateWithoutShippingAddressDataInput {
+  amount: String
+  email: String
+  record: Json
+  created: Int
+  stripePaymentId: String
+  stripeCustomerId: String
+  status: String
+  stripeRecord: PaymentRecordUpdateManyInput
+  items: ProductUpdateManyWithoutPurchasesInput
   customer: UserUpdateOneWithoutPurchasesInput
   vendors: UserUpdateManyWithoutSalesInput
 }
@@ -631,7 +673,7 @@ input InvoiceUpdateWithoutVendorsDataInput {
   stripeCustomerId: String
   status: String
   stripeRecord: PaymentRecordUpdateManyInput
-  shippingAddress: ShippingAddressUpdateOneInput
+  shippingAddress: ShippingAddressUpdateOneWithoutInvoicesInput
   items: ProductUpdateManyWithoutPurchasesInput
   customer: UserUpdateOneWithoutPurchasesInput
 }
@@ -644,6 +686,11 @@ input InvoiceUpdateWithWhereUniqueWithoutCustomerInput {
 input InvoiceUpdateWithWhereUniqueWithoutItemsInput {
   where: InvoiceWhereUniqueInput!
   data: InvoiceUpdateWithoutItemsDataInput!
+}
+
+input InvoiceUpdateWithWhereUniqueWithoutShippingAddressInput {
+  where: InvoiceWhereUniqueInput!
+  data: InvoiceUpdateWithoutShippingAddressDataInput!
 }
 
 input InvoiceUpdateWithWhereUniqueWithoutVendorsInput {
@@ -661,6 +708,12 @@ input InvoiceUpsertWithWhereUniqueWithoutItemsInput {
   where: InvoiceWhereUniqueInput!
   update: InvoiceUpdateWithoutItemsDataInput!
   create: InvoiceCreateWithoutItemsInput!
+}
+
+input InvoiceUpsertWithWhereUniqueWithoutShippingAddressInput {
+  where: InvoiceWhereUniqueInput!
+  update: InvoiceUpdateWithoutShippingAddressDataInput!
+  create: InvoiceCreateWithoutShippingAddressInput!
 }
 
 input InvoiceUpsertWithWhereUniqueWithoutVendorsInput {
@@ -1015,38 +1068,38 @@ type Mutation {
   createCart(data: CartCreateInput!): Cart!
   createInvoice(data: InvoiceCreateInput!): Invoice!
   createProduct(data: ProductCreateInput!): Product!
-  createPaymentRecord(data: PaymentRecordCreateInput!): PaymentRecord!
   createShippingAddress(data: ShippingAddressCreateInput!): ShippingAddress!
+  createPaymentRecord(data: PaymentRecordCreateInput!): PaymentRecord!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateCart(data: CartUpdateInput!, where: CartWhereUniqueInput!): Cart
   updateInvoice(data: InvoiceUpdateInput!, where: InvoiceWhereUniqueInput!): Invoice
   updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
-  updatePaymentRecord(data: PaymentRecordUpdateInput!, where: PaymentRecordWhereUniqueInput!): PaymentRecord
   updateShippingAddress(data: ShippingAddressUpdateInput!, where: ShippingAddressWhereUniqueInput!): ShippingAddress
+  updatePaymentRecord(data: PaymentRecordUpdateInput!, where: PaymentRecordWhereUniqueInput!): PaymentRecord
   deleteUser(where: UserWhereUniqueInput!): User
   deleteCart(where: CartWhereUniqueInput!): Cart
   deleteInvoice(where: InvoiceWhereUniqueInput!): Invoice
   deleteProduct(where: ProductWhereUniqueInput!): Product
-  deletePaymentRecord(where: PaymentRecordWhereUniqueInput!): PaymentRecord
   deleteShippingAddress(where: ShippingAddressWhereUniqueInput!): ShippingAddress
+  deletePaymentRecord(where: PaymentRecordWhereUniqueInput!): PaymentRecord
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertCart(where: CartWhereUniqueInput!, create: CartCreateInput!, update: CartUpdateInput!): Cart!
   upsertInvoice(where: InvoiceWhereUniqueInput!, create: InvoiceCreateInput!, update: InvoiceUpdateInput!): Invoice!
   upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
-  upsertPaymentRecord(where: PaymentRecordWhereUniqueInput!, create: PaymentRecordCreateInput!, update: PaymentRecordUpdateInput!): PaymentRecord!
   upsertShippingAddress(where: ShippingAddressWhereUniqueInput!, create: ShippingAddressCreateInput!, update: ShippingAddressUpdateInput!): ShippingAddress!
+  upsertPaymentRecord(where: PaymentRecordWhereUniqueInput!, create: PaymentRecordCreateInput!, update: PaymentRecordUpdateInput!): PaymentRecord!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   updateManyCarts(data: CartUpdateInput!, where: CartWhereInput): BatchPayload!
   updateManyInvoices(data: InvoiceUpdateInput!, where: InvoiceWhereInput): BatchPayload!
   updateManyProducts(data: ProductUpdateInput!, where: ProductWhereInput): BatchPayload!
-  updateManyPaymentRecords(data: PaymentRecordUpdateInput!, where: PaymentRecordWhereInput): BatchPayload!
   updateManyShippingAddresses(data: ShippingAddressUpdateInput!, where: ShippingAddressWhereInput): BatchPayload!
+  updateManyPaymentRecords(data: PaymentRecordUpdateInput!, where: PaymentRecordWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyCarts(where: CartWhereInput): BatchPayload!
   deleteManyInvoices(where: InvoiceWhereInput): BatchPayload!
   deleteManyProducts(where: ProductWhereInput): BatchPayload!
-  deleteManyPaymentRecords(where: PaymentRecordWhereInput): BatchPayload!
   deleteManyShippingAddresses(where: ShippingAddressWhereInput): BatchPayload!
+  deleteManyPaymentRecords(where: PaymentRecordWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -2109,20 +2162,20 @@ type Query {
   carts(where: CartWhereInput, orderBy: CartOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Cart]!
   invoices(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice]!
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
-  paymentRecords(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PaymentRecord]!
   shippingAddresses(where: ShippingAddressWhereInput, orderBy: ShippingAddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ShippingAddress]!
+  paymentRecords(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PaymentRecord]!
   user(where: UserWhereUniqueInput!): User
   cart(where: CartWhereUniqueInput!): Cart
   invoice(where: InvoiceWhereUniqueInput!): Invoice
   product(where: ProductWhereUniqueInput!): Product
-  paymentRecord(where: PaymentRecordWhereUniqueInput!): PaymentRecord
   shippingAddress(where: ShippingAddressWhereUniqueInput!): ShippingAddress
+  paymentRecord(where: PaymentRecordWhereUniqueInput!): PaymentRecord
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   cartsConnection(where: CartWhereInput, orderBy: CartOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartConnection!
   invoicesConnection(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InvoiceConnection!
   productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
-  paymentRecordsConnection(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PaymentRecordConnection!
   shippingAddressesConnection(where: ShippingAddressWhereInput, orderBy: ShippingAddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ShippingAddressConnection!
+  paymentRecordsConnection(where: PaymentRecordWhereInput, orderBy: PaymentRecordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PaymentRecordConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -2141,6 +2194,7 @@ type ShippingAddress implements Node {
   state: String!
   zip: String!
   user(where: UserWhereInput): User
+  invoices(where: InvoiceWhereInput, orderBy: InvoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Invoice!]
 }
 
 """A connection to a list of items."""
@@ -2160,6 +2214,7 @@ input ShippingAddressCreateInput {
   state: String!
   zip: String!
   user: UserCreateOneWithoutShippingAddressesInput
+  invoices: InvoiceCreateManyWithoutShippingAddressInput
 }
 
 input ShippingAddressCreateManyWithoutUserInput {
@@ -2167,9 +2222,18 @@ input ShippingAddressCreateManyWithoutUserInput {
   connect: [ShippingAddressWhereUniqueInput!]
 }
 
-input ShippingAddressCreateOneInput {
-  create: ShippingAddressCreateInput
+input ShippingAddressCreateOneWithoutInvoicesInput {
+  create: ShippingAddressCreateWithoutInvoicesInput
   connect: ShippingAddressWhereUniqueInput
+}
+
+input ShippingAddressCreateWithoutInvoicesInput {
+  recipient: String!
+  street: String!
+  city: String!
+  state: String!
+  zip: String!
+  user: UserCreateOneWithoutShippingAddressesInput
 }
 
 input ShippingAddressCreateWithoutUserInput {
@@ -2178,6 +2242,7 @@ input ShippingAddressCreateWithoutUserInput {
   city: String!
   state: String!
   zip: String!
+  invoices: InvoiceCreateManyWithoutShippingAddressInput
 }
 
 """An edge in a connection."""
@@ -2258,15 +2323,6 @@ input ShippingAddressSubscriptionWhereInput {
   node: ShippingAddressWhereInput
 }
 
-input ShippingAddressUpdateDataInput {
-  recipient: String
-  street: String
-  city: String
-  state: String
-  zip: String
-  user: UserUpdateOneWithoutShippingAddressesInput
-}
-
 input ShippingAddressUpdateInput {
   recipient: String
   street: String
@@ -2274,6 +2330,7 @@ input ShippingAddressUpdateInput {
   state: String
   zip: String
   user: UserUpdateOneWithoutShippingAddressesInput
+  invoices: InvoiceUpdateManyWithoutShippingAddressInput
 }
 
 input ShippingAddressUpdateManyWithoutUserInput {
@@ -2285,13 +2342,22 @@ input ShippingAddressUpdateManyWithoutUserInput {
   upsert: [ShippingAddressUpsertWithWhereUniqueWithoutUserInput!]
 }
 
-input ShippingAddressUpdateOneInput {
-  create: ShippingAddressCreateInput
+input ShippingAddressUpdateOneWithoutInvoicesInput {
+  create: ShippingAddressCreateWithoutInvoicesInput
   connect: ShippingAddressWhereUniqueInput
   disconnect: Boolean
   delete: Boolean
-  update: ShippingAddressUpdateDataInput
-  upsert: ShippingAddressUpsertNestedInput
+  update: ShippingAddressUpdateWithoutInvoicesDataInput
+  upsert: ShippingAddressUpsertWithoutInvoicesInput
+}
+
+input ShippingAddressUpdateWithoutInvoicesDataInput {
+  recipient: String
+  street: String
+  city: String
+  state: String
+  zip: String
+  user: UserUpdateOneWithoutShippingAddressesInput
 }
 
 input ShippingAddressUpdateWithoutUserDataInput {
@@ -2300,6 +2366,7 @@ input ShippingAddressUpdateWithoutUserDataInput {
   city: String
   state: String
   zip: String
+  invoices: InvoiceUpdateManyWithoutShippingAddressInput
 }
 
 input ShippingAddressUpdateWithWhereUniqueWithoutUserInput {
@@ -2307,9 +2374,9 @@ input ShippingAddressUpdateWithWhereUniqueWithoutUserInput {
   data: ShippingAddressUpdateWithoutUserDataInput!
 }
 
-input ShippingAddressUpsertNestedInput {
-  update: ShippingAddressUpdateDataInput!
-  create: ShippingAddressCreateInput!
+input ShippingAddressUpsertWithoutInvoicesInput {
+  update: ShippingAddressUpdateWithoutInvoicesDataInput!
+  create: ShippingAddressCreateWithoutInvoicesInput!
 }
 
 input ShippingAddressUpsertWithWhereUniqueWithoutUserInput {
@@ -2612,9 +2679,9 @@ input ShippingAddressWhereInput {
   """All values not ending with the given string."""
   zip_not_ends_with: String
   user: UserWhereInput
-  _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput
-  _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput
-  _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput
+  invoices_every: InvoiceWhereInput
+  invoices_some: InvoiceWhereInput
+  invoices_none: InvoiceWhereInput
 }
 
 input ShippingAddressWhereUniqueInput {
@@ -2626,8 +2693,8 @@ type Subscription {
   cart(where: CartSubscriptionWhereInput): CartSubscriptionPayload
   invoice(where: InvoiceSubscriptionWhereInput): InvoiceSubscriptionPayload
   product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
-  paymentRecord(where: PaymentRecordSubscriptionWhereInput): PaymentRecordSubscriptionPayload
   shippingAddress(where: ShippingAddressSubscriptionWhereInput): ShippingAddressSubscriptionPayload
+  paymentRecord(where: PaymentRecordSubscriptionWhereInput): PaymentRecordSubscriptionPayload
 }
 
 type User implements Node {

@@ -8,5 +8,8 @@ export const ShippingAddress: ShippingAddressResolvers.Type = {
 
   user: (parent, args, ctx) => {
     throw new Error("Resolver not implemented");
+  },
+  invoices: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
   }
 };

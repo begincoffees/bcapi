@@ -891,9 +891,9 @@ export namespace UserResolvers {
     zip_ends_with: string | null;
     zip_not_ends_with: string | null;
     user: UserWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput | null;
+    invoices_every: InvoiceWhereInput | null;
+    invoices_some: InvoiceWhereInput | null;
+    invoices_none: InvoiceWhereInput | null;
   }
 
   export interface ArgsCart {
@@ -1836,9 +1836,9 @@ export namespace CartResolvers {
     zip_ends_with: string | null;
     zip_not_ends_with: string | null;
     user: UserWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput | null;
+    invoices_every: InvoiceWhereInput | null;
+    invoices_some: InvoiceWhereInput | null;
+    invoices_none: InvoiceWhereInput | null;
   }
 
   export interface ArgsUser {
@@ -2628,9 +2628,9 @@ export namespace ProductResolvers {
     zip_ends_with: string | null;
     zip_not_ends_with: string | null;
     user: UserWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput | null;
+    invoices_every: InvoiceWhereInput | null;
+    invoices_some: InvoiceWhereInput | null;
+    invoices_none: InvoiceWhereInput | null;
   }
 
   export interface ArgsVendor {
@@ -3173,9 +3173,9 @@ export namespace InvoiceResolvers {
     zip_ends_with: string | null;
     zip_not_ends_with: string | null;
     user: UserWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput | null;
+    invoices_every: InvoiceWhereInput | null;
+    invoices_some: InvoiceWhereInput | null;
+    invoices_none: InvoiceWhereInput | null;
   }
   export interface UserWhereInput {
     AND: UserWhereInput[];
@@ -3591,19 +3591,19 @@ export namespace InvoiceResolvers {
     info: GraphQLResolveInfo
   ) => string | null | Promise<string | null>;
 
-  export type ShippingAddressResolver = (
-    parent: Invoice,
-    args: ArgsShippingAddress,
-    ctx: Context,
-    info: GraphQLResolveInfo
-  ) => ShippingAddress | null | Promise<ShippingAddress | null>;
-
   export type StatusResolver = (
     parent: Invoice,
     args: {},
     ctx: Context,
     info: GraphQLResolveInfo
   ) => string | null | Promise<string | null>;
+
+  export type ShippingAddressResolver = (
+    parent: Invoice,
+    args: ArgsShippingAddress,
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => ShippingAddress | null | Promise<ShippingAddress | null>;
 
   export type ItemsResolver = (
     parent: Invoice,
@@ -3697,19 +3697,19 @@ export namespace InvoiceResolvers {
       info: GraphQLResolveInfo
     ) => string | null | Promise<string | null>;
 
-    shippingAddress: (
-      parent: Invoice,
-      args: ArgsShippingAddress,
-      ctx: Context,
-      info: GraphQLResolveInfo
-    ) => ShippingAddress | null | Promise<ShippingAddress | null>;
-
     status: (
       parent: Invoice,
       args: {},
       ctx: Context,
       info: GraphQLResolveInfo
     ) => string | null | Promise<string | null>;
+
+    shippingAddress: (
+      parent: Invoice,
+      args: ArgsShippingAddress,
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => ShippingAddress | null | Promise<ShippingAddress | null>;
 
     items: (
       parent: Invoice,
@@ -4577,13 +4577,23 @@ export namespace ShippingAddressResolvers {
     zip_ends_with: string | null;
     zip_not_ends_with: string | null;
     user: UserWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput | null;
+    invoices_every: InvoiceWhereInput | null;
+    invoices_some: InvoiceWhereInput | null;
+    invoices_none: InvoiceWhereInput | null;
   }
 
   export interface ArgsUser {
     where: UserWhereInput | null;
+  }
+
+  export interface ArgsInvoices {
+    where: InvoiceWhereInput | null;
+    orderBy: InvoiceOrderByInput | null;
+    skip: number | null;
+    after: string | null;
+    before: string | null;
+    first: number | null;
+    last: number | null;
   }
 
   export type IdResolver = (
@@ -4647,7 +4657,14 @@ export namespace ShippingAddressResolvers {
     args: ArgsUser,
     ctx: Context,
     info: GraphQLResolveInfo
-  ) => User | Promise<User>;
+  ) => User | null | Promise<User | null>;
+
+  export type InvoicesResolver = (
+    parent: ShippingAddress,
+    args: ArgsInvoices,
+    ctx: Context,
+    info: GraphQLResolveInfo
+  ) => Invoice[] | Promise<Invoice[]>;
 
   export interface Type {
     id: (
@@ -4711,7 +4728,14 @@ export namespace ShippingAddressResolvers {
       args: ArgsUser,
       ctx: Context,
       info: GraphQLResolveInfo
-    ) => User | Promise<User>;
+    ) => User | null | Promise<User | null>;
+
+    invoices: (
+      parent: ShippingAddress,
+      args: ArgsInvoices,
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => Invoice[] | Promise<Invoice[]>;
   }
 }
 
@@ -5376,9 +5400,9 @@ export namespace MutationResolvers {
     zip_ends_with: string | null;
     zip_not_ends_with: string | null;
     user: UserWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_every: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_some: InvoiceWhereInput | null;
-    _MagicalBackRelation_InvoiceToShippingAddress_none: InvoiceWhereInput | null;
+    invoices_every: InvoiceWhereInput | null;
+    invoices_some: InvoiceWhereInput | null;
+    invoices_none: InvoiceWhereInput | null;
   }
 
   export interface ArgsCustomerSignup {

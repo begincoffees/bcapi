@@ -82,4 +82,5 @@ type ShippingAddress {
   state: String!
   zip: String!
   user: User @unique
+  invoices: [Invoice!]!
 }
