@@ -1,6 +1,5 @@
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs'
-import { UserParent } from "./User";
 import { getUserId } from "../utils";
 import { Context } from "./types/Context";
 import { createGuestInvoice, createUserInvoice } from "../utils/stripe";
@@ -12,36 +11,35 @@ export const Mutation: MutationResolvers.Type = {
   ...MutationResolvers.defaultResolvers,
   customerSignup: async (_parent, {..._args}, context: any, _info) => {
     try {
-      const stripeId = await context.stripe.customers.create({
-        email: _args.email,
-      }).then((customer) => {
-        return customer.id;
-      })
+      const stripeId = await context.stripe.customers
+        .create({ email: _args.email })
+        .then((customer) => customer.id)
 
       if (stripeId){
         const password = await bcrypt.hash(_args.password, 10)
-        const customer = await context.db.createUser({
-          firstName: _args.firstName,
-          lastName: _args.lastName,
-          email: _args.email,
-          role: 'CUSTOMER',
-          password,
-          permissions: {
-            set: [
-              "read:products",
-              "read:feed",
-              "write:account",
-              "read:purchases"
-            ]
-          },
-          stripeId,
-          cart: {
-            create: {
-              itemCount: 0,
-              totalPrice: "0"
+        const customer = await context.db
+          .createUser({
+            firstName: _args.firstName,
+            lastName: _args.lastName,
+            email: _args.email,
+            role: 'CUSTOMER',
+            password,
+            permissions: {
+              set: [
+                "read:products",
+                "read:feed",
+                "write:account",
+                "read:purchases"
+              ]
+            },
+            stripeId,
+            cart: {
+              create: {
+                itemCount: 0,
+                totalPrice: "0"
+              }
             }
-          }
-        })
+          })
       
         const token = jwt.sign(
           { userId: customer.id }, 
@@ -61,39 +59,36 @@ export const Mutation: MutationResolvers.Type = {
   },
   vendorSignup: async (_parent, _args, context: any, _info)=> {
     try {
-      const stripeId = await context.stripe.customers.create({
-        email: _args.email,
-      }).then((customer) => {
-        return customer.id;
-      })
+      const stripeId = await context.stripe.customers
+        .create({ email: _args.email })
+        .then((customer) => customer.id)
 
       if(stripeId !== undefined){
         const password = await bcrypt.hash(_args.password, 10).then(res => res)
-        const vendor = await context.db.createUser({
-          bizName: _args.name,
-          email: _args.email,
-          password: password,
-          role: "VENDOR",
-          stripeId,
-          cart: {
-            create: {
-              itemCount: 0,
-              totalPrice: "0"
-            }
-          },
-          permissions: {
-            set: [
-              "read:products",
-              "write:products",
-              "read:feed",
-              "write:account",
-              "read:purchases",
-              "read:sales"
-            ]
-          },
-        
-          
-        })
+        const vendor = await context.db
+          .createUser({
+            bizName: _args.name,
+            email: _args.email,
+            password: password,
+            role: "VENDOR",
+            stripeId,
+            cart: {
+              create: {
+                itemCount: 0,
+                totalPrice: "0"
+              }
+            },
+            permissions: {
+              set: [
+                "read:products",
+                "write:products",
+                "read:feed",
+                "write:account",
+                "read:purchases",
+                "read:sales"
+              ]
+            },  
+          })
         
         const token = jwt.sign(
           { userId: vendor.id }, 
@@ -113,25 +108,33 @@ export const Mutation: MutationResolvers.Type = {
     }
   },
   login: async (_parent, {email, password}, context: Context, _info) => {
+    
+    /** check the db for the email */
     try {
-
-      /** check the db for the email */
       const user = await context.db.user({email}).then(res => res)
       if(!user){
         throw new Error('check your email')
       }
 
+      /** 
+       * compare the password against the saved hash 
+       * 
+       * note--
+       *   -> await bcrypt.compare(password, user.password)
+       *   works for new users, not working with older accounts
+       */
       if(user){
-        /** compare the password against the saved hash */
 
-        const token = jwt.sign({userId: user.id},process.env.APP_SECRET,{expiresIn: '1y'})
-    
-          const res = {
-            token,
-            user
-          }
-          return {...res}
-    
+        const token = jwt.sign(
+          {userId: user.id},
+          process.env.APP_SECRET,
+          {expiresIn: '1y'}
+        )
+        
+        return {
+          token,
+          user
+        }
       }
 
     } catch(err) {
@@ -143,6 +146,8 @@ export const Mutation: MutationResolvers.Type = {
     let stripePayment
     
     try {
+
+      /** create the record with stripe */
       const id = getUserId(context)
       const stripeId = _args.stripeId
 
@@ -151,7 +156,8 @@ export const Mutation: MutationResolvers.Type = {
         stripePayment = await createUserInvoice(
           context.stripe,
           _args.stripeId, 
-          _args.amount
+          _args.amount,
+          _args.email
         )
       } 
 
@@ -164,26 +170,28 @@ export const Mutation: MutationResolvers.Type = {
         )
       }
 
-      /**
-       * save the payment data to db
+      /** 
+       * check if the provided address already exists in db 
+       * if so connect the payment to existing, if not create new address
        */
-
-      const shippingAddressUser = id ? {user: {connect: {id}}} : {}
       const hasAddress = await context.db.user({id}).shippingAddresses({where:{street: _args.street}})
-
+      const shippingAddressUser = id ? {user: {connect: {id}}} : {}
       const shippingAddress = hasAddress ? (
         {connect: {id: hasAddress[0].id}}
-      ) : ({
-        create: {
-          recipient: _args.recipient || '',
-          street: _args.street,
-          city: _args.city,
-          state: _args.state,
-          zip: _args.zip,
-          ...shippingAddressUser
+      ) : (
+        {
+          create: {
+            recipient: _args.recipient || '',
+            street: _args.street,
+            city: _args.city,
+            state: _args.state,
+            zip: _args.zip,
+            ...shippingAddressUser
+          }
         }
-      })
+      )
 
+      /** save the payment data to db */
       await context.db.createInvoice({
         amount: _args.amount,
         email: _args.email,

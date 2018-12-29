@@ -18,7 +18,8 @@ async function guestTransaction(stripe: Stripe, email: string, amount: number){
       return stripe.charges.create({
         amount,
         currency: 'usd',
-        customer: source.customer as any
+        customer: source.customer as any,
+        receipt_email: email
       }); 
     })
 
@@ -29,7 +30,7 @@ async function guestTransaction(stripe: Stripe, email: string, amount: number){
   }
 }
 
-async function userTransaction(stripe: Stripe, customerId: string, amount: number){
+async function userTransaction(stripe: Stripe, customerId: string, amount: number, email: string){
   
   // attach payment source to customer
   try{
@@ -42,7 +43,8 @@ async function userTransaction(stripe: Stripe, customerId: string, amount: numbe
       return stripe.charges.create({
         amount,
         currency: 'usd',
-        customer: source.customer as any
+        customer: source.customer as any,
+        receipt_email: email
       }); 
     })
 
@@ -57,8 +59,9 @@ async function userTransaction(stripe: Stripe, customerId: string, amount: numbe
 const createUserInvoice = async(
   stripe: Stripe, 
   customerId: string, 
-  amount: number
-) => await userTransaction(stripe, customerId, amount)
+  amount: number,
+  email: string
+) => await userTransaction(stripe, customerId, amount, email)
   .then(res => res)
   .catch((err) => err)
 
