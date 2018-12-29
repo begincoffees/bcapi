@@ -169,7 +169,21 @@ export const Mutation: MutationResolvers.Type = {
        */
 
       const shippingAddressUser = id ? {user: {connect: {id}}} : {}
-      console.log(id ? 'yes' : 'no')
+      const hasAddress = await context.db.user({id}).shippingAddresses({where:{street: _args.street}})
+
+      const shippingAddress = hasAddress ? (
+        {connect: {id: hasAddress[0].id}}
+      ) : ({
+        create: {
+          recipient: _args.recipient || '',
+          street: _args.street,
+          city: _args.city,
+          state: _args.state,
+          zip: _args.zip,
+          ...shippingAddressUser
+        }
+      })
+
       await context.db.createInvoice({
         amount: _args.amount,
         email: _args.email,
@@ -179,16 +193,7 @@ export const Mutation: MutationResolvers.Type = {
         stripeCustomerId: stripeId || stripePayment.customer,
         vendors:{connect: [..._args.vendors]},
         customer: id ? {connect: {id}} : null,
-        shippingAddress: {
-          create: {
-            recipient: _args.recipient || '',
-            street: _args.street,
-            city: _args.city,
-            state: _args.state,
-            zip: _args.zip,
-            ...shippingAddressUser
-          }
-        },
+        shippingAddress: {...shippingAddress},
         items: {connect: [..._args.items]}
       } as any)
 
