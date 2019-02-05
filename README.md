@@ -20,7 +20,7 @@ You'll need a copy of the .env
 Clone the repo:
 
 ```sh
-$ git clone https://github.com/andrewangelle/bcapp.git
+$ git clone http://github.com/andrewangelle/bcapp.git
 ```
 
 build the project:
