@@ -24,8 +24,8 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-        fingerprints:
-          - "c3:0d:5c:b0:da:c9:c4:92:ed:49:8d:14:e7:5f:02:f9"
+          fingerprints:
+            - "c3:0d:5c:b0:da:c9:c4:92:ed:49:8d:14:e7:5f:02:f9"
       - run: echo 'Starting Deployment For bcgraph'
 workflows:
   version: 2
