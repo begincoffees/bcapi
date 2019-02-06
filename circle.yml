@@ -11,9 +11,7 @@ jobs:
             - "c3:0d:5c:b0:da:c9:c4:92:ed:49:8d:14:e7:5f:02:f9"
       - setup_remote_docker:
           docker_layer_caching: true
-      - run: 
-          command: ssh -oStrictHostKeyChecking=no -v $DROPLET_USER@$DROPLET_IP
-          command: cd bcgraph && git pull origin master
+      - run: ssh -oStrictHostKeyChecking=no -v $DROPLET_USER@$DROPLET_IP "bash ./build-api.sh"
       - run: echo 'deployment for api.bcweb.me successful'
   deploy_api:
     docker:
@@ -23,7 +21,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "c3:0d:5c:b0:da:c9:c4:92:ed:49:8d:14:e7:5f:02:f9"
-      - run: ssh -oStrictHostKeyChecking=no -v $DROPLET_USER@$DROPLET_IP "sh deploy-api.sh"
+      - run: ssh -oStrictHostKeyChecking=no -v $DROPLET_USER@$DROPLET_IP "bash deploy-api.sh"
       - run: echo 'Starting Deployment For bcgraph'
 workflows:
   version: 2
