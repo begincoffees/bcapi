@@ -23,16 +23,21 @@ It features Prisma as an abstraction over a Postgres data layer.
 
 You'll need a copy of the .env
 
+You'll also need docker installed locally
+
 Clone the repo:
 
 ```sh
 $ git clone http://github.com/begincoffees/bcapi.git
 ```
 
-build the images:
+build and run the images:
 ```sh
 $ docker-compose up --build
 ```
+
+
+
 
 
 Open up the dev client at http://localhost:6006
